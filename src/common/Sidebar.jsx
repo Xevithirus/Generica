@@ -1,16 +1,31 @@
 import React from 'react';
+import { useCharacter } from '../CharacterContext';
 
 const Sidebar = () => {
+  const { character } = useCharacter();
+
+  const getImageSrc = () => {
+    const { sex, job } = character;
+    if (!sex || !job) return '../images/adventurer-female.png';
+    return `../images/${job}-${sex}.png`;
+  };
+
   return (
     <div className="sidebar">
-      <h1 className="sidebar-title">CHARACTER</h1>
-      <img src="../images/adventurer-female.png" alt="Profile Picture" />
-      <p>{`LV: 1`}</p>
+      <h1 className="sidebar-title">{character.name.toUpperCase()}</h1>
+      <img src={getImageSrc()} alt="Profile Picture" />
+      <p>{`Name: ${character.name}`}</p>
+      <p>{`Sex: ${character.sex}`}</p>
+      <p>{`Job: ${character.job}`}</p>
+      <p>{`LV: ${character.level}`}</p>
       <p>{`XP: 120/1000`}</p>
       <br />
-      <p>{`HP: 100`}</p>
-      <p>{`ENG: 120`}</p>
-      <p>{`MAG: 18`}</p>
+      <p>{`HP: ${character.stats.hp}`}</p>
+      <p>{`ENG: ${character.stats.eng}`}</p>
+      <p>{`MAG: ${character.stats.mag}`}</p>
+      <p>{`STR: ${character.stats.str}`}</p>
+      <p>{`AGI: ${character.stats.agi}`}</p>
+      <p>{`INT: ${character.stats.int}`}</p>
       <div className="inventory">
         <h3>Inventory</h3>
         <div className="text-box">

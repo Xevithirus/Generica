@@ -18,10 +18,12 @@ export const WorldData = {
               shop: {
                 name: "Tinkerton's",
                 description: "You enter Tinkerton's general store. Find the best selection of legal merchandise around, from practical tools to whimsical trinkets.",
+                image: './images/tinkertons.png',
               },
               inn: {
                 name: 'The Crinkled Skink',
                 description: 'You enter The Crinkled Skink. It is lively, bustling with the denizens of Darda. A pleasant barkeep waves at you from behind the counter.',
+                image: './images/crinkled-skink-tavern.png',
               }
             }
           },
@@ -50,7 +52,7 @@ export const WorldData = {
         localPositions: {
           valleyPath: {
             name: 'Valley Path',
-            description: 'You step onto a serene path through the valley, dappled with sunlight. Ancient trees stand tall, their leaves whispering secrets of the past. The air is cool and filled with the scent of pine and earth. Every step brings a new discovery, from blooming flowers to hidden clearings. It is a place of quiet reflection and natural wonder.',
+            description: 'You step onto a dirt path that snakes through the valley, dappled with sunlight. The air is cool and filled with the scent of pine and earth. Every step brings a new discovery, from blooming flowers to hidden clearings. It is a place of quiet reflection and natural wonder.',
             image: './images/old-trail-valley.png',
             activities: {
               Walking: {
