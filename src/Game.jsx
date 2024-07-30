@@ -13,6 +13,7 @@ const Game = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [popupList, setPopupList] = useState([]);
     const [popupType, setPopupType] = useState('');
+    const [isEventActive, setIsEventActive] = useState(false);
 
     const currentRegionData = WorldData[currentRegion];
     const currentAreaData = currentRegionData?.areas[currentArea];
@@ -114,12 +115,14 @@ const Game = () => {
                     setCurrentArea={setCurrentArea}
                     setCurrentLocalPosition={setCurrentLocalPosition}
                     setCurrentActivity={setCurrentActivity}
+                    isEventActive={isEventActive}
                 />
             </div>
             <EventTrigger 
                 currentLocalPosition={currentLocalPosition} 
                 currentArea={currentArea}
-                currentRegion={currentRegion} 
+                currentRegion={currentRegion}
+                setIsEventActive={setIsEventActive} 
             />
             {showPopup && (
                 <div className="popup">

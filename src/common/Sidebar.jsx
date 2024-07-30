@@ -17,15 +17,15 @@ const Sidebar = () => {
       <p>{`Name: ${character.name}`}</p>
       <p>{`Sex: ${character.sex}`}</p>
       <p>{`Job: ${character.job}`}</p>
-      <p>{`LV: ${character.level}`}</p>
-      <p>{`XP: 120/1000`}</p>
+      <p>{`Level: ${character.level}`}</p>
+      <p>{`Experience: 120/1000`}</p>
       <br />
-      <p>{`HP: ${character.stats.hp}`}</p>
-      <p>{`EN: ${character.stats.en}`}</p>
-      <p>{`MAG: ${character.stats.mag}`}</p>
-      <p>{`STR: ${character.stats.str}`}</p>
-      <p>{`AGI: ${character.stats.agi}`}</p>
-      <p>{`INT: ${character.stats.int}`}</p>
+      <div className="stat-container"><span>Health:</span><span>{character.stats.hp}</span></div>
+      <div className="stat-container"><span>Energy:</span><span>{character.stats.en}</span></div>
+      <div className="stat-container"><span>Magic:</span><span>{character.stats.mag}</span></div>
+      <div className="stat-container"><span>Strength:</span><span>{character.stats.str}</span></div>
+      <div className="stat-container"><span>Agility:</span><span>{character.stats.agi}</span></div>
+      <div className="stat-container"><span>Intellect:</span><span>{character.stats.int}</span></div>
       <div className="inventory">
         <h3>Inventory</h3>
         <div className="text-box">

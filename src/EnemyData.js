@@ -28,8 +28,8 @@ export const EnemyData = {
     image: './images/valley-wolf.png'
   },
   dragon: {
-    name: 'Mountain Drake',
-    type: 'Dragon',
+    name: 'Corrupted Golem',
+    type: 'Enchantment',
     level: 3,
     stats: {
       hp: 300,
@@ -39,6 +39,6 @@ export const EnemyData = {
       agi: 10,
       int: 15,
     },
-    image: './images/dragon.png'
+    image: './images/corrupted-golem.png'
   }
 };
