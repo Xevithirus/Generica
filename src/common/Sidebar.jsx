@@ -21,7 +21,7 @@ const Sidebar = () => {
       <p>{`XP: 120/1000`}</p>
       <br />
       <p>{`HP: ${character.stats.hp}`}</p>
-      <p>{`ENG: ${character.stats.eng}`}</p>
+      <p>{`EN: ${character.stats.en}`}</p>
       <p>{`MAG: ${character.stats.mag}`}</p>
       <p>{`STR: ${character.stats.str}`}</p>
       <p>{`AGI: ${character.stats.agi}`}</p>

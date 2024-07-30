@@ -63,7 +63,12 @@ export const WorldData = {
                 name: 'Nature Watching',
                 description: 'Observe the wildlife in their natural habitat. Spot deer, foxes, and countless birds. The valley is alive with the wonders of the natural world.',
               }
-            }
+            },
+            enemies: [
+              { name: 'goblin', spawnRate: 70 },
+              { name: 'orc', spawnRate: 20 },
+              { name: 'dragon', spawnRate: 10 }
+            ]
           }
         }
       },
@@ -109,7 +114,10 @@ export const WorldData = {
                 name: 'Photography',
                 description: 'Capture beautiful photos of the landscape. The ever-changing light and shadows offer endless opportunities. The cliffs provide a dramatic backdrop for your shots.',
               }
-            }
+            },
+            enemies: [
+              { name: 'dragon', spawnRate: 100 }
+            ]            
           }
         }
       },
@@ -117,20 +125,21 @@ export const WorldData = {
         name: 'Thalen Pass',
         description: 'You enter Thalen Pass, an old mining tunnel that once provided thoroughfare to the world beyond the Westridge Mountains. Echoes of its industrious past still linger, with rusted tracks and forgotten tools. The air is cool and heavy with the scent of earth and history. As you explore, you can almost hear the whispers of miners who once toiled here. It is a place of mystery and history, where every corner holds a tale.',
         image: './images/thalen-pass.png',
-        connectedAreas: ['theValley', 'coralCove'],
+        connectedAreas: ['theValley'],
         localPositions: {
-          miningCamp: {
-            name: 'Mining Camp',
-            description: 'You arrive at an old mining camp with abandoned equipment. The remnants of hard work and dreams of fortune are evident everywhere. Rusted tools and broken carts tell stories of the past. It is a place to ponder the lives of those who once toiled here. The camp is now a silent witness to a bygone era.',
-            image: './images/mining-camp.png',
+          tunnelEntrance: {
+            name: 'Tunnel Entrance',
+            description: 'The entrance to the Thalen Pass.',
+            image: './images/inside-tunnel.png',
             activities: {
               Exploring: {
                 name: 'Exploring',
-                description: 'Explore the old mining camp. Discover relics of the past and imagine the bustling activity that once filled this place. Every step is a journey into history.',
+                description: 'You look around the area. Discover relics of the past and imagine the bustling activity that once filled this place. Every step is a journey into history.',
               },
-              Mining: {
-                name: 'Mining',
-                description: 'Try your hand at mining for resources. Unearth hidden treasures and feel the thrill of discovery. The ground holds secrets waiting to be found.',
+              Encounter: {
+                name: 'Sound in the dark',
+                description: 'You hear something approaching...',
+                image: './images/goblin.png',
               }
             }
           }
