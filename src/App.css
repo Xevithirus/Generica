@@ -76,6 +76,7 @@
   color: #000;
   border: 2px solid #000;
 }
+
 .sidebar {
   max-width: 330px;
   min-width: 330px;
@@ -274,4 +275,89 @@
   cursor: pointer;
   background-color: #fff;
   color: #000;
+}
+
+.event-popup {
+  position: absolute;
+  top: 0;
+  left: 330px;
+  width: calc(100% - 330px);
+  height: calc(100% - 280px);
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgb(36, 36, 36);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.event-popup img {
+  max-width: 65%;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid rgb(36, 36, 36);
+  z-index: 1;
+}
+
+.text-LR-alignment {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 65%;
+}
+
+.event-popup h3,
+.event-popup p,
+.event-popup button {
+  color: rgb(255, 255, 255);
+  z-index: 30;
+}
+
+.enemy-name-span {
+  color: rgb(255, 238, 0);
+}
+
+.event-popup h3 {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.event-popup .stats-left {
+  position: relative;
+  text-align: left;
+}
+
+.event-popup .stats-right {
+  position: relative;
+  text-align: right;
+}
+
+.event-popup .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 30%;
+  margin-top: auto;
+}
+
+.event-popup .button-container .event-button {
+  background-color: #180700;
+  border: 2px solid #ffffff;
+  padding: 10px;
+  font-family: "Press Start 2P", system-ui;
+  text-align: center;
+  cursor: pointer;
+  flex: 1;
+}
+
+.event-popup .button-container .event-button:hover {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
 }

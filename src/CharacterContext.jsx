@@ -22,10 +22,10 @@ export const CharacterProvider = ({ children }) => {
 
   const initializeStats = (job) => {
     const jobStats = {
-      warrior: { hp: 120, eng: 80, mag: 0, str: 30, agi: 20, int: 10 },
-      witch: { hp: 70, eng: 50, mag: 80, str: 10, agi: 20, int: 30 },
-      rogue: { hp: 90, eng: 70, mag: 10, str: 20, agi: 30, int: 20 },
-      cleric: { hp: 80, eng: 60, mag: 70, str: 15, agi: 20, int: 25 },
+      warrior: { hp: 120, en: 80, mag: 0, str: 30, agi: 20, int: 10 },
+      witch: { hp: 70, en: 50, mag: 80, str: 10, agi: 20, int: 30 },
+      rogue: { hp: 90, en: 70, mag: 10, str: 20, agi: 30, int: 20 },
+      cleric: { hp: 80, en: 60, mag: 70, str: 15, agi: 20, int: 25 },
     };
     return jobStats[job];
   };
