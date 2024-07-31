@@ -112,6 +112,22 @@
   cursor: pointer;
 }
 
+.stat-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.stat-container span:first-child {
+  flex: 1;
+  text-align: left;
+}
+
+.stat-container span:last-child {
+  flex: 0 0 50px;
+  text-align: right;
+}
+
 .inventory {
   margin-top: 10%;
 }
@@ -298,7 +314,9 @@
 
 .event-popup img {
   max-width: 65%;
+  /* max-width: 1090px; */
   height: auto;
+  max-height: 650px;
   margin: 10px 0;
   border-radius: 10px;
   border: 2px solid rgb(36, 36, 36);
@@ -360,4 +378,9 @@
   background-color: #fff;
   color: #000;
   border: 2px solid #000;
+}
+
+.event-button.disabled {
+  color: grey;
+  pointer-events: none;
 }

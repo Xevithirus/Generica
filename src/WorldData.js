@@ -40,8 +40,8 @@ export const WorldData = {
                 name: 'Fishing',
                 description: 'Cast your line and feel the thrill of the catch. Watch the fishermen at work and learn their secrets. The sea promises bountiful rewards for those who are patient.',
               }
-            }
-          },
+            },
+          }
         }
       },
       theValley: {
@@ -64,11 +64,16 @@ export const WorldData = {
                 description: 'Observe the wildlife in their natural habitat. Spot deer, foxes, and countless birds. The valley is alive with the wonders of the natural world.',
               }
             },
+            // Enemy spawns and spawn weights for Valley Path
             enemies: [
-              { name: 'goblin', spawnRate: 70 },
-              { name: 'orc', spawnRate: 20 },
-              { name: 'dragon', spawnRate: 10 }
-            ]
+              { name: 'GreenSlime', spawnRate: 55 },
+              { name: 'Velyr', spawnRate: 25 },
+              { name: 'Kaskari', spawnRate: 10 },
+              { name: 'ValleyWolf', spawnRate: 5 },
+              { name: 'Brontor', spawnRate: 3 },
+              { name: 'Ayrin', spawnRate: 2 },
+            ],
+            levelRange: { min: 1, max: 3 } // Define level range for Valley Path
           }
         }
       },
@@ -91,7 +96,12 @@ export const WorldData = {
                 name: 'Beach Games',
                 description: 'Play games on the sandy beach. Feel the joy of simple pleasures under the sun. The beach is a playground for all ages.',
               }
-            }
+            },
+            // Enemy spawns and spawn weights 
+            enemies: [
+              { name: 'GreenSlime', spawnRate: 85 },
+            ],
+            levelRange: { min: 2, max: 5 } // Define level range 
           }
         }
       },
@@ -114,10 +124,15 @@ export const WorldData = {
                 name: 'Photography',
                 description: 'Capture beautiful photos of the landscape. The ever-changing light and shadows offer endless opportunities. The cliffs provide a dramatic backdrop for your shots.',
               }
-            },
+            },         
+            // Enemy spawns and spawn weights for Cliff Top
             enemies: [
-              { name: 'dragon', spawnRate: 100 }
-            ]            
+              // { name: 'GreenSlime', spawnRate: 55 },
+              // { name: 'Velyr', spawnRate: 30 },
+              // { name: 'Kaskari', spawnRate: 10 },
+              // { name: 'ValleyWolf', spawnRate: 5 },
+            ],
+            levelRange: { min: 3, max: 6 } // Define level range for Cliff Top 
           }
         }
       },
@@ -139,9 +154,17 @@ export const WorldData = {
               Encounter: {
                 name: 'Sound in the dark',
                 description: 'You hear something approaching...',
-                image: './images/goblin.png',
+                image: './images/corrupted-golem.png',
               }
-            }
+            },
+            // Enemy spawns and spawn weights for Tunnel Entrance
+            enemies: [
+              { name: 'Corrupted Golem', spawnRate: 100 },
+              // { name: 'Velyr', spawnRate: 30 },
+              // { name: 'Kaskari', spawnRate: 10 },
+              // { name: 'ValleyWolf', spawnRate: 5 },
+            ],
+            levelRange: { min: 6, max: 8 } // Define level range for Tunnel Entrance
           }
         }
       }

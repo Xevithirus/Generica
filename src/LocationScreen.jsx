@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LocationScreen = ({ region, area, localPosition, activity, handleTravel, handleLocal, handleActivities, setCurrentArea, setCurrentLocalPosition, setCurrentActivity }) => {
+const LocationScreen = ({ region, area, localPosition, activity, handleTravel, handleLocal, handleActivities, setCurrentArea, setCurrentLocalPosition, setCurrentActivity, isEventActive }) => {
   return (
     <div className="world-location">
       <h2 className="location-name">{activity ? activity.name : (localPosition?.name || area?.name || region.name)}</h2>
@@ -14,9 +14,9 @@ const LocationScreen = ({ region, area, localPosition, activity, handleTravel, h
         )}
         {localPosition && !activity && (
           <>
-            <button className="local-button" onClick={handleLocal}>Local</button>
-            <button className="activities-button" onClick={handleActivities}>Activities</button>
-            <button className="leave-button" onClick={() => { setCurrentLocalPosition(null); setCurrentActivity(null); }}>Leave Area</button>
+            <button className="local-button" onClick={handleLocal} disabled={isEventActive}>Local</button>
+            <button className="activities-button" onClick={handleActivities} disabled={isEventActive}>Activities</button>
+            <button className="leave-button" onClick={() => { setCurrentLocalPosition(null); setCurrentActivity(null); }} disabled={isEventActive}>Leave Area</button>
           </>
         )}
         {activity && (
