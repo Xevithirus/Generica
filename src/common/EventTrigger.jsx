@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { WorldData } from '../WorldData';
-import { EnemyData } from '../EnemyData'; 
-import { calculateStats, baseStats } from '../EnemyData';
+import { EnemyData, calculateStats, growthCoefficients } from '../EnemyData'; 
 
 function getRandomLevel(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,8 +16,8 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
     if (currentLocalPosition && currentArea && currentRegion) {
       if (Math.random() > 0.4) {
         const regionData = WorldData[currentRegion];
-        const areaData = regionData.areas[currentArea];
-        const localPositionData = areaData.localPositions[currentLocalPosition];
+        const areaData = regionData?.areas[currentArea];
+        const localPositionData = areaData?.localPositions[currentLocalPosition];
         const enemies = localPositionData?.enemies;
 
         if (enemies && enemies.length > 0) {
@@ -28,11 +27,15 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
 
           if (selectedEnemy) {
             const enemyDetails = EnemyData[selectedEnemy.name];
-            const levelRange = localPositionData.levelRange;
-            const level = getRandomLevel(levelRange.min, levelRange.max);
-            const stats = calculateStats(enemyDetails.baseStats, level);
-            setEnemy({ ...selectedEnemy, ...enemyDetails, level, stats });
-            setIsEventActive(true);
+            if (enemyDetails) {
+              const levelRange = localPositionData.levelRange;
+              const level = getRandomLevel(levelRange.min, levelRange.max);
+              const stats = calculateStats(enemyDetails.stats, level, growthCoefficients); // Correct usage
+              setEnemy({ ...selectedEnemy, ...enemyDetails, level, stats });
+              setIsEventActive(true);
+            } else {
+              console.error(`Enemy details not found for: ${selectedEnemy.name}`);
+            }
           }
         }
       }
@@ -70,6 +73,7 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
       {enemy && (
         <div className="event-popup">
           <h3>An enemy <span className="enemy-name-span">{enemy.name}</span> has appeared!</h3>
+          <p>{enemy.description}</p>
           <img src={enemy.image} alt={enemy.name} />
           <div className="text-LR-alignment">
             <div className="stats-left">
@@ -81,9 +85,13 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
               <p>MAG: {enemy.stats.mag}</p>
             </div>
             <div className="stats-left">
-              <p>STR: {enemy.stats.str}</p>
-              <p>AGI: {enemy.stats.agi}</p>           
-              <p>INT: {enemy.stats.int}</p>                   
+              <p>AP: {enemy.stats.ap}</p>
+              <p>AR: {enemy.stats.ar}</p>           
+              <p>MRES: {enemy.stats.mres}</p>                   
+              <p>CRIT: {enemy.stats.crit}</p>
+              <p>EVA: {enemy.stats.eva}</p>
+              <p>AGI: {enemy.stats.agi}</p>
+              <p>ACC: {enemy.stats.acc}</p>
             </div>
           </div>
           <div className="button-container">   

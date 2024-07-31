@@ -67,9 +67,11 @@ export const WorldData = {
             // Enemy spawns and spawn weights for Valley Path
             enemies: [
               { name: 'GreenSlime', spawnRate: 55 },
-              { name: 'Velyra', spawnRate: 30 },
+              { name: 'Velyr', spawnRate: 25 },
               { name: 'Kaskari', spawnRate: 10 },
-              { name: 'Wolf', spawnRate: 5 },
+              { name: 'ValleyWolf', spawnRate: 5 },
+              { name: 'Brontor', spawnRate: 3 },
+              { name: 'Ayrin', spawnRate: 2 },
             ],
             levelRange: { min: 1, max: 3 } // Define level range for Valley Path
           }
@@ -97,10 +99,7 @@ export const WorldData = {
             },
             // Enemy spawns and spawn weights 
             enemies: [
-              { name: 'GreenSlime', spawnRate: 55 },
-              { name: 'Velyra', spawnRate: 30 },
-              { name: 'Kaskari', spawnRate: 10 },
-              { name: 'Wolf', spawnRate: 5 },
+              { name: 'GreenSlime', spawnRate: 85 },
             ],
             levelRange: { min: 2, max: 5 } // Define level range 
           }
@@ -128,10 +127,10 @@ export const WorldData = {
             },         
             // Enemy spawns and spawn weights for Cliff Top
             enemies: [
-              { name: 'GreenSlime', spawnRate: 55 },
-              { name: 'Velyra', spawnRate: 30 },
-              { name: 'Kaskari', spawnRate: 10 },
-              { name: 'Wolf', spawnRate: 5 },
+              // { name: 'GreenSlime', spawnRate: 55 },
+              // { name: 'Velyr', spawnRate: 30 },
+              // { name: 'Kaskari', spawnRate: 10 },
+              // { name: 'ValleyWolf', spawnRate: 5 },
             ],
             levelRange: { min: 3, max: 6 } // Define level range for Cliff Top 
           }
@@ -160,12 +159,12 @@ export const WorldData = {
             },
             // Enemy spawns and spawn weights for Tunnel Entrance
             enemies: [
-              { name: 'GreenSlime', spawnRate: 55 },
-              { name: 'Velyra', spawnRate: 30 },
-              { name: 'Kaskari', spawnRate: 10 },
-              { name: 'Wolf', spawnRate: 5 },
+              { name: 'Corrupted Golem', spawnRate: 100 },
+              // { name: 'Velyr', spawnRate: 30 },
+              // { name: 'Kaskari', spawnRate: 10 },
+              // { name: 'ValleyWolf', spawnRate: 5 },
             ],
-            levelRange: { min: 4, max: 7 } // Define level range for Tunnel Entrance
+            levelRange: { min: 6, max: 8 } // Define level range for Tunnel Entrance
           }
         }
       }
