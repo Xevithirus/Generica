@@ -1,7 +1,11 @@
-// EventTrigger.jsx
 import React, { useEffect, useState } from "react";
 import { WorldData } from '../WorldData';
-import { EnemyData } from '../EnemyData';
+import { EnemyData } from '../EnemyData'; 
+import { calculateStats, baseStats } from '../EnemyData';
+
+function getRandomLevel(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export default function EventTrigger({ currentLocalPosition, currentArea, currentRegion, setIsEventActive }) {
   const [enemy, setEnemy] = useState(null);
@@ -11,20 +15,25 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
 
   useEffect(() => {
     if (currentLocalPosition && currentArea && currentRegion) {
-      const regionData = WorldData[currentRegion];
-      const areaData = regionData.areas[currentArea];
-      const localPositionData = areaData.localPositions[currentLocalPosition];
-      const enemies = localPositionData?.enemies;
+      if (Math.random() > 0.4) {
+        const regionData = WorldData[currentRegion];
+        const areaData = regionData.areas[currentArea];
+        const localPositionData = areaData.localPositions[currentLocalPosition];
+        const enemies = localPositionData?.enemies;
 
-      if (enemies && enemies.length > 0) {
-        const totalWeight = enemies.reduce((sum, enemy) => sum + enemy.spawnRate, 0);
-        let random = Math.random() * totalWeight;
-        const selectedEnemy = enemies.find(enemy => (random -= enemy.spawnRate) <= 0);
-        
-        if (selectedEnemy) {
-          const enemyDetails = EnemyData[selectedEnemy.name];
-          setEnemy({ ...selectedEnemy, ...enemyDetails });
-          setIsEventActive(true); // Lock navigation when an enemy appears
+        if (enemies && enemies.length > 0) {
+          const totalWeight = enemies.reduce((sum, enemy) => sum + enemy.spawnRate, 0);
+          let random = Math.random() * totalWeight;
+          const selectedEnemy = enemies.find(enemy => (random -= enemy.spawnRate) <= 0);
+
+          if (selectedEnemy) {
+            const enemyDetails = EnemyData[selectedEnemy.name];
+            const levelRange = localPositionData.levelRange;
+            const level = getRandomLevel(levelRange.min, levelRange.max);
+            const stats = calculateStats(enemyDetails.baseStats, level);
+            setEnemy({ ...selectedEnemy, ...enemyDetails, level, stats });
+            setIsEventActive(true);
+          }
         }
       }
     }
@@ -35,18 +44,25 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
 
     const enemyAgility = enemy.stats.agi;
     let fleeChance = 50 + (playerAgility - enemyAgility);
-    fleeChance += Math.floor(Math.random() * 11) - 5; // Random modifier ±5%
-    fleeChance = Math.max(0, Math.min(100, fleeChance)); // Clamp flee chance between 0% and 100%
+    fleeChance += Math.floor(Math.random() * 11) - 5;
+    fleeChance = Math.max(0, Math.min(100, fleeChance));
 
     if (Math.random() * 100 < fleeChance) {
-      // Successful flee
       setEnemy(null);
-      setIsEventActive(false); // Unlock navigation
+      setFleeDisabled(false);
+      setIsEventActive(false);
     } else {
-      // Failed flee
       alert("You could not escape!");
       setFleeDisabled(true);
     }
+  };
+
+  const handleFight = () => {
+    if (!enemy) return;
+    
+    setEnemy(null);
+    setFleeDisabled(false);
+    setIsEventActive(false);
   };
 
   return (
@@ -71,7 +87,7 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
             </div>
           </div>
           <div className="button-container">   
-            <button className="event-button">Fight</button>
+            <button className="event-button" onClick={handleFight}>Fight</button>
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>
           </div>       
         </div>
