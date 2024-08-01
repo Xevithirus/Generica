@@ -1,5 +1,4 @@
-// CharacterContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import { growthCoefficients } from './EnemyData';  // Import growth coefficients
 
 const CharacterContext = createContext();
@@ -18,17 +17,19 @@ const baseCharacterStats = {
 
 // Calculate stats based on level and growth coefficients
 const calculateStats = (base, level) => {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  
   return {
-    hp: Math.round(base.hp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
-    mag: Math.round(base.mag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
-    ap: Math.round(base.ap * Math.pow(growthCoefficients.ap, level - 1) * (0.9 + Math.random() * 0.2)),
-    ar: Math.round(base.ar * Math.pow(growthCoefficients.ar, level - 1) * (0.9 + Math.random() * 0.2)),
-    mres: Math.round(base.mres * Math.pow(growthCoefficients.mres, level - 1) * (0.9 + Math.random() * 0.2)),
-    agi: Math.round(base.agi * Math.pow(growthCoefficients.agi, level - 1) * (0.9 + Math.random() * 0.2)),
-    acc: Math.round(base.acc * Math.pow(growthCoefficients.acc, level - 1) * (0.9 + Math.random() * 0.2)),
-    eva: Math.round(base.eva * Math.pow(growthCoefficients.eva, level - 1) * (0.9 + Math.random() * 0.2)),
-    crit: Math.round(base.crit * Math.pow(growthCoefficients.crit, level - 1) * (0.9 + Math.random() * 0.2)),
-    en: Math.round(base.en * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    hp: Math.round(base.hp * Math.pow(growthCoefficients.hp || 1, level - 1)),
+    mag: Math.round(base.mag * Math.pow(growthCoefficients.mag || 1, level - 1)),
+    ap: Math.round(base.ap * Math.pow(growthCoefficients.ap || 1, level - 1)),
+    ar: Math.round(base.ar * Math.pow(growthCoefficients.ar || 1, level - 1)),
+    mres: Math.round(base.mres * Math.pow(growthCoefficients.mres || 1, level - 1)),
+    agi: Math.round(base.agi * Math.pow(growthCoefficients.agi || 1, level - 1)),
+    acc: Math.round(base.acc * Math.pow(growthCoefficients.acc || 1, level - 1)),
+    eva: Math.round(base.eva * Math.pow(growthCoefficients.eva || 1, level - 1)),
+    crit: Math.round(base.crit * Math.pow(growthCoefficients.crit || 1, level - 1)),
+    en: Math.round(base.en * Math.pow(growthCoefficients.en || 1, level - 1)),
   };
 };
 
@@ -38,23 +39,25 @@ export const CharacterProvider = ({ children }) => {
     sex: '',
     job: '',
     level: 1,
-    stats: {},
+    baseStats: {},  // Store base stats separately
+    stats: {},      // Store current stats
   });
+
   const [isCharacterCreated, setIsCharacterCreated] = useState(false);
 
-  const handleCharacterCreation = (name, job, sex) => {
+  const handleCharacterCreation = useCallback((name, job, sex) => {
     const baseStats = baseCharacterStats[job];
     const stats = calculateStats(baseStats, 1); // Initialize stats at level 1
-    setCharacter({ name, job, sex, level: 1, stats });
+    setCharacter({ name, job, sex, level: 1, baseStats, stats });
     setIsCharacterCreated(true);  // Set the flag to true when character is created
-  };
+  }, []);
 
-  const levelUp = () => {
+  const levelUp = useCallback(() => {
     const newLevel = character.level + 1;
-    const baseStats = baseCharacterStats[character.job];
+    const baseStats = character.baseStats;
     const stats = calculateStats(baseStats, newLevel);
     setCharacter(prev => ({ ...prev, level: newLevel, stats }));
-  };
+  }, [character.baseStats, character.level]);
 
   return (
     <CharacterContext.Provider value={{ character, isCharacterCreated, handleCharacterCreation, levelUp }}>

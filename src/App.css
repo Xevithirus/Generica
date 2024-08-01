@@ -384,3 +384,53 @@
   color: grey;
   pointer-events: none;
 }
+
+/* Combat Window */
+.combat-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  color: white;
+  border: 2px solid #555;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  width: 80%;
+  max-width: 500px;
+}
+
+.combat-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.combat-character,
+.combat-enemy {
+  width: 45%;
+}
+
+.combat-feedback {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.combat-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.combat-actions button {
+  background-color: #555;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.combat-actions button:hover {
+  background-color: #777;
+}

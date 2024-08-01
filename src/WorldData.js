@@ -159,7 +159,7 @@ export const WorldData = {
             },
             // Enemy spawns and spawn weights for Tunnel Entrance
             enemies: [
-              { name: 'Corrupted Golem', spawnRate: 100 },
+              { name: 'CorruptedGolem', spawnRate: 100 },
               // { name: 'Velyr', spawnRate: 30 },
               // { name: 'Kaskari', spawnRate: 10 },
               // { name: 'ValleyWolf', spawnRate: 5 },

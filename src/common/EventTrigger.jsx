@@ -1,59 +1,89 @@
 import React, { useEffect, useState } from "react";
 import { WorldData } from '../WorldData';
-import { EnemyData, calculateStats, growthCoefficients } from '../EnemyData'; 
+import { EnemyData } from '../EnemyData';
+import { useCharacter } from '../CharacterContext';
+import { calculateStats, growthCoefficients } from '../EnemyData';
 
-function getRandomLevel(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// Function to get a random level within the range
+const getRandomLevel = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-export default function EventTrigger({ currentLocalPosition, currentArea, currentRegion, setIsEventActive }) {
-  const [enemy, setEnemy] = useState(null);
+export default function EventTrigger({ setInCombat, currentLocalPosition, currentArea, currentRegion, setIsEventActive, setEnemy }) {
+  const [enemy, setEnemyState] = useState(null);
   const [fleeDisabled, setFleeDisabled] = useState(false);
 
-  const playerAgility = 20; // Example player agility, replace with actual player agility once made dynamic
+  const { character } = useCharacter(); // Access character stats from context
 
-  useEffect(() => {
-    if (currentLocalPosition && currentArea && currentRegion) {
-      if (Math.random() > 0.4) {
-        const regionData = WorldData[currentRegion];
-        const areaData = regionData?.areas[currentArea];
-        const localPositionData = areaData?.localPositions[currentLocalPosition];
-        const enemies = localPositionData?.enemies;
+useEffect(() => {
+  if (currentLocalPosition && currentArea && currentRegion) {
+      console.log('Random event triggered');
 
-        if (enemies && enemies.length > 0) {
-          const totalWeight = enemies.reduce((sum, enemy) => sum + enemy.spawnRate, 0);
-          let random = Math.random() * totalWeight;
-          const selectedEnemy = enemies.find(enemy => (random -= enemy.spawnRate) <= 0);
+      const regionData = WorldData[currentRegion];
+      const areaData = regionData?.areas[currentArea];
+      const localPositionData = areaData?.localPositions[currentLocalPosition];
+      const enemies = localPositionData?.enemies;
 
-          if (selectedEnemy) {
-            const enemyDetails = EnemyData[selectedEnemy.name];
-            if (enemyDetails) {
-              const levelRange = localPositionData.levelRange;
-              const level = getRandomLevel(levelRange.min, levelRange.max);
-              const stats = calculateStats(enemyDetails.stats, level, growthCoefficients); // Correct usage
-              setEnemy({ ...selectedEnemy, ...enemyDetails, level, stats });
-              setIsEventActive(true);
-            } else {
-              console.error(`Enemy details not found for: ${selectedEnemy.name}`);
-            }
+      if (enemies && enemies.length > 0) {
+        const totalWeight = enemies.reduce((sum, enemy) => sum + enemy.spawnRate, 0);
+        let random = Math.random() * totalWeight;
+        const selectedEnemy = enemies.find(enemy => (random -= enemy.spawnRate) <= 0);
+
+        if (selectedEnemy) {
+          const enemyDetails = EnemyData[selectedEnemy.name];
+          if (enemyDetails) {
+            const levelRange = localPositionData.levelRange;
+            const level = getRandomLevel(levelRange.min, levelRange.max);
+            const stats = calculateStats(enemyDetails.stats, level, growthCoefficients);
+            const fullEnemyData = { ...selectedEnemy, ...enemyDetails, level, stats };
+
+            setEnemyState(fullEnemyData);
+            setEnemy(fullEnemyData);
+            setIsEventActive(true);
+          } else {
+            console.error(`Enemy details not found for: ${selectedEnemy.name}`);
+            setEnemyState(null); // Ensure no enemy state is set
+            setEnemy(null);
+            setIsEventActive(false);
           }
+        } else {
+          console.error('No enemy selected');
+          setEnemyState(null);
+          setEnemy(null);
+          setIsEventActive(false);
         }
+      } else {
+        console.error('No enemies available');
+        setEnemyState(null);
+        setEnemy(null);
+        setIsEventActive(false);
       }
+    } else {
+      console.log('Random event not triggered');
+      setEnemyState(null);
+      setEnemy(null);
+      setIsEventActive(false);
     }
-  }, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
+}, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
 
   const handleFlee = () => {
     if (!enemy) return;
 
+    console.log('Handling flee');
     const enemyAgility = enemy.stats.agi;
+    const playerAgility = character.stats.agi; 
     let fleeChance = 50 + (playerAgility - enemyAgility);
     fleeChance += Math.floor(Math.random() * 11) - 5;
     fleeChance = Math.max(0, Math.min(100, fleeChance));
 
+    console.log('fleeChance:', fleeChance);
+
     if (Math.random() * 100 < fleeChance) {
-      setEnemy(null);
+      setEnemyState(null); // Update the local state
       setFleeDisabled(false);
       setIsEventActive(false);
+      setInCombat(false);
+      // Ensure to reset current activity
+      // Ensure to reset current local position
+      // Ensure to reset current area
     } else {
       alert("You could not escape!");
       setFleeDisabled(true);
@@ -62,15 +92,15 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
 
   const handleFight = () => {
     if (!enemy) return;
-    
-    setEnemy(null);
-    setFleeDisabled(false);
+    setInCombat(true);
     setIsEventActive(false);
   };
 
+  console.log('Rendering with enemy:', enemy);
+
   return (
     <>
-      {enemy && (
+      {enemy ? (
         <div className="event-popup">
           <h3>An enemy <span className="enemy-name-span">{enemy.name}</span> has appeared!</h3>
           <p>{enemy.description}</p>
@@ -99,6 +129,8 @@ export default function EventTrigger({ currentLocalPosition, currentArea, curren
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>
           </div>       
         </div>
+      ) : (
+        <p>No enemy data to display</p>
       )}
     </>
   );

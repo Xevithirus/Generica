@@ -3,6 +3,7 @@ import Sidebar from './common/Sidebar';
 import LocationScreen from './LocationScreen';
 import { WorldData } from './WorldData';
 import EventTrigger from './common/EventTrigger';
+import CombatWindow from './CombatWindow';
 import './App.css';
 
 const Game = () => {
@@ -14,6 +15,9 @@ const Game = () => {
     const [popupList, setPopupList] = useState([]);
     const [popupType, setPopupType] = useState('');
     const [isEventActive, setIsEventActive] = useState(false);
+    const [enemy, setEnemy] = useState(null);
+    const [inCombat, setInCombat] = useState(false);
+    const [fleeDisabled, setFleeDisabled] = useState(false);
 
     const currentRegionData = WorldData[currentRegion];
     const currentAreaData = currentRegionData?.areas[currentArea];
@@ -29,6 +33,21 @@ const Game = () => {
     const mainDescription = currentActivityData
         ? currentActivityData.description
         : currentLocalPositionData?.description || currentAreaData?.description || currentRegionData?.description;
+
+    useEffect(() => {
+        if (currentLocalPositionData?.enemies && currentLocalPositionData.enemies.length > 0) {
+            // Check if an event should be triggered
+            const shouldTriggerEvent = Math.random();
+            if (shouldTriggerEvent > 0.4) {
+                setIsEventActive(true);
+            } else {
+                setIsEventActive(false);
+            }
+        } else {
+            // Deactivate the event if there are no enemies
+            setIsEventActive(false);
+        }
+    }, [currentLocalPositionData]); // Dependency on currentLocalPositionData
 
     const handlePopupToggle = (type, list) => {
         if (showPopup && popupType === type) {
@@ -86,7 +105,13 @@ const Game = () => {
     };
 
     const handleClickOutsidePopup = (e) => {
-        if (showPopup && !e.target.closest('.popup') && !e.target.closest('.travel-button') && !e.target.closest('.local-button') && !e.target.closest('.activities-button')) {
+        if (
+            showPopup &&
+            !e.target.closest('.popup') &&
+            !e.target.closest('.travel-button') &&
+            !e.target.closest('.local-button') &&
+            !e.target.closest('.activities-button')
+        ) {
             setShowPopup(false);
             setPopupType('');
         }
@@ -118,12 +143,25 @@ const Game = () => {
                     isEventActive={isEventActive}
                 />
             </div>
-            <EventTrigger 
-                currentLocalPosition={currentLocalPosition} 
-                currentArea={currentArea}
-                currentRegion={currentRegion}
-                setIsEventActive={setIsEventActive} 
-            />
+            {isEventActive && (
+                <EventTrigger 
+                    currentLocalPosition={currentLocalPosition} 
+                    currentArea={currentArea}
+                    currentRegion={currentRegion}
+                    setInCombat={setInCombat} 
+                    setEnemy={setEnemy}
+                    setIsEventActive={setIsEventActive}
+                    fleeDisabled={fleeDisabled}
+                    setFleeDisabled={setFleeDisabled}
+                />
+            )}
+            {inCombat && (
+                <CombatWindow 
+                    enemy={enemy} 
+                    setInCombat={setInCombat} 
+                    setEnemy={setEnemy} 
+                />
+            )}
             {showPopup && (
                 <div className="popup">
                     <ul>
