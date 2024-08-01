@@ -139,7 +139,7 @@ export const EnemyData = {
     level: 1,
     stats: baseStats.Ayrin,
     image: './images/ayrin.png',
-    description: "Antelope-like beings with the ability to manipulate wind and create powerful gusts.", 
+    description: "An antelope-like being said to have the ability to manipulate wind and create powerful gusts.", 
   },
   /*
   Sisharra

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useCharacter } from './CharacterContext';
+import { getProfileImageSrc } from './utils/utils';
 
 export default function CombatWindow({ enemy, setInCombat, setEnemy }) {
   const { character } = useCharacter(); // Access character stats from context
   const [combatLog, setCombatLog] = useState([]);
+  const combatLogRef = useRef(null);
 
   if (!enemy) {
     console.log('No enemy data received');
@@ -11,6 +13,12 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy }) {
   }
 
   console.log('Enemy data:', enemy);
+
+  useEffect(() => {
+    if (combatLogRef.current) {
+      combatLogRef.current.scrollTop = combatLogRef.current.scrollHeight;
+    }
+  }, [combatLog]);
 
   // Function to handle attacking
   const handleAttackClick = () => {
@@ -53,39 +61,48 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy }) {
     setInCombat(false);
   };
 
+  const playerImageSrc = getProfileImageSrc(character);
+
   return (
     <div className="combat-window">
       <div className="combat-info">
         <div className="combat-character">
-          <h2>{character.name}</h2>
-          <p>Level: {character.level}</p>
-          <p>HP: {character.stats.hp}</p>
-          <p>AP: {character.stats.ap}</p>
-          <p>EN: {character.stats.en}</p>
-          <p>MAG: {character.stats.mag}</p>
-          <p>AR: {character.stats.ar}</p>
-          <p>MRES: {character.stats.mres}</p>
-          <p>CRIT: {character.stats.crit}</p>
-          <p>EVA: {character.stats.eva}</p>
-          <p>AGI: {character.stats.agi}</p>
-          <p>ACC: {character.stats.acc}</p>
+          <h2 className="combat-title">{character.name}</h2>
+          <img src={playerImageSrc} />
+          <div className="combat-stats">
+            <p><span>Level:</span><span>{character.level}</span></p>
+            <p><span>HP:</span><span>{character.stats.hp}</span></p>
+            <p><span>AP:</span><span>{character.stats.ap}</span></p>
+            <p><span>EN:</span><span>{character.stats.en}</span></p>
+            <p><span>MAG:</span><span>{character.stats.mag}</span></p>
+            <p><span>AR:</span><span>{character.stats.ar}</span></p>
+            <p><span>MRES:</span><span>{character.stats.mres}</span></p>
+            <p><span>CRIT:</span><span>{character.stats.crit}</span></p>
+            <p><span>EVA:</span><span>{character.stats.eva}</span></p>
+            <p><span>AGI:</span><span>{character.stats.agi}</span></p>
+            <p><span>ACC:</span><span>{character.stats.acc}</span></p>
+          </div>
         </div>
+        <img className="battle-icon" src={ "./images/crossed-swords-icon.png" } />   
         <div className="combat-enemy">
-          <h2>{enemy.name}</h2>
-          <p>Level: {enemy.level}</p>
-          <p>HP: {enemy.stats.hp}</p>
-          <p>AP: {enemy.stats.ap}</p>
-          <p>EN: {enemy.stats.en}</p>
-          <p>MAG: {enemy.stats.mag}</p>
-          <p>AR: {enemy.stats.ar}</p>
-          <p>MRES: {enemy.stats.mres}</p>
-          <p>CRIT: {enemy.stats.crit}</p>
-          <p>EVA: {enemy.stats.eva}</p>
-          <p>AGI: {enemy.stats.agi}</p>
-          <p>ACC: {enemy.stats.acc}</p>
+          <h2 className="combat-title">{enemy.name}</h2>
+          <img src={enemy.image} alt={enemy.name} />
+          <div className="combat-stats">
+            <p><span>Level:</span><span>{enemy.level}</span></p>
+            <p><span>HP:</span><span>{enemy.stats.hp}</span></p>
+            <p><span>AP:</span><span>{enemy.stats.ap}</span></p>
+            <p><span>EN:</span><span>{enemy.stats.en}</span></p>
+            <p><span>MAG:</span><span>{enemy.stats.mag}</span></p>
+            <p><span>AR:</span><span>{enemy.stats.ar}</span></p>
+            <p><span>MRES:</span><span>{enemy.stats.mres}</span></p>
+            <p><span>CRIT:</span><span>{enemy.stats.crit}</span></p>
+            <p><span>EVA:</span><span>{enemy.stats.eva}</span></p>
+            <p><span>AGI:</span><span>{enemy.stats.agi}</span></p>
+            <p><span>ACC:</span><span>{enemy.stats.acc}</span></p>
+          </div>
         </div>
       </div>
-      <div className="combat-log">
+      <div className="combat-log" ref={combatLogRef}>
         {combatLog.map((log, index) => (
           <p key={index}>{log}</p>
         ))}

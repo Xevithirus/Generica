@@ -98,7 +98,7 @@
   width: 100%;
   height: auto;
   margin-bottom: 20px;
-  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 1);
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 1);
   border-radius: 10px;
 }
 
@@ -183,7 +183,7 @@
   text-align: left;
   z-index: 20;
   border: solid 2px rgb(61, 61, 61);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .location-name {
@@ -219,6 +219,17 @@
   font-family: "Press Start 2P", system-ui;
   flex: 1;
   text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.travel-button:disabled,
+.activities-button:disabled,
+.local-button:disabled,
+.enter-button:disabled,
+.leave-button:disabled,
+.return-button:disabled {
+  background-color: #0e0d0d;
+  pointer-events: none;
 }
 
 .travel-button:hover,
@@ -388,49 +399,135 @@
 /* Combat Window */
 .combat-window {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: calc(40%);
+  left: 58%;
   transform: translate(-50%, -50%);
-  background-color: #333;
+  background-color: #1e1e1e;
   color: white;
   border: 2px solid #555;
-  border-radius: 10px;
   padding: 20px;
   z-index: 1000;
-  width: 80%;
-  max-width: 500px;
+  width: 60%;
+  max-width: 1200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+}
+
+.combat-title {
+  margin-bottom: 20px;
 }
 
 .combat-info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .combat-character,
 .combat-enemy {
   width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.combat-feedback {
+.combat-character img,
+.combat-enemy img {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
   margin-bottom: 20px;
-  font-size: 1.2em;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 1);
+}
+
+.battle-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+}
+
+.combat-stats {
+  width: 100%;
+}
+
+.combat-stats p {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+  padding: 0 150px;
+}
+
+.combat-log {
+  max-height: 130px;
+  height: 160px;
+  overflow-y: auto;
+  background-color: #242424;
+  padding: 10px;
+  margin-top: 20px;
+  font-size: 12px;
+  border: 2px solid rgb(61, 61, 61);
+}
+
+.combat-log p {
+  margin: 5px 0;
 }
 
 .combat-actions {
   display: flex;
   justify-content: space-around;
+  margin-top: 20px;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 .combat-actions button {
-  background-color: #555;
-  border: none;
+  background-color: #180700;
+  border: 2px solid #ffffff;
   color: white;
   padding: 10px 20px;
-  border-radius: 5px;
   cursor: pointer;
+  flex-grow: 1;
+  font-family: "Press Start 2P", system-ui;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  min-width: 100px;
+  max-width: 150px;
+  margin: 0 5px;
+  /* Adjust as needed to control the exact spacing */
 }
 
 .combat-actions button:hover {
-  background-color: #777;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+@media (max-width: 768px) {
+  .combat-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .combat-character,
+  .combat-enemy {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+
+  .combat-actions {
+    flex-direction: column;
+  }
+
+  .combat-actions button {
+    margin: 5px 0;
+  }
 }
