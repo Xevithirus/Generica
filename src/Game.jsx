@@ -141,6 +141,7 @@ const Game = () => {
                     setCurrentLocalPosition={setCurrentLocalPosition}
                     setCurrentActivity={setCurrentActivity}
                     isEventActive={isEventActive}
+                    inCombat={inCombat} 
                 />
             </div>
             {isEventActive && (
@@ -157,9 +158,14 @@ const Game = () => {
             )}
             {inCombat && (
                 <CombatWindow 
+                    currentLocalPosition={currentLocalPosition} 
+                    currentArea={currentArea}
+                    currentRegion={currentRegion}
                     enemy={enemy} 
                     setInCombat={setInCombat} 
                     setEnemy={setEnemy} 
+                    fleeDisabled={fleeDisabled}
+                    setFleeDisabled={setFleeDisabled}
                 />
             )}
             {showPopup && (

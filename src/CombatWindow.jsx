@@ -68,37 +68,39 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy }) {
       <div className="combat-info">
         <div className="combat-character">
           <h2 className="combat-title">{character.name}</h2>
+          <p className="combat-level"><span>Level:</span><span>{character.level}</span></p>
           <img src={playerImageSrc} />
           <div className="combat-stats">
-            <p><span>Level:</span><span>{character.level}</span></p>
-            <p><span>HP:</span><span>{character.stats.hp}</span></p>
-            <p><span>AP:</span><span>{character.stats.ap}</span></p>
-            <p><span>EN:</span><span>{character.stats.en}</span></p>
-            <p><span>MAG:</span><span>{character.stats.mag}</span></p>
-            <p><span>AR:</span><span>{character.stats.ar}</span></p>
-            <p><span>MRES:</span><span>{character.stats.mres}</span></p>
-            <p><span>CRIT:</span><span>{character.stats.crit}</span></p>
-            <p><span>EVA:</span><span>{character.stats.eva}</span></p>
-            <p><span>AGI:</span><span>{character.stats.agi}</span></p>
-            <p><span>ACC:</span><span>{character.stats.acc}</span></p>
+            <p><span>HP:</span><span className="stat-value">{character.stats.hp}</span></p>
+            <p><span>EN:</span><span className="stat-value">{character.stats.en}</span></p>
+            <p><span>MAG:</span><span className="stat-value">{character.stats.mag}</span></p>
+            <p><span>AR:</span><span className="stat-value">{character.stats.ar}</span></p>
+            <p><span>MRES:</span><span className="stat-value">{character.stats.mres}</span></p>
+            <p><span>STR:</span><span className="stat-value">{character.stats.str}</span></p>
+            <p><span>INT:</span><span className="stat-value">{character.stats.int}</span></p>
+            <p><span>CRIT:</span><span className="stat-value">{character.stats.crit}</span></p>
+            <p><span>EVA:</span><span className="stat-value">{character.stats.eva}</span></p>
+            <p><span>AGI:</span><span className="stat-value">{character.stats.agi}</span></p>
+            <p><span>ACC:</span><span className="stat-value">{character.stats.acc}</span></p>
           </div>
         </div>
         <img className="battle-icon" src={ "./images/crossed-swords-icon.png" } />   
         <div className="combat-enemy">
           <h2 className="combat-title">{enemy.name}</h2>
+          <p className="combat-level"><span>Level:</span><span>{enemy.level}</span></p>
           <img src={enemy.image} alt={enemy.name} />
           <div className="combat-stats">
-            <p><span>Level:</span><span>{enemy.level}</span></p>
-            <p><span>HP:</span><span>{enemy.stats.hp}</span></p>
-            <p><span>AP:</span><span>{enemy.stats.ap}</span></p>
-            <p><span>EN:</span><span>{enemy.stats.en}</span></p>
-            <p><span>MAG:</span><span>{enemy.stats.mag}</span></p>
-            <p><span>AR:</span><span>{enemy.stats.ar}</span></p>
-            <p><span>MRES:</span><span>{enemy.stats.mres}</span></p>
-            <p><span>CRIT:</span><span>{enemy.stats.crit}</span></p>
-            <p><span>EVA:</span><span>{enemy.stats.eva}</span></p>
-            <p><span>AGI:</span><span>{enemy.stats.agi}</span></p>
-            <p><span>ACC:</span><span>{enemy.stats.acc}</span></p>
+            <p><span>HP:</span><span className="stat-value">{enemy.stats.hp}</span></p>
+            <p><span>EN:</span><span className="stat-value">{enemy.stats.en}</span></p>
+            <p><span>MAG:</span><span className="stat-value">{enemy.stats.mag}</span></p>
+            <p><span>AR:</span><span className="stat-value">{enemy.stats.ar}</span></p>
+            <p><span>MRES:</span><span className="stat-value">{enemy.stats.mres}</span></p>
+            <p><span>STR:</span><span className="stat-value">{enemy.stats.str}</span></p>
+            <p><span>INT:</span><span className="stat-value">{enemy.stats.int}</span></p>
+            <p><span>CRIT:</span><span className="stat-value">{enemy.stats.crit}</span></p>
+            <p><span>EVA:</span><span className="stat-value">{enemy.stats.eva}</span></p>
+            <p><span>AGI:</span><span className="stat-value">{enemy.stats.agi}</span></p>
+            <p><span>ACC:</span><span className="stat-value">{enemy.stats.acc}</span></p>
           </div>
         </div>
       </div>

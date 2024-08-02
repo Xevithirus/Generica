@@ -37,9 +37,10 @@ const capitalizeField = (job, sex) => {
       <div className="stat-container"><span>Health:</span><span>{character.stats.hp}</span></div>
       <div className="stat-container"><span>Energy:</span><span>{character.stats.en}</span></div>
       <div className="stat-container"><span>Magic:</span><span>{character.stats.mag}</span></div>
-      <div className="stat-container"><span>Attack Power:</span><span>{character.stats.ap || 0}</span></div>
       <div className="stat-container"><span>Armor:</span><span>{character.stats.ar || 0}</span></div>
       <div className="stat-container"><span>Magic Resist:</span><span>{character.stats.mres || 0}</span></div>
+      <div className="stat-container"><span>Strength:</span><span>{character.stats.str || 0}</span></div>
+      <div className="stat-container"><span>Intellect:</span><span>{character.stats.int || 0}</span></div>
       <div className="stat-container"><span>Critical:</span><span>{character.stats.crit || 0}</span></div>
       <div className="stat-container"><span>Evasion:</span><span>{character.stats.eva || 0}</span></div>
       <div className="stat-container"><span>Agility:</span><span>{character.stats.agi}</span></div>

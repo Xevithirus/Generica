@@ -9,6 +9,7 @@
   height: 100vh;
   overflow: hidden;
   font-family: "Press Start 2P", system-ui;
+  background: linear-gradient(to bottom, #1c1c1c, #0d0d0d);
 }
 
 .character-creation-container {
@@ -16,16 +17,17 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #161616;
+  background-color: #141313;
   font-family: "Press Start 2P", system-ui;
 }
 
 .character-creation-form {
-  background-color: #180700;
+  background-color: #252525;
   padding: 40px;
-  border: 2px solid rgb(61, 61, 61);
+  border: 2px solid #b8860b;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.5);
   text-align: center;
+  color: #f5f5f5;
 }
 
 .character-creation-form h1 {
@@ -45,16 +47,19 @@
   padding: 10px;
   margin-top: 5px;
   margin-bottom: 20px;
-  border: 2px solid rgb(61, 61, 61);
-  background-color: #242424;
-  color: white;
+  border: 2px solid #b8860b;
+  background-color: #141414;
+  color: #f5f5f5;
   font-family: "Press Start 2P", system-ui;
   font-size: 0.8rem;
 }
 
 .character-creation-form select {
-  border-radius: 0;
   appearance: none;
+}
+
+.character-creation-form select option {
+  padding-bottom: 100px;
 }
 
 .character-creation-form select option:hover {
@@ -63,8 +68,8 @@
 }
 
 .character-creation-form button {
-  background-color: #180700;
-  border: 2px solid #ffffff;
+  background-color: #290d0d;
+  border: 2px solid #b8860b;
   padding: 15px;
   font-family: "Press Start 2P", system-ui;
   text-align: center;
@@ -72,7 +77,7 @@
 }
 
 .character-creation-form button:hover {
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
   border: 2px solid #000;
 }
@@ -80,12 +85,13 @@
 .sidebar {
   max-width: 330px;
   min-width: 330px;
-  background-color: #242424;
+  background-color: #2c2c2c;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   font-size: 0.7rem;
   z-index: 10;
-  border: 2px solid rgb(61, 61, 61);
+  border: 2px solid #5a5a5a;
+  color: #f5f5f5;
 }
 
 .sidebar-title {
@@ -135,14 +141,14 @@
 .sidebar .text-box {
   margin-top: 20px;
   padding: 10px;
-  background-color: #180700;
-  border: solid 2px rgb(61, 61, 61);
+  background-color: #141414;
+  border: solid 2px #5a5a5a;
 }
 
 .money-container {
   padding: 10px;
-  background-color: #161616;
-  border: solid 2px rgb(61, 61, 61);
+  background-color: #222222;
+  border: solid 2px #5a5a5a;
 }
 
 .location-screen {
@@ -151,9 +157,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #161616;
+  background-color: #222222;
   overflow: hidden;
-  border-radius: 10px;
 }
 
 .main-image {
@@ -161,7 +166,7 @@
   height: 100%;
   overflow: hidden;
   object-position: center;
-  border-radius: 10px;
+
 }
 
 .main-image img {
@@ -173,17 +178,17 @@
 
 .world-location {
   position: sticky;
-  /* bottom: 10px; */
   height: 350px;
   min-height: 200px;
   width: 100%;
-  background-color: #242424;
+  background-color: #2e2e2e;
   padding: 20px;
   box-shadow: 0px -5px 40px 10px rgba(0, 0, 0, 1);
   text-align: left;
   z-index: 20;
-  border: solid 2px rgb(61, 61, 61);
+  border: solid 2px #5a5a5a;
   font-size: 12px;
+  color: #f5f5f5;
 }
 
 .location-name {
@@ -193,8 +198,8 @@
 }
 
 .location-description {
-  border: 1px solid rgb(61, 61, 61);
-  background-color: #161616;
+  border: 2px solid #5a5a5a;
+  background-color: #141414;
   padding: 10px;
   text-align: justify;
   line-height: 20px;
@@ -213,8 +218,8 @@
 .enter-button,
 .leave-button,
 .return-button {
-  background-color: #180700;
-  border: 2px solid #ffffff;
+  background-color: #290d0d;
+  border: 2px solid #b8860b;
   padding: 10px;
   font-family: "Press Start 2P", system-ui;
   flex: 1;
@@ -228,7 +233,7 @@
 .enter-button:disabled,
 .leave-button:disabled,
 .return-button:disabled {
-  background-color: #0e0d0d;
+  background-color: #1c1c1c;
   pointer-events: none;
 }
 
@@ -238,7 +243,7 @@
 .enter-button:hover,
 .leave-button:hover,
 .return-button:hover {
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
   border: 2px solid #000;
   cursor: pointer;
@@ -246,7 +251,7 @@
 
 .world-location .popup {
   position: sticky;
-  background-color: #180700;
+  background-color: #2e2e2e;
   margin: 10px;
   z-index: 1000;
 }
@@ -254,24 +259,20 @@
 .popup-header {
   padding: 7px 15px;
   margin: 5px;
-  border: 1px solid rgb(36, 25, 25);
-  background-color: #0e0400;
+  border: 1px solid #b8860b;
+  background-color: #1c1c1c;
 }
 
 .world-location .popup ul {
   list-style: none;
   padding: 0;
   margin: 5;
-  border: 2px solid #ffffff;
-}
-
-.world-location .popup ul li {
-  padding: 6px 25px;
+  border: 2px solid #b8860b;
 }
 
 .world-location .popup ul li:hover {
   cursor: pointer;
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
 }
 
@@ -279,10 +280,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  /* transform: translate(-50%, -50%); */
-  background-color: #180700;
+  background-color: #2e2e2e;
   padding: 20px;
-  border: solid 2px rgb(61, 61, 61);
+  border: solid 2px #b8860b;
   z-index: 1000;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
@@ -291,16 +291,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 2px solid #ffffff;
+  border: 2px solid #b8860b;
+  background-color: #290d0d;
 }
 
 .popup ul li {
+  transition: background-color 0.3s ease;
   padding: 6px 25px;
 }
 
 .popup ul li:hover {
   cursor: pointer;
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
 }
 
@@ -312,7 +314,6 @@
   height: calc(100% - 280px);
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.5);
-  border: 2px solid rgb(36, 36, 36);
   z-index: 10;
   backdrop-filter: blur(10px);
   box-sizing: border-box;
@@ -320,18 +321,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
 }
 
 .event-popup img {
   max-width: 65%;
-  /* max-width: 1090px; */
   height: auto;
   max-height: 650px;
   margin: 10px 0;
   border-radius: 10px;
-  border: 2px solid rgb(36, 36, 36);
   z-index: 1;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 1);
 }
 
 .text-LR-alignment {
@@ -344,12 +343,12 @@
 .event-popup h3,
 .event-popup p,
 .event-popup button {
-  color: rgb(255, 255, 255);
+  color: #f5f5f5;
   z-index: 30;
 }
 
 .enemy-name-span {
-  color: rgb(255, 238, 0);
+  color: #b8860b;
 }
 
 .event-popup h3 {
@@ -376,8 +375,8 @@
 }
 
 .event-popup .button-container .event-button {
-  background-color: #180700;
-  border: 2px solid #ffffff;
+  background-color: #290d0d;
+  border: 2px solid #b8860b;
   padding: 10px;
   font-family: "Press Start 2P", system-ui;
   text-align: center;
@@ -386,7 +385,7 @@
 }
 
 .event-popup .button-container .event-button:hover {
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
   border: 2px solid #000;
 }
@@ -396,20 +395,19 @@
   pointer-events: none;
 }
 
-/* Combat Window */
 .combat-window {
   position: fixed;
   top: calc(40%);
   left: 58%;
   transform: translate(-50%, -50%);
-  background-color: #1e1e1e;
+  background-color: #303030;
   color: white;
-  border: 2px solid #555;
+  border: 2px solid #5e5e5e;
   padding: 20px;
   z-index: 1000;
   width: 60%;
   max-width: 1200px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -417,6 +415,13 @@
 }
 
 .combat-title {
+  margin: 10px;
+  padding: 10px 30px;
+  background-color: #161616;
+  border: 2px solid #535353;
+}
+
+.combat-level {
   margin-bottom: 20px;
 }
 
@@ -451,12 +456,16 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
 }
 
 .combat-stats {
   width: 100%;
+}
+
+.stat-value{
+  color: rgb(0, 255, 0);
 }
 
 .combat-stats p {
@@ -470,11 +479,11 @@
   max-height: 130px;
   height: 160px;
   overflow-y: auto;
-  background-color: #242424;
+  background-color: #141414;
   padding: 10px;
   margin-top: 20px;
   font-size: 12px;
-  border: 2px solid rgb(61, 61, 61);
+  border: 2px solid #5e5e5e;
 }
 
 .combat-log p {
@@ -490,8 +499,8 @@
 }
 
 .combat-actions button {
-  background-color: #180700;
-  border: 2px solid #ffffff;
+  background-color: #290d0d;
+  border: 2px solid #b8860b;
   color: white;
   padding: 10px 20px;
   cursor: pointer;
@@ -502,11 +511,10 @@
   min-width: 100px;
   max-width: 150px;
   margin: 0 5px;
-  /* Adjust as needed to control the exact spacing */
 }
 
 .combat-actions button:hover {
-  background-color: #fff;
+  background-color: #b8860b;
   color: #000;
   border: 2px solid #000;
 }

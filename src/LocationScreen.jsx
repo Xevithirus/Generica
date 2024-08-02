@@ -1,3 +1,4 @@
+//LocationScreen.jsx
 import React from 'react';
 
 const LocationScreen = ({ region, area, localPosition, activity, handleTravel, handleLocal, handleActivities, setCurrentArea, setCurrentLocalPosition, setCurrentActivity, isEventActive, inCombat }) => {
@@ -10,8 +11,8 @@ const LocationScreen = ({ region, area, localPosition, activity, handleTravel, h
       <div className="button-container">
         {!localPosition && !activity && (
           <>
-            <button className="travel-button" onClick={handleTravel}>Travel</button>
-            <button className="enter-button" onClick={() => setCurrentLocalPosition(Object.keys(area.localPositions)[0])}>Enter</button>
+            <button className="travel-button" onClick={handleTravel} disabled={isDisabled}>Travel</button>
+            <button className="enter-button" onClick={() => setCurrentLocalPosition(Object.keys(area.localPositions)[0])} disabled={isDisabled}>Enter</button>
           </>
         )}
         {localPosition && !activity && (
@@ -22,7 +23,7 @@ const LocationScreen = ({ region, area, localPosition, activity, handleTravel, h
           </>
         )}
         {activity && (
-          <button className="return-button" onClick={() => setCurrentActivity(null)}>Return</button>
+          <button className="return-button" onClick={() => setCurrentActivity(null)} disabled={isDisabled}>Return</button>
         )}
       </div>
     </div>
