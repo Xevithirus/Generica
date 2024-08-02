@@ -13,8 +13,8 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
 
   const { character } = useCharacter(); // Access character stats from context
 
-useEffect(() => {
-  if (currentLocalPosition && currentArea && currentRegion) {
+  useEffect(() => {
+    if (currentLocalPosition && currentArea && currentRegion) {
       console.log('Random event triggered');
 
       const regionData = WorldData[currentRegion];
@@ -33,7 +33,18 @@ useEffect(() => {
             const levelRange = localPositionData.levelRange;
             const level = getRandomLevel(levelRange.min, levelRange.max);
             const stats = calculateStats(enemyDetails.stats, level, growthCoefficients);
-            const fullEnemyData = { ...selectedEnemy, ...enemyDetails, level, stats };
+            const fullEnemyData = { 
+              ...selectedEnemy, 
+              ...enemyDetails, 
+              level, 
+              stats,
+              currentHp: stats.hp,
+              maxHp: stats.hp,
+              currentEn: stats.en,
+              maxEn: stats.en,
+              currentMag: stats.mag,
+              maxMag: stats.mag
+            };
 
             setEnemyState(fullEnemyData);
             setEnemy(fullEnemyData);
@@ -62,7 +73,7 @@ useEffect(() => {
       setEnemy(null);
       setIsEventActive(false);
     }
-}, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
+  }, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
 
   const handleFlee = () => {
     if (!enemy) return;
@@ -103,27 +114,16 @@ useEffect(() => {
       {enemy ? (
         <div className="event-popup">
           <h3>An enemy <span className="enemy-name-span">{enemy.name}</span> has appeared!</h3>
-          <p>{enemy.description}</p>
           <img src={enemy.image} alt={enemy.name} />
           <div className="text-LR-alignment">
             <div className="stats-left">
               <p>Name: {enemy.name}</p>
               <p>Type: {enemy.type}</p> 
               <p>LV: {enemy.level}</p>
-              <p>HP: {enemy.stats.hp}</p>
-              <p>EN: {enemy.stats.en}</p>
-              <p>MAG: {enemy.stats.mag}</p>
-            </div>
-            <div className="stats-left">
-              <p>AP: {enemy.stats.ap}</p>
-              <p>AR: {enemy.stats.ar}</p>           
-              <p>MRES: {enemy.stats.mres}</p>                   
-              <p>CRIT: {enemy.stats.crit}</p>
-              <p>EVA: {enemy.stats.eva}</p>
-              <p>AGI: {enemy.stats.agi}</p>
-              <p>ACC: {enemy.stats.acc}</p>
             </div>
           </div>
+          <br />
+          <p className="stats-left">{enemy.description}</p>
           <div className="button-container">   
             <button className="event-button" onClick={handleFight}>Fight</button>
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>

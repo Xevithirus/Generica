@@ -1,51 +1,56 @@
 // Base stats for level 1 enemies
 export const baseStats = {
-  GreenSlime: { hp: 50, en: 10, mag: 10, ap: 15, ar: 5, mres: 5, crit: 5, eva: 10, agi: 10, acc: 10 },
-  ValleyWolf: { hp: 90, en: 15, mag: 5, ap: 20, ar: 10, mres: 5, crit: 10, eva: 15, agi: 20, acc: 20 },
-  Velyr: { hp: 60, en: 15, mag: 15, ap: 10, ar: 5, mres: 10, crit: 5, eva: 20, agi: 20, acc: 15 },
-  Kaskari: { hp: 100, en: 20, mag: 10, ap: 25, ar: 15, mres: 15, crit: 10, eva: 15, agi: 20, acc: 20 },
-  Ayrin: { hp: 140, en: 20, mag: 20, ap: 35, ar: 20, mres: 15, crit: 15, eva: 15, agi: 15, acc: 25 },
-  Brontor: { hp: 180, en: 30, mag: 25, ap: 50, ar: 25, mres: 20, crit: 20, eva: 10, agi: 10, acc: 15 },
-  CorruptedGolem: { hp: 220, en: 35, mag: 15, ap: 60, ar: 30, mres: 25, crit: 15, eva: 5, agi: 5, acc: 10 },
-  Kryten: { hp: 70, en: 10, mag: 10, ap: 15, ar: 10, mres: 10, crit: 5, eva: 10, agi: 10, acc: 15 },
-  Grugmir: { hp: 110, en: 20, mag: 15, ap: 25, ar: 20, mres: 15, crit: 10, eva: 10, agi: 10, acc: 20 },
-  Molgur: { hp: 160, en: 25, mag: 20, ap: 40, ar: 25, mres: 20, crit: 15, eva: 10, agi: 10, acc: 25 },
-  Zarnoth: { hp: 230, en: 30, mag: 15, ap: 60, ar: 30, mres: 25, crit: 10, eva: 5, agi: 5, acc: 10 }
+  GreenSlime: { maxHp: 60, currentHp: 60, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 5, mres: 5, str: 15, int: 10, crit: 5, eva: 5, acc: 8, agi: 8 },
+  Velyr: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 20, currentMag: 20, ar: 7, mres: 10, str: 10, int: 15, crit: 8, eva: 20, acc: 12, agi: 15 },
+  Kaskari: { maxHp: 120, currentHp: 120, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 10, mres: 12, str: 20, int: 15, crit: 10, eva: 15, acc: 12, agi: 15 },
+  Kryten: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 8, mres: 10, str: 15, int: 12, crit: 8, eva: 10, acc: 10, agi: 10 },
+  ValleyWolf: { maxHp: 140, currentHp: 140, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 10, mres: 8, str: 25, int: 8, crit: 12, eva: 15, acc: 15, agi: 18 },
+  Grugmir: { maxHp: 160, currentHp: 160, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 12, mres: 12, str: 25, int: 15, crit: 10, eva: 10, acc: 15, agi: 12 },
+  Molgur: { maxHp: 200, currentHp: 200, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 18, mres: 15, str: 30, int: 18, crit: 12, eva: 10, acc: 15, agi: 12 },
+  Ayrin: { maxHp: 220, currentHp: 220, maxEn: 35, currentEn: 35, maxMag: 30, currentMag: 30, ar: 15, mres: 18, str: 30, int: 20, crit: 15, eva: 15, acc: 18, agi: 18 },
+  Brontor: { maxHp: 260, currentHp: 260, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 20, mres: 18, str: 35, int: 15, crit: 12, eva: 10, acc: 10, agi: 10 },
+  CorruptedGolem: { maxHp: 300, currentHp: 300, maxEn: 45, currentEn: 45, maxMag: 15, currentMag: 15, ar: 25, mres: 20, str: 40, int: 15, crit: 10, eva: 8, acc: 10, agi: 8 },
+  Zarnoth: { maxHp: 400, currentHp: 400, maxEn: 30, currentEn: 30, maxMag: 15, currentMag: 15, ar: 30, mres: 25, str: 50, int: 15, crit: 15, eva: 10, acc: 10, agi: 10 },
 };
 
 // Growth per level Coefficients
 export const growthCoefficients = {
-  hp: 1.06,   
-  mag: 1.05,  
-  ap: 1.05,   
-  ar: 1.05,   
-  mres: 1.05, 
-  agi: 1.03,  
-  acc: 1.03,  
-  eva: 1.03, 
-  crit: 1.03, 
-  en: 1.05, 
+  hp: 1.06,
+  en: 1.05,
+  mag: 1.05,
+  ar: 1.05,
+  mres: 1.05,
+  str: 1.05,
+  int: 1.05,
+  agi: 1.03,
+  acc: 1.03,
+  eva: 1.03,
+  crit: 1.03,
 };
 
 export function calculateStats(base, level, growthCoefficients) {
-
   if (!base) {
     console.error('Base stats are undefined');
     return {};
   }
   return {
-    hp: Math.round(base.hp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
-    mag: Math.round(base.mag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
-    ap: Math.round(base.ap * Math.pow(growthCoefficients.ap, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxHp: Math.round(base.maxHp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentHp: Math.round(base.maxHp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxEn: Math.round(base.maxEn * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentEn: Math.round(base.maxEn * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxMag: Math.round(base.maxMag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentMag: Math.round(base.maxMag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
     ar: Math.round(base.ar * Math.pow(growthCoefficients.ar, level - 1) * (0.9 + Math.random() * 0.2)),
     mres: Math.round(base.mres * Math.pow(growthCoefficients.mres, level - 1) * (0.9 + Math.random() * 0.2)),
-    agi: Math.round(base.agi * Math.pow(growthCoefficients.agi, level - 1) * (0.9 + Math.random() * 0.2)),
-    acc: Math.round(base.acc * Math.pow(growthCoefficients.acc, level - 1) * (0.9 + Math.random() * 0.2)),
-    eva: Math.round(base.eva * Math.pow(growthCoefficients.eva, level - 1) * (0.9 + Math.random() * 0.2)),
+    str: Math.round(base.str * Math.pow(growthCoefficients.str, level - 1) * (0.9 + Math.random() * 0.2)),
+    int: Math.round(base.int * Math.pow(growthCoefficients.int, level - 1) * (0.9 + Math.random() * 0.2)),
     crit: Math.round(base.crit * Math.pow(growthCoefficients.crit, level - 1) * (0.9 + Math.random() * 0.2)),
-    en: Math.round(base.en * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    eva: Math.round(base.eva * Math.pow(growthCoefficients.eva, level - 1) * (0.9 + Math.random() * 0.2)),
+    acc: Math.round(base.acc * Math.pow(growthCoefficients.acc, level - 1) * (0.9 + Math.random() * 0.2)),
+    agi: Math.round(base.agi * Math.pow(growthCoefficients.agi, level - 1) * (0.9 + Math.random() * 0.2)),
   };
 }
+
 
 
 // --------------------------------------- GRASSLAND BIOME ----------------------------------------
@@ -98,7 +103,7 @@ export const EnemyData = {
     level: 1,
     stats: baseStats.CorruptedGolem,
     image: './images/corrupted-golem.png',
-    description: "An enchanted stone being crafted to guard important things. As millenias pass, their magic drains unevenly from the material, leaving many corrupted by madness.", 
+    description: "An enchanted stone being crafted to guard important things. As millenia pass, their magic drains unevenly from the material, leaving many corrupted by madness.", 
   },
   Kryten: {
     name: 'Kryten',
@@ -139,7 +144,7 @@ export const EnemyData = {
     level: 1,
     stats: baseStats.Ayrin,
     image: './images/ayrin.png',
-    description: "Antelope-like beings with the ability to manipulate wind and create powerful gusts.", 
+    description: "An antelope-like being said to have the ability to manipulate wind and create powerful gusts.", 
   },
   /*
   Sisharra
