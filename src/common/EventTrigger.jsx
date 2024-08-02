@@ -13,8 +13,8 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
 
   const { character } = useCharacter(); // Access character stats from context
 
-useEffect(() => {
-  if (currentLocalPosition && currentArea && currentRegion) {
+  useEffect(() => {
+    if (currentLocalPosition && currentArea && currentRegion) {
       console.log('Random event triggered');
 
       const regionData = WorldData[currentRegion];
@@ -33,7 +33,18 @@ useEffect(() => {
             const levelRange = localPositionData.levelRange;
             const level = getRandomLevel(levelRange.min, levelRange.max);
             const stats = calculateStats(enemyDetails.stats, level, growthCoefficients);
-            const fullEnemyData = { ...selectedEnemy, ...enemyDetails, level, stats };
+            const fullEnemyData = { 
+              ...selectedEnemy, 
+              ...enemyDetails, 
+              level, 
+              stats,
+              currentHp: stats.hp,
+              maxHp: stats.hp,
+              currentEn: stats.en,
+              maxEn: stats.en,
+              currentMag: stats.mag,
+              maxMag: stats.mag
+            };
 
             setEnemyState(fullEnemyData);
             setEnemy(fullEnemyData);
@@ -62,7 +73,7 @@ useEffect(() => {
       setEnemy(null);
       setIsEventActive(false);
     }
-}, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
+  }, [currentLocalPosition, currentArea, currentRegion, setIsEventActive]);
 
   const handleFlee = () => {
     if (!enemy) return;
@@ -112,7 +123,7 @@ useEffect(() => {
             </div>
           </div>
           <br />
-          <p lassName="stats-left">{enemy.description}</p>
+          <p className="stats-left">{enemy.description}</p>
           <div className="button-container">   
             <button className="event-button" onClick={handleFight}>Fight</button>
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>

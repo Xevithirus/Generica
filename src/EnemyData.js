@@ -1,43 +1,45 @@
 // Base stats for level 1 enemies
 export const baseStats = {
-  GreenSlime: { hp: 30, en: 10, mag: 5, ar: 2, mres: 3, str: 10, int: 5, crit: 3, eva: 5, acc: 5, agi: 4 },
-  Velyr: { hp: 40, en: 10, mag: 10, ar: 3, mres: 5, str: 5, int: 8, crit: 5, eva: 15, acc: 8, agi: 10 },
-  Kaskari: { hp: 60, en: 20, mag: 15, ar: 5, mres: 8, str: 12, int: 10, crit: 7, eva: 12, acc: 10, agi: 10 },
-  Kryten: { hp: 50, en: 10, mag: 8, ar: 4, mres: 6, str: 10, int: 8, crit: 5, eva: 7, acc: 8, agi: 6 },
-  ValleyWolf: { hp: 70, en: 15, mag: 5, ar: 5, mres: 4, str: 15, int: 5, crit: 8, eva: 10, acc: 10, agi: 12 },
-  Grugmir: { hp: 80, en: 15, mag: 10, ar: 6, mres: 8, str: 15, int: 10, crit: 6, eva: 8, acc: 10, agi: 8 },
-  Molgur: { hp: 100, en: 20, mag: 15, ar: 10, mres: 10, str: 20, int: 12, crit: 8, eva: 6, acc: 12, agi: 8 },
-  Ayrin: { hp: 110, en: 25, mag: 20, ar: 8, mres: 10, str: 20, int: 15, crit: 10, eva: 12, acc: 15, agi: 15 },
-  Brontor: { hp: 130, en: 30, mag: 10, ar: 12, mres: 10, str: 25, int: 10, crit: 8, eva: 6, acc: 8, agi: 6 },
-  CorruptedGolem: { hp: 150, en: 35, mag: 10, ar: 15, mres: 12, str: 30, int: 10, crit: 7, eva: 4, acc: 6, agi: 4 },
-  Zarnoth: { hp: 200, en: 25, mag: 10, ar: 20, mres: 15, str: 40, int: 10, crit: 10, eva: 5, acc: 6, agi: 5 }
+  GreenSlime: { maxHp: 60, currentHp: 60, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 5, mres: 5, str: 15, int: 10, crit: 5, eva: 5, acc: 8, agi: 8 },
+  Velyr: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 20, currentMag: 20, ar: 7, mres: 10, str: 10, int: 15, crit: 8, eva: 20, acc: 12, agi: 15 },
+  Kaskari: { maxHp: 120, currentHp: 120, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 10, mres: 12, str: 20, int: 15, crit: 10, eva: 15, acc: 12, agi: 15 },
+  Kryten: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 8, mres: 10, str: 15, int: 12, crit: 8, eva: 10, acc: 10, agi: 10 },
+  ValleyWolf: { maxHp: 140, currentHp: 140, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 10, mres: 8, str: 25, int: 8, crit: 12, eva: 15, acc: 15, agi: 18 },
+  Grugmir: { maxHp: 160, currentHp: 160, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 12, mres: 12, str: 25, int: 15, crit: 10, eva: 10, acc: 15, agi: 12 },
+  Molgur: { maxHp: 200, currentHp: 200, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 18, mres: 15, str: 30, int: 18, crit: 12, eva: 10, acc: 15, agi: 12 },
+  Ayrin: { maxHp: 220, currentHp: 220, maxEn: 35, currentEn: 35, maxMag: 30, currentMag: 30, ar: 15, mres: 18, str: 30, int: 20, crit: 15, eva: 15, acc: 18, agi: 18 },
+  Brontor: { maxHp: 260, currentHp: 260, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 20, mres: 18, str: 35, int: 15, crit: 12, eva: 10, acc: 10, agi: 10 },
+  CorruptedGolem: { maxHp: 300, currentHp: 300, maxEn: 45, currentEn: 45, maxMag: 15, currentMag: 15, ar: 25, mres: 20, str: 40, int: 15, crit: 10, eva: 8, acc: 10, agi: 8 },
+  Zarnoth: { maxHp: 400, currentHp: 400, maxEn: 30, currentEn: 30, maxMag: 15, currentMag: 15, ar: 30, mres: 25, str: 50, int: 15, crit: 15, eva: 10, acc: 10, agi: 10 },
 };
 
 // Growth per level Coefficients
 export const growthCoefficients = {
-  hp: 1.06,   
-  en: 1.05, 
-  mag: 1.05,  
-  ar: 1.05,   
-  mres: 1.05, 
-  str: 1.05,  
+  hp: 1.06,
+  en: 1.05,
+  mag: 1.05,
+  ar: 1.05,
+  mres: 1.05,
+  str: 1.05,
   int: 1.05,
-  agi: 1.03,  
-  acc: 1.03,  
-  eva: 1.03, 
-  crit: 1.03, 
+  agi: 1.03,
+  acc: 1.03,
+  eva: 1.03,
+  crit: 1.03,
 };
 
 export function calculateStats(base, level, growthCoefficients) {
-
   if (!base) {
     console.error('Base stats are undefined');
     return {};
   }
   return {
-    hp: Math.round(base.hp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
-    en: Math.round(base.en * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
-    mag: Math.round(base.mag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxHp: Math.round(base.maxHp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentHp: Math.round(base.maxHp * Math.pow(growthCoefficients.hp, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxEn: Math.round(base.maxEn * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentEn: Math.round(base.maxEn * Math.pow(growthCoefficients.en, level - 1) * (0.9 + Math.random() * 0.2)),
+    maxMag: Math.round(base.maxMag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
+    currentMag: Math.round(base.maxMag * Math.pow(growthCoefficients.mag, level - 1) * (0.9 + Math.random() * 0.2)),
     ar: Math.round(base.ar * Math.pow(growthCoefficients.ar, level - 1) * (0.9 + Math.random() * 0.2)),
     mres: Math.round(base.mres * Math.pow(growthCoefficients.mres, level - 1) * (0.9 + Math.random() * 0.2)),
     str: Math.round(base.str * Math.pow(growthCoefficients.str, level - 1) * (0.9 + Math.random() * 0.2)),
@@ -48,6 +50,7 @@ export function calculateStats(base, level, growthCoefficients) {
     agi: Math.round(base.agi * Math.pow(growthCoefficients.agi, level - 1) * (0.9 + Math.random() * 0.2)),
   };
 }
+
 
 
 // --------------------------------------- GRASSLAND BIOME ----------------------------------------
