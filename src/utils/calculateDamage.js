@@ -1,48 +1,40 @@
-// calculateDamage.js
-export const calculateDamage = (attacker, defender, attackType) => {
-  const criticalMultiplier = 1.5; // Critical hits deal 150% damage
+export const calculateDamage = (attacker, defender, abilityDetails) => {
+  const criticalMultiplier = 1.5;
+  const randomFactor = 0.1; // 10% random modifier for variability
+  const baseHitChance = 0.75; // 75% base hit chance
+  const minHitChance = 0.1; // Minimum 10% hit chance
+  const maxHitChance = 0.95; // Maximum 95% hit chance
+
   let baseDamage = 0;
   let finalDamage = 0;
-
-  // Separate multipliers and bonuses for clarity
-  const equipmentBonus = attacker.stats.equipmentBonuses || 0;
-  const buffMultiplier = attacker.stats.buffMultipliers || 0;
-  const itemEffectMultiplier = attacker.stats.itemEffectMultipliers || 0;
-
-  const enemyEquipmentBonus = defender.stats.equipmentBonuses || 0;
-  const enemyBuffMultiplier = defender.stats.buffMultipliers || 0;
-  const enemyItemEffectMultiplier = defender.stats.itemEffectMultipliers || 0;
-
-  const totalAttackMultiplier = 1 + equipmentBonus + buffMultiplier + itemEffectMultiplier;
-  const totalDefenseMultiplier = 1 + enemyEquipmentBonus + enemyBuffMultiplier + enemyItemEffectMultiplier;
 
   let damageType = '';
   let mitigatedAmount = 0;
   let isCritical = false;
-  let didHit = false;
+  let didHit = true;
 
-  // Calculate base damage based on attack type
-  if (attackType === 'physical') {
+  // Calculate base damage based on ability effect
+  const abilityEffect = abilityDetails.effect(attacker);
+  const damage = abilityEffect.damage !== undefined && abilityEffect.damage !== null ? abilityEffect.damage : 0; // Ensure damage is not null or undefined
+
+  console.log(`Ability Effect: ${JSON.stringify(abilityEffect)}`); // Log ability effect
+
+  // Apply random factor to the base damage
+  if (abilityEffect.type === 'physical') {
     damageType = 'physical';
-    baseDamage = attacker.stats.str * attacker.stats.weaponMultiplier * totalAttackMultiplier;
-    mitigatedAmount = defender.stats.ar * totalDefenseMultiplier;
+    baseDamage = damage * (1 + (Math.random() - 0.5) * 2 * randomFactor);
+    mitigatedAmount = defender.stats.ar;
     finalDamage = baseDamage - mitigatedAmount;
-  } else if (attackType === 'magical') {
+  } else if (abilityEffect.type === 'magical') {
     damageType = 'magical';
-    baseDamage = attacker.stats.int * attacker.stats.magicMultiplier * totalAttackMultiplier;
-    mitigatedAmount = defender.stats.mres * totalDefenseMultiplier;
+    baseDamage = damage * (1 + (Math.random() - 0.5) * 2 * randomFactor);
+    mitigatedAmount = defender.stats.mres;
     finalDamage = baseDamage - mitigatedAmount;
-  } else if (attackType === 'mixed') {
-    damageType = 'mixed';
-    const physicalDamage = attacker.stats.str * attacker.stats.weaponMultiplier * totalAttackMultiplier;
-    const magicDamage = attacker.stats.int * attacker.stats.magicMultiplier * totalAttackMultiplier;
-    const physicalMitigated = defender.stats.ar * totalDefenseMultiplier;
-    const magicMitigated = defender.stats.mres * totalDefenseMultiplier;
-    finalDamage = Math.max(0, physicalDamage - physicalMitigated) + Math.max(0, magicDamage - magicMitigated);
-    mitigatedAmount = physicalMitigated + magicMitigated;
   }
 
-  // Ensure final damage is at least 1 if it hits
+  console.log(`Base Damage: ${baseDamage}, Mitigated Amount: ${mitigatedAmount}, Final Damage: ${finalDamage}`); // Log damage details
+
+  // Ensure final damage is at least 1
   finalDamage = Math.max(1, finalDamage);
 
   // Critical strike chance
@@ -51,19 +43,22 @@ export const calculateDamage = (attacker, defender, attackType) => {
     finalDamage *= criticalMultiplier;
   }
 
-  // Apply accuracy and evasion
-  const hitChance = attacker.stats.acc / (attacker.stats.acc + defender.stats.eva);
+  // Apply agility-based hit chance
+  let hitChance = baseHitChance + (attacker.stats.agi - defender.stats.agi) / 100;
+  hitChance = Math.max(minHitChance, Math.min(maxHitChance, hitChance));
   didHit = Math.random() < hitChance;
-
   if (!didHit) {
     finalDamage = 0; // Missed attack
   }
 
+  console.log(`Hit Chance: ${hitChance}, Did Hit: ${didHit}, Is Critical: ${isCritical}`); // Log hit details
+
   return {
     finalDamage: Math.round(finalDamage),
+    baseDamage: Math.round(baseDamage), 
     damageType,
     mitigatedAmount: Math.round(mitigatedAmount),
     isCritical,
-    didHit
+    didHit,
   };
 };

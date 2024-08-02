@@ -1,11 +1,20 @@
+// EventTrigger.jsx
 import React, { useEffect, useState } from "react";
 import { WorldData } from '../WorldData';
 import { EnemyData } from '../EnemyData';
 import { useCharacter } from '../CharacterContext';
 import { calculateStats, growthCoefficients } from '../EnemyData';
+import { AbilityData } from '../AbilityData'; // Import AbilityData
 
-// Function to get a random level within the range
 const getRandomLevel = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const assignAbilities = (enemy, level) => {
+  if (!enemy || !enemy.possibleAbilities) {
+    return [];
+  }
+  const availableAbilities = enemy.possibleAbilities.filter(ability => AbilityData[ability].requiredLevel <= level);
+  return availableAbilities;
+};
 
 export default function EventTrigger({ setInCombat, currentLocalPosition, currentArea, currentRegion, setIsEventActive, setEnemy }) {
   const [enemy, setEnemyState] = useState(null);
@@ -33,18 +42,22 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
             const levelRange = localPositionData.levelRange;
             const level = getRandomLevel(levelRange.min, levelRange.max);
             const stats = calculateStats(enemyDetails.stats, level, growthCoefficients);
+            const abilities = assignAbilities(enemyDetails, level);
             const fullEnemyData = { 
               ...selectedEnemy, 
               ...enemyDetails, 
               level, 
               stats,
-              currentHp: stats.hp,
-              maxHp: stats.hp,
-              currentEn: stats.en,
-              maxEn: stats.en,
-              currentMag: stats.mag,
-              maxMag: stats.mag
+              abilities,
+              currentHp: stats.maxHp,
+              maxHp: stats.maxHp,
+              currentEn: stats.maxEn,
+              maxEn: stats.maxEn,
+              currentMag: stats.maxMag,
+              maxMag: stats.maxMag
             };
+
+            console.log('Enemy Stats:', fullEnemyData); // Log enemy stats
 
             setEnemyState(fullEnemyData);
             setEnemy(fullEnemyData);
@@ -92,9 +105,6 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
       setFleeDisabled(false);
       setIsEventActive(false);
       setInCombat(false);
-      // Ensure to reset current activity
-      // Ensure to reset current local position
-      // Ensure to reset current area
     } else {
       alert("You could not escape!");
       setFleeDisabled(true);
@@ -123,7 +133,7 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
             </div>
           </div>
           <br />
-          <p className="stats-left">{enemy.description}</p>
+          <p className="event-description">{enemy.description}</p>
           <div className="button-container">   
             <button className="event-button" onClick={handleFight}>Fight</button>
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>

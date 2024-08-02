@@ -1,22 +1,23 @@
+// CombatWindow.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useCharacter } from './CharacterContext';
-import { calculateDamage } from './utils/calculateDamage'; 
+import { calculateDamage } from './utils/calculateDamage';
+import { calculateHealing } from './utils/calculateHealing';
 import { getProfileImageSrc } from './utils/utils';
 import Popup from './common/Popup';
+import { AbilityData } from './AbilityData';
 
 export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity }) {
-  const { character, setCharacter, lastInn } = useCharacter(); // Access character stats and lastInn from context
+  const { character, setCharacter, lastInn } = useCharacter();
   const [combatLog, setCombatLog] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+  const [showAbilityMenu, setShowAbilityMenu] = useState(false);
   const combatLogRef = useRef(null);
 
   if (!enemy) {
-    console.log('No enemy data received');
-    return <p>No enemy data to display</p>; // Display message if no enemy data
+    return <p>No enemy data to display</p>;
   }
-
-  console.log('Enemy data:', enemy);
 
   useEffect(() => {
     if (combatLogRef.current) {
@@ -24,97 +25,107 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     }
   }, [combatLog]);
 
-  const handleAttackClick = () => {
-    if (!enemy) return; // Ensure enemy exists
+  const handleAbilityUse = (ability) => {
+    if (!enemy) return;
 
-    console.log('Character stats:', character.stats);
-    console.log('Enemy stats:', enemy.stats);
+    const abilityDetails = AbilityData[ability];
+    console.log('Ability Details:', abilityDetails);
 
-    const validatedCharacterStats = validateStats(character.stats);
-    const validatedEnemyStats = validateStats(enemy.stats);
+    if (character.currentEn < abilityDetails.cost.energy || character.currentMag < abilityDetails.cost.magic) {
+      setCombatLog(prevLog => [...prevLog, <div key={prevLog.length}>You do not have enough resources to use {abilityDetails.name}!</div>]);
+      return;
+    }
 
-    const playerAttack = calculateDamage({ ...character, stats: validatedCharacterStats }, { ...enemy, stats: validatedEnemyStats }, 'physical'); // or 'magic' or 'mixed'
-    const enemyAttack = calculateDamage({ ...enemy, stats: validatedEnemyStats }, { ...character, stats: validatedCharacterStats }, 'physical'); // or 'magic' or 'mixed'
+    let result;
+    if (abilityDetails.effect(character).type === 'heal') {
+      result = calculateHealing(character, abilityDetails);
+      setCharacter(prev => ({
+        ...prev,
+        currentHp: Math.min(prev.stats.maxHp, prev.currentHp + result.healingAmount),
+        currentEn: prev.currentEn - abilityDetails.cost.energy,
+        currentMag: prev.currentMag - abilityDetails.cost.magic,
+      }));
+      setCombatLog(prevLog => [
+        ...prevLog,
+        generateLogMessage('You', null, result, false)
+      ]);
+    } else {
+      result = calculateDamage(character, enemy, abilityDetails);
+      const updatedEnemy = {
+        ...enemy,
+        stats: {
+          ...enemy.stats,
+          currentHp: Math.max(0, enemy.stats.currentHp - result.finalDamage),
+        },
+      };
 
-    console.log('Player attack:', playerAttack);
-    console.log('Enemy attack:', enemyAttack);
+      setEnemy(updatedEnemy);
 
-    const updatedCharacter = {
-      ...character,
-      currentHp: Math.max(0, character.currentHp - enemyAttack.finalDamage),
-    };
+      const enemyAttack = calculateDamage(enemy, character, AbilityData['basicAttack']);
+      
+      setCharacter(prev => ({
+        ...prev,
+        currentHp: Math.max(0, prev.currentHp - enemyAttack.finalDamage),
+      }));
 
-    const updatedEnemy = {
-      ...enemy,
-      stats: {
-        ...enemy.stats,
-        currentHp: Math.max(0, enemy.stats.currentHp - playerAttack.finalDamage),
-      },
-    };
+      setCombatLog(prevLog => [
+        ...prevLog,
+        generateLogMessage('You', enemy.name, result, false),
+        generateLogMessage(enemy.name, 'you', enemyAttack, true),
+      ]);
+    }
 
-    setCharacter(updatedCharacter);
-    setEnemy(updatedEnemy);
+    console.log('Result:', result);
 
-    const playerLogMessage = generateLogMessage('You', enemy.name, playerAttack, false);
-    const enemyLogMessage = generateLogMessage(enemy.name, 'you', enemyAttack, true);
-
-    setCombatLog(prevLog => [
-      ...prevLog,
-      playerLogMessage,
-      enemyLogMessage
-    ]);
-
-    // Check win/loss conditions
-    if (updatedEnemy.stats.currentHp <= 0) {
+    if (enemy.stats.currentHp <= 0) {
       setPopupMessage(`You have defeated the ${enemy.name}!`);
       setShowPopup(true);
-    } else if (updatedCharacter.currentHp <= 0) {
+    } else if (character.currentHp <= 0) {
       setPopupMessage('You have been defeated...');
       setShowPopup(true);
     }
   };
 
-  const validateStats = (stats) => {
-    return {
-      ...stats,
-      hp: stats.hp || 0,
-      en: stats.en || 0,
-      mag: stats.mag || 0,
-      ar: stats.ar || 0,
-      mres: stats.mres || 0,
-      str: stats.str || 0,
-      int: stats.int || 0,
-      crit: stats.crit || 0,
-      eva: stats.eva || 0,
-      agi: stats.agi || 0,
-      acc: stats.acc || 0,
-      weaponMultiplier: stats.weaponMultiplier || 1, // Ensure weaponMultiplier has a default value
-      magicMultiplier: stats.magicMultiplier || 1  // Ensure magicMultiplier has a default value
-    };
-  };
-
-  const generateLogMessage = (attackerName, defenderName, attackDetails, isEnemyAttacking) => {
-    let logMessage;
-    if (!attackDetails.didHit) {
-      logMessage = <div>{attackerName} missed!</div>;
+const generateLogMessage = (attackerName, defenderName, attackDetails, isEnemyAttacking) => {
+  if (attackDetails.effectType === 'heal') {
+    const healAmount = <span style={{ color: '#00eeff' }}>{attackDetails.healingAmount}</span>;
+    if (isEnemyAttacking) {
+      return <div key={combatLog.length}>The {attackerName} heals for {healAmount} health!</div>;
     } else {
-      if (isEnemyAttacking) {
-        logMessage = (
-          <div>
-            <p>The {attackerName} attacks {defenderName} for <span>{attackDetails.finalDamage}</span> {attackDetails.damageType} damage! {attackDetails.mitigatedAmount} damage was mitigated. You take <span style={{ color: 'red' }}>{Math.max(0, attackDetails.finalDamage - attackDetails.mitigatedAmount)}</span> damage!</p>
-            {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}> Critical Hit!</span></p>}
-          </div>
-        );
-      } else {
-        logMessage = (
-          <div>
-            <p>You attack the {defenderName} for <span>{attackDetails.finalDamage}</span> {attackDetails.damageType} damage! {attackDetails.mitigatedAmount} damage was mitigated. The {defenderName.charAt(0).toUpperCase() + defenderName.slice(1)} takes <span style={{ color: '#00ff00' }}>{Math.max(0, attackDetails.finalDamage - attackDetails.mitigatedAmount)}</span> damage!</p>
-            {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}> Critical Hit!</span></p>}
-          </div>
-        );
-      }
+      return <div key={combatLog.length}>You heal for {healAmount} health!</div>;
     }
-    return logMessage;
+  } else if (!attackDetails.didHit) {
+    return <div key={combatLog.length}>{attackerName} missed!</div>;
+  } else {
+    const damageColor = isEnemyAttacking ? 'red' : '#00ff00';
+    const baseDamage = <span>{attackDetails.baseDamage}</span>;
+    const mitigatedAmount = <span>{attackDetails.mitigatedAmount}</span>;
+    const finalDamage = <span style={{ color: damageColor }}>{attackDetails.finalDamage}</span>;
+
+    let message;
+    if (isEnemyAttacking) {
+      message = (
+        <div key={combatLog.length}>
+          <p>The {attackerName} attacks you for {baseDamage} {attackDetails.damageType} damage! {mitigatedAmount} damage was mitigated.</p>
+          <p>You take {finalDamage} damage!</p>
+          {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
+        </div>
+      );
+    } else {
+      message = (
+        <div key={combatLog.length}>
+          <p>You attack the {defenderName} for {baseDamage} {attackDetails.damageType} damage! {mitigatedAmount} damage was mitigated.</p>
+          <p>The {defenderName} takes {finalDamage} damage!</p>
+          {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
+        </div>
+      );
+    }
+    return message;
+  }
+};
+
+  const handleAttackClick = () => {
+    setShowAbilityMenu(true);
   };
 
   const handleUseClick = () => {
@@ -123,7 +134,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
 
   const handleFleeClick = () => {
     console.log("Attempting to flee...");
-    setEnemy(null); 
+    setEnemy(null);
     setInCombat(false);
   };
 
@@ -146,6 +157,10 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     setEnemy(null);
   };
 
+  const handleAbilityMenuClose = () => {
+    setShowAbilityMenu(false);
+  };
+
   const playerImageSrc = getProfileImageSrc(character);
 
   return (
@@ -154,7 +169,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
         <div className="combat-character">
           <h2 className="combat-title">{character.name}</h2>
           <p className="combat-level"><span>Level:</span><span>{character.level}</span></p>
-          <img src={playerImageSrc} />
+          <img src={playerImageSrc} alt={character.name} />
           <div className="combat-stats">
             <p><span>HP:</span><span className="stat-value">{character.currentHp}/{character.stats.maxHp}</span></p>
             <p><span>EN:</span><span className="stat-value">{character.currentEn}/{character.stats.maxEn}</span></p>
@@ -169,7 +184,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
             <p><span>ACC:</span><span className="stat-value">{character.stats.acc}</span></p>
           </div>
         </div>
-        <img className="battle-icon" src="./images/crossed-swords-icon.png" />
+        <img className="battle-icon" src="./images/crossed-swords-icon.png" alt="Battle Icon" />
         <div className="combat-enemy">
           <h2 className="combat-title">{enemy.name}</h2>
           <p className="combat-level"><span>Level:</span><span>{enemy.level}</span></p>
@@ -199,6 +214,18 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
         <button onClick={handleUseClick}>Use</button>
         <button onClick={handleFleeClick}>Flee</button>
       </div>
+      {showAbilityMenu && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>Select an Ability</h3>
+            {character.abilities.map(ability => (
+              <button key={ability} onClick={() => { handleAbilityUse(ability); handleAbilityMenuClose(); }}>
+                {AbilityData[ability].name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {showPopup && <Popup message={popupMessage} onClose={handleClosePopup} />}
     </div>
   );

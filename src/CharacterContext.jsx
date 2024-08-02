@@ -1,18 +1,117 @@
+// CharacterContext.jsx
 import React, { createContext, useState, useContext, useCallback } from 'react';
-import { growthCoefficients } from './EnemyData';  // Import growth coefficients
+import { growthCoefficients } from './EnemyData';  
+import { AbilityData } from './AbilityData'; 
 
 const CharacterContext = createContext();
 
 export const useCharacter = () => useContext(CharacterContext);
 
 const baseCharacterStats = {
-  warrior: { hp: 200, en: 70, mag: 40, ar: 15, mres: 10, str: 20, int: 10, crit: 10, eva: 8, acc: 12, agi: 10 },
-  witch: { hp: 120, en: 50, mag: 150, ar: 10, mres: 15, str: 10, int: 20, crit: 12, eva: 10, acc: 10, agi: 12 },
-  rogue: { hp: 160, en: 90, mag: 50, ar: 12, mres: 10, str: 18, int: 10, crit: 15, eva: 20, acc: 15, agi: 20 },
-  cleric: { hp: 140, en: 60, mag: 120, ar: 10, mres: 18, str: 12, int: 20, crit: 10, eva: 10, acc: 10, agi: 15 },
-  paladin: { hp: 180, en: 60, mag: 70, ar: 18, mres: 18, str: 22, int: 10, crit: 8, eva: 8, acc: 10, agi: 10 },
-  ranger: { hp: 150, en: 80, mag: 60, ar: 12, mres: 10, str: 15, int: 15, crit: 15, eva: 20, acc: 18, agi: 20 },
+  warrior: { 
+    hp: 240, 
+    en: 60, 
+    mag: 30, 
+    ar: 15, 
+    mres: 10, 
+    str: 15, 
+    int: 10, 
+    crit: 5, 
+    eva: 5, 
+    acc: 8, 
+    agi: 5, 
+    abilities: ['basicAttack', 'knockBack'] 
+  },
+  witch: { 
+    hp: 100, 
+    en: 50, 
+    mag: 180, 
+    ar: 5, 
+    mres: 10, 
+    str: 10, 
+    int: 30, 
+    crit: 8, 
+    eva: 10, 
+    acc: 8, 
+    agi: 10, 
+    abilities: ['basicAttack', 'shunt', 'recover'] 
+  },
+  rogue: { 
+    hp: 160, 
+    en: 100, 
+    mag: 30, 
+    ar: 8, 
+    mres: 5, 
+    str: 20, 
+    int: 10, 
+    crit: 15, 
+    eva: 20, 
+    acc: 12, 
+    agi: 20, 
+    abilities: ['basicAttack'] 
+  },
+  cleric: { 
+    hp: 140, 
+    en: 50, 
+    mag: 140, 
+    ar: 5, 
+    mres: 12, 
+    str: 10, 
+    int: 25, 
+    crit: 5, 
+    eva: 8, 
+    acc: 8, 
+    agi: 12, 
+    abilities: ['basicAttack', 'recover', 'shunt'] 
+  },
+  paladin: { 
+    hp: 200, 
+    en: 60, 
+    mag: 80, 
+    ar: 12, 
+    mres: 12, 
+    str: 18, 
+    int: 10, 
+    crit: 5, 
+    eva: 5, 
+    acc: 6, 
+    agi: 8, 
+    abilities: ['basicAttack', 'recover'] 
+  },
+  ranger: { 
+    hp: 160, 
+    en: 100, 
+    mag: 50, 
+    ar: 8, 
+    mres: 5, 
+    str: 20, 
+    int: 15, 
+    crit: 15, 
+    eva: 20, 
+    acc: 15, 
+    agi: 20, 
+    abilities: ['basicAttack', 'shoot'] 
+  },
 };
+
+const initialStats = (baseStats) => ({
+  maxHp: baseStats.hp,
+  currentHp: baseStats.hp,
+  maxEn: baseStats.en,
+  currentEn: baseStats.en,
+  maxMag: baseStats.mag,
+  currentMag: baseStats.mag,
+  ar: baseStats.ar,
+  mres: baseStats.mres,
+  str: baseStats.str,
+  int: baseStats.int,
+  crit: baseStats.crit,
+  eva: baseStats.eva,
+  acc: baseStats.acc,
+  agi: baseStats.agi,
+  weaponMultiplier: 1,  
+  magicMultiplier: 1    
+});
 
 // Calculate stats based on level and growth coefficients
 const calculateStats = (base, level, bonuses = {}) => {
@@ -33,20 +132,27 @@ const calculateStats = (base, level, bonuses = {}) => {
   };
 };
 
+const calculateRequiredExperience = (level) => {
+  return Math.round(100 * Math.pow(1.5, level - 1));  
+};
+
 export const CharacterProvider = ({ children }) => {
   const [character, setCharacter] = useState({
     name: '',
     sex: '',
     job: '',
     level: 1,
-    baseStats: {},  // Store base stats separately
-    stats: {},      // Store current stats
+    experience: 0,
+    experienceToNextLevel: calculateRequiredExperience(1),
+    baseStats: {},  
+    stats: {},     
     currentHp: 0,
     currentEn: 0,
     currentMag: 0,
-    equipmentBonuses: {},  // New field for equipment bonuses
-    buffMultipliers: {},  // New field for active buff multipliers
-    itemEffectMultipliers: {},  // New field for active item effect multipliers
+    equipmentBonuses: {},  
+    buffMultipliers: {},  
+    itemEffectMultipliers: {},  
+    abilities: [],  
   });
 
   const [lastInn, setLastInn] = useState({
@@ -60,41 +166,66 @@ export const CharacterProvider = ({ children }) => {
 
   const handleCharacterCreation = useCallback((name, job, sex) => {
     const baseStats = baseCharacterStats[job];
-    const stats = calculateStats(baseStats, 1); // Initialize stats at level 1
+    const stats = calculateStats(baseStats, 1); 
+    console.log('Character Created:', { 
+      name, job, sex, baseStats, stats, 
+      abilities: baseStats.abilities.filter(ability => AbilityData[ability].requiredLevel <= 1)
+    });
     setCharacter({ 
       name, 
       job, 
       sex, 
       level: 1, 
+      experience: 0,
+      experienceToNextLevel: calculateRequiredExperience(1),
       baseStats, 
       stats, 
       currentHp: stats.maxHp, 
       currentEn: stats.maxEn, 
-      currentMag: stats.maxMag 
+      currentMag: stats.maxMag,
+      abilities: baseStats.abilities.filter(ability => AbilityData[ability].requiredLevel <= 1),
     });
-    setIsCharacterCreated(true);  // Set the flag to true when character is created
+    setIsCharacterCreated(true);  
   }, []);
 
-  const levelUp = useCallback(() => {
-    const newLevel = character.level + 1;
-    const baseStats = character.baseStats;
-    const stats = calculateStats(baseStats, newLevel);
-    setCharacter(prev => ({ 
-      ...prev, 
-      level: newLevel, 
-      stats,
-      currentHp: stats.maxHp, 
-      currentEn: stats.maxEn, 
-      currentMag: stats.maxMag 
-    }));
-  }, [character.baseStats, character.level]);
+  const gainExperience = useCallback((exp) => {
+    setCharacter(prev => {
+      const newExperience = prev.experience + exp;
+      if (newExperience >= prev.experienceToNextLevel) {
+        const newLevel = prev.level + 1;
+        const stats = calculateStats(prev.baseStats, newLevel);
+        const newAbilities = prev.baseStats.abilities.filter(ability => 
+          AbilityData[ability].requiredLevel <= newLevel && 
+          !prev.abilities.includes(ability)
+        );
+        console.log('Level Up:', { newLevel, stats, newAbilities });
+        return {
+          ...prev,
+          level: newLevel,
+          experience: newExperience - prev.experienceToNextLevel,
+          experienceToNextLevel: calculateRequiredExperience(newLevel),
+          stats,
+          currentHp: stats.maxHp,
+          currentEn: stats.maxEn,
+          currentMag: stats.maxMag,
+          abilities: [...prev.abilities, ...newAbilities],
+        };
+      } else {
+        console.log('Experience Gained:', { newExperience });
+        return {
+          ...prev,
+          experience: newExperience,
+        };
+      }
+    });
+  }, []);
 
   const updateLastInn = useCallback((region, area, localPosition, activity) => {
     setLastInn({ region, area, localPosition, activity });
   }, []);
 
   return (
-    <CharacterContext.Provider value={{ character, setCharacter, isCharacterCreated, handleCharacterCreation, levelUp, lastInn, updateLastInn }}>
+    <CharacterContext.Provider value={{ character, setCharacter, isCharacterCreated, handleCharacterCreation, gainExperience, lastInn, updateLastInn }}>
       {children}
     </CharacterContext.Provider>
   );

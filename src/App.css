@@ -203,6 +203,7 @@
   padding: 10px;
   text-align: justify;
   line-height: 20px;
+  height: 120px;
 }
 
 .button-container {
@@ -347,6 +348,11 @@
   z-index: 30;
 }
 
+.event-description{
+  width: 80%;
+  margin-top: 10px;
+}
+
 .enemy-name-span {
   color: #b8860b;
 }
@@ -372,6 +378,7 @@
   gap: 10px;
   width: 30%;
   margin-top: auto;
+  margin-bottom: 40px;
 }
 
 .event-popup .button-container .event-button {
@@ -556,7 +563,7 @@
 .popup-content {
   background-color: #303030;
   border: 2px solid #b8860b;
-  color: white;
+  color: #ffffff;
   padding: 40px 50px;
   text-align: center;
   margin: 20px;

@@ -1,20 +1,21 @@
+// Sidebar.jsx
 import React from 'react';
 import { useCharacter } from '../CharacterContext';
 
 const Sidebar = () => {
   const { character } = useCharacter();
 
-  // Capitalize job and sex values
   const capitalizeField = (field) => {
     return field ? field.charAt(0).toUpperCase() + field.slice(1).toLowerCase() : '';
   };
 
-  // Determine the profile image source
   const getImageSrc = () => {
     const { sex, job } = character;
-    if (!sex || !job) return '../images/adventurer-female.png'; // Default image
+    if (!sex || !job) return '../images/adventurer-female.png'; 
     return `../images/${job}-${sex}.png`;
   };
+
+  console.log('Sidebar Character:', character); // Log character data
 
   return (
     <div className="sidebar">
@@ -24,7 +25,7 @@ const Sidebar = () => {
       <p>{`Sex: ${capitalizeField(character.sex)}`}</p>
       <p>{`Job: ${capitalizeField(character.job)}`}</p>
       <p>{`Level: ${character.level}`}</p>
-      <p>{`Experience: 120/1000`}</p>
+      <p>{`Experience: ${character.experience}/${character.experienceToNextLevel}`}</p>
       <br />
       <div className="stat-container"><span>Health:</span><span>{character.currentHp}/{character.stats.maxHp}</span></div>
       <div className="stat-container"><span>Energy:</span><span>{character.currentEn}/{character.stats.maxEn}</span></div>
@@ -57,4 +58,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

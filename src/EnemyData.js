@@ -1,16 +1,22 @@
+// EnemyData.js
+const assignAbilities = (enemy, level) => {
+  const availableAbilities = enemy.possibleAbilities.filter(ability => AbilityData[ability].requiredLevel <= level);
+  return availableAbilities;
+};
+
 // Base stats for level 1 enemies
 export const baseStats = {
-  GreenSlime: { maxHp: 60, currentHp: 60, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 5, mres: 5, str: 15, int: 10, crit: 5, eva: 5, acc: 8, agi: 8 },
-  Velyr: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 20, currentMag: 20, ar: 7, mres: 10, str: 10, int: 15, crit: 8, eva: 20, acc: 12, agi: 15 },
-  Kaskari: { maxHp: 120, currentHp: 120, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 10, mres: 12, str: 20, int: 15, crit: 10, eva: 15, acc: 12, agi: 15 },
-  Kryten: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 8, mres: 10, str: 15, int: 12, crit: 8, eva: 10, acc: 10, agi: 10 },
-  ValleyWolf: { maxHp: 140, currentHp: 140, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 10, mres: 8, str: 25, int: 8, crit: 12, eva: 15, acc: 15, agi: 18 },
-  Grugmir: { maxHp: 160, currentHp: 160, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 12, mres: 12, str: 25, int: 15, crit: 10, eva: 10, acc: 15, agi: 12 },
-  Molgur: { maxHp: 200, currentHp: 200, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 18, mres: 15, str: 30, int: 18, crit: 12, eva: 10, acc: 15, agi: 12 },
-  Ayrin: { maxHp: 220, currentHp: 220, maxEn: 35, currentEn: 35, maxMag: 30, currentMag: 30, ar: 15, mres: 18, str: 30, int: 20, crit: 15, eva: 15, acc: 18, agi: 18 },
-  Brontor: { maxHp: 260, currentHp: 260, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 20, mres: 18, str: 35, int: 15, crit: 12, eva: 10, acc: 10, agi: 10 },
-  CorruptedGolem: { maxHp: 300, currentHp: 300, maxEn: 45, currentEn: 45, maxMag: 15, currentMag: 15, ar: 25, mres: 20, str: 40, int: 15, crit: 10, eva: 8, acc: 10, agi: 8 },
-  Zarnoth: { maxHp: 400, currentHp: 400, maxEn: 30, currentEn: 30, maxMag: 15, currentMag: 15, ar: 30, mres: 25, str: 50, int: 15, crit: 15, eva: 10, acc: 10, agi: 10 },
+  GreenSlime: { maxHp: 60, currentHp: 60, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 4, mres: 2, str: 15, int: 10, crit: 5, eva: 5, acc: 8, agi: 8 },
+  Velyr: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 20, currentMag: 20, ar: 0, mres: 5, str: 10, int: 15, crit: 8, eva: 20, acc: 12, agi: 15 },
+  Kaskari: { maxHp: 120, currentHp: 120, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 2, mres: 6, str: 20, int: 15, crit: 10, eva: 15, acc: 12, agi: 15 },
+  Kryten: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 4, mres: 5, str: 15, int: 12, crit: 8, eva: 10, acc: 10, agi: 10 },
+  ValleyWolf: { maxHp: 140, currentHp: 140, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 5, mres: 4, str: 25, int: 8, crit: 12, eva: 15, acc: 15, agi: 18 },
+  Grugmir: { maxHp: 160, currentHp: 160, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 6, mres: 6, str: 25, int: 15, crit: 10, eva: 10, acc: 15, agi: 12 },
+  Molgur: { maxHp: 200, currentHp: 200, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 9, mres: 7, str: 30, int: 18, crit: 12, eva: 10, acc: 15, agi: 12 },
+  Ayrin: { maxHp: 220, currentHp: 220, maxEn: 35, currentEn: 35, maxMag: 30, currentMag: 30, ar: 7, mres: 9, str: 30, int: 20, crit: 15, eva: 15, acc: 18, agi: 18 },
+  Brontor: { maxHp: 260, currentHp: 260, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 10, mres: 9, str: 35, int: 15, crit: 12, eva: 10, acc: 10, agi: 10 },
+  CorruptedGolem: { maxHp: 300, currentHp: 300, maxEn: 45, currentEn: 45, maxMag: 15, currentMag: 15, ar: 12, mres: 10, str: 40, int: 15, crit: 10, eva: 8, acc: 10, agi: 8 },
+  Zarnoth: { maxHp: 400, currentHp: 400, maxEn: 30, currentEn: 30, maxMag: 15, currentMag: 15, ar: 15, mres: 12, str: 50, int: 15, crit: 15, eva: 10, acc: 10, agi: 10 },
 };
 
 // Growth per level Coefficients
@@ -51,8 +57,6 @@ export function calculateStats(base, level, growthCoefficients) {
   };
 }
 
-
-
 // --------------------------------------- GRASSLAND BIOME ----------------------------------------
 export const EnemyData = {
   GreenSlime: {
@@ -62,6 +66,7 @@ export const EnemyData = {
     stats: baseStats.GreenSlime,
     image: './images/green-slime.png',
     description: "Small and acidic gelatinous creatures. Not overly aggressive but very sticky.", 
+    possibleAbilities: ['basicAttack', 'recover'],
   },
   ValleyWolf: {
     name: 'Valley Wolf',
@@ -70,6 +75,7 @@ export const EnemyData = {
     stats: baseStats.ValleyWolf,
     image: './images/valley-wolf.png',
     description: "A skilled predator and prowler of The Valley.", 
+    possibleAbilities: ['basicAttack'],
   },
   Velyr: {
     name: 'Velyr',
@@ -78,6 +84,7 @@ export const EnemyData = {
     stats: baseStats.Velyr,
     image: './images/velyr.png',
     description: "Small and docile moth-like beings that float aimlessly on the wind.", 
+    possibleAbilities: ['basicAttack', 'shunt'],
   },
   Kaskari: {
     name: 'Kaskari',
@@ -86,6 +93,7 @@ export const EnemyData = {
     stats: baseStats.Kaskari,
     image: './images/kaskari.png',
     description: "A Small creature with fur resembling the grasses around it and the ability to manipulate plants.", 
+    possibleAbilities: ['basicAttack', 'recover'],
   },
   Brontor: {
     name: 'Brontor',
@@ -94,6 +102,7 @@ export const EnemyData = {
     stats: baseStats.Brontor,
     image: './images/brontor.png',
     description: "A burly beast that attacks by rolling its great weight toward the enemy.", 
+    possibleAbilities: ['basicAttack'],
   },
   
   // --------------------------------------- MOUNTAIN BIOME ----------------------------------------
@@ -104,6 +113,7 @@ export const EnemyData = {
     stats: baseStats.CorruptedGolem,
     image: './images/corrupted-golem.png',
     description: "An enchanted stone being crafted to guard important things. As millenia pass, their magic drains unevenly from the material, leaving many corrupted by madness.", 
+    possibleAbilities: ['basicAttack'],
   },
   Kryten: {
     name: 'Kryten',
@@ -112,6 +122,7 @@ export const EnemyData = {
     stats: baseStats.Kryten,
     image: './images/kryten.png',
     description: "Tiny, crystal-winged creatures with rough, stone-like skin.", 
+    possibleAbilities: ['basicAttack'],
   },
   Grugmir: {
     name: 'Grugmir',
@@ -120,6 +131,7 @@ export const EnemyData = {
     stats: baseStats.Grugmir,
     image: './images/grugmir.png',
     description: "Small, sturdy creatures with rocky exteriors and luminous veins.", 
+    possibleAbilities: ['basicAttack'],
   },
   Molgur: {
     name: 'Molgur',
@@ -128,6 +140,7 @@ export const EnemyData = {
     stats: baseStats.Molgur,
     image: './images/molgur.png',
     description: "Reptilian creatures with molten cores and hardened lava scales.", 
+    possibleAbilities: ['basicAttack'],
   },
   
   // ---------------------------------- TEMPERATE FOREST BIOME -----------------------------------
@@ -145,6 +158,7 @@ export const EnemyData = {
     stats: baseStats.Ayrin,
     image: './images/ayrin.png',
     description: "An antelope-like being said to have the ability to manipulate wind and create powerful gusts.", 
+    possibleAbilities: ['basicAttack', 'shunt', 'recover'],
   },
   /*
   Sisharra
@@ -167,6 +181,7 @@ export const EnemyData = {
     stats: baseStats.Zarnoth,
     image: './images/zarnoth.png',
     description: "Massive beings with crystalline spines and immense strength.", 
+    possibleAbilities: ['basicAttack'],
   },
 /*
 Kryten
