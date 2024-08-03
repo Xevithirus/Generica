@@ -1,10 +1,10 @@
-// EventTrigger.jsx
 import React, { useEffect, useState } from "react";
 import { WorldData } from '../WorldData';
 import { EnemyData } from '../EnemyData';
 import { useCharacter } from '../CharacterContext';
 import { calculateStats, growthCoefficients } from '../EnemyData';
 import { AbilityData } from '../AbilityData'; // Import AbilityData
+import EventPopup from '../common/EventPopup'; // Import EventPopup
 
 const getRandomLevel = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -19,6 +19,8 @@ const assignAbilities = (enemy, level) => {
 export default function EventTrigger({ setInCombat, currentLocalPosition, currentArea, currentRegion, setIsEventActive, setEnemy }) {
   const [enemy, setEnemyState] = useState(null);
   const [fleeDisabled, setFleeDisabled] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   const { character } = useCharacter(); // Access character stats from context
 
@@ -54,7 +56,8 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
               currentEn: stats.maxEn,
               maxEn: stats.maxEn,
               currentMag: stats.maxMag,
-              maxMag: stats.maxMag
+              maxMag: stats.maxMag,
+              expReward: stats.expReward, 
             };
 
             console.log('Enemy Stats:', fullEnemyData); // Log enemy stats
@@ -101,12 +104,11 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
     console.log('fleeChance:', fleeChance);
 
     if (Math.random() * 100 < fleeChance) {
-      setEnemyState(null); // Update the local state
-      setFleeDisabled(false);
-      setIsEventActive(false);
-      setInCombat(false);
+      setPopupMessage('You successfully fled the battle!');
+      setShowPopup(true);
     } else {
-      alert("You could not escape!");
+      setPopupMessage('You could not escape!');
+      setShowPopup(true);
       setFleeDisabled(true);
     }
   };
@@ -117,10 +119,20 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
     setIsEventActive(false);
   };
 
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    if (popupMessage === 'You successfully fled the battle!') {
+      setEnemyState(null); // Update the local state
+      setFleeDisabled(false);
+      setIsEventActive(false);
+      setInCombat(false);
+    }
+  };
+
   console.log('Rendering with enemy:', enemy);
 
   return (
-    <>
+    <div className="event-trigger">
       {enemy ? (
         <div className="event-popup">
           <h3>An enemy <span className="enemy-name-span">{enemy.name}</span> has appeared!</h3>
@@ -142,6 +154,7 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
       ) : (
         <p>No enemy data to display</p>
       )}
-    </>
+      {showPopup && <EventPopup message={popupMessage} onClose={handleClosePopup} />}
+    </div>
   );
 }

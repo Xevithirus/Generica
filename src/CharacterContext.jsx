@@ -20,7 +20,7 @@ const baseCharacterStats = {
     eva: 5, 
     acc: 8, 
     agi: 5, 
-    abilities: ['basicAttack', 'knockBack'] 
+    abilities: ['basicAttack', 'slash'] 
   },
   witch: { 
     hp: 100, 
@@ -34,7 +34,7 @@ const baseCharacterStats = {
     eva: 10, 
     acc: 8, 
     agi: 10, 
-    abilities: ['basicAttack', 'shunt', 'recover'] 
+    abilities: ['basicAttack', 'shunt'] 
   },
   rogue: { 
     hp: 160, 
@@ -48,7 +48,7 @@ const baseCharacterStats = {
     eva: 20, 
     acc: 12, 
     agi: 20, 
-    abilities: ['basicAttack'] 
+    abilities: ['basicAttack', 'bandage'] 
   },
   cleric: { 
     hp: 140, 
@@ -62,7 +62,7 @@ const baseCharacterStats = {
     eva: 8, 
     acc: 8, 
     agi: 12, 
-    abilities: ['basicAttack', 'recover', 'shunt'] 
+    abilities: ['basicAttack', 'heal'] 
   },
   paladin: { 
     hp: 200, 
@@ -90,7 +90,7 @@ const baseCharacterStats = {
     eva: 20, 
     acc: 15, 
     agi: 20, 
-    abilities: ['basicAttack', 'shoot'] 
+    abilities: ['basicAttack', 'bandage'] 
   },
 };
 

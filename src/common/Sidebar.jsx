@@ -15,8 +15,6 @@ const Sidebar = () => {
     return `../images/${job}-${sex}.png`;
   };
 
-  console.log('Sidebar Character:', character); // Log character data
-
   return (
     <div className="sidebar">
       <h1 className="sidebar-title">{character.name.toUpperCase()}</h1>

@@ -348,7 +348,7 @@
   z-index: 30;
 }
 
-.event-description{
+.event-description {
   width: 80%;
   margin-top: 10px;
 }
@@ -404,7 +404,7 @@
 
 .combat-window {
   position: fixed;
-  top: calc(40%);
+  top: calc(39%);
   left: 58%;
   transform: translate(-50%, -50%);
   background-color: #303030;
@@ -442,7 +442,7 @@
 
 .combat-character,
 .combat-enemy {
-  width: 45%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -471,7 +471,7 @@
   width: 100%;
 }
 
-.stat-value{
+.stat-value {
   color: rgb(0, 255, 0);
 }
 
@@ -483,7 +483,7 @@
 }
 
 .combat-log {
-  max-height: 130px;
+  max-height: 150px;
   height: 160px;
   overflow-y: auto;
   background-color: #141414;
@@ -558,6 +558,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
 }
 
 .popup-content {
@@ -568,6 +569,12 @@
   text-align: center;
   margin: 20px;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-message {
+  padding-bottom: 30px;
 }
 
 .popup-content button {
@@ -576,11 +583,10 @@
   background-color: #290d0d;
   border: 2px solid #b8860b;
   padding: 10px 30px;
-  margin-bottom: 10px;
-  margin-top: 40px;
+  margin-bottom: 0px;
+  margin-top: 0px;
   color: white;
   font-family: "Press Start 2P", system-ui;
-  
 }
 
 .popup-content button:hover {

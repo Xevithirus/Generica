@@ -1,0 +1,42 @@
+.eventPopupOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding-left: 330px;
+    padding-bottom: 260px;
+}
+
+.eventPopupContent {
+    background-color: #303030;
+    border: 2px solid #b8860b;
+    color: #ffffff;
+    padding: 40px 50px;
+    text-align: center;
+    margin: 20px;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 1);
+}
+
+.eventPopupContent button {
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: #290d0d;
+    border: 2px solid #b8860b;
+    padding: 10px 30px;
+    margin-bottom: 10px;
+    margin-top: 40px;
+    color: white;
+    font-family: "Press Start 2P", system-ui;
+}
+
+.eventPopupContent button:hover {
+    background-color: #b8860b;
+    color: #000;
+    border: 2px solid #000;
+}
