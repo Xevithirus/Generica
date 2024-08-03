@@ -163,12 +163,9 @@ const Game = () => {
             // Initialize enemy with current and max values
             setEnemy({
               ...enemyData,
-              currentHp: enemyData.hp,
-              maxHp: enemyData.hp,
-              currentEn: enemyData.en,
-              maxEn: enemyData.en,
-              currentMag: enemyData.mag,
-              maxMag: enemyData.mag,
+              currentHp: enemyData.stats.maxHp,
+              currentEn: enemyData.stats.maxEn,
+              currentMag: enemyData.stats.maxMag,
             });
           }}
           setIsEventActive={setIsEventActive}

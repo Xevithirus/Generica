@@ -3,13 +3,24 @@ import { WorldData } from '../WorldData';
 import { EnemyData } from '../EnemyData';
 import { useCharacter } from '../CharacterContext';
 import { calculateStats, growthCoefficients } from '../EnemyData';
+import { AbilityData } from '../AbilityData'; // Import AbilityData
+import EventPopup from '../common/EventPopup'; // Import EventPopup
 
-// Function to get a random level within the range
 const getRandomLevel = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const assignAbilities = (enemy, level) => {
+  if (!enemy || !enemy.possibleAbilities) {
+    return [];
+  }
+  const availableAbilities = enemy.possibleAbilities.filter(ability => AbilityData[ability].requiredLevel <= level);
+  return availableAbilities;
+};
 
 export default function EventTrigger({ setInCombat, currentLocalPosition, currentArea, currentRegion, setIsEventActive, setEnemy }) {
   const [enemy, setEnemyState] = useState(null);
   const [fleeDisabled, setFleeDisabled] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   const { character } = useCharacter(); // Access character stats from context
 
@@ -33,18 +44,23 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
             const levelRange = localPositionData.levelRange;
             const level = getRandomLevel(levelRange.min, levelRange.max);
             const stats = calculateStats(enemyDetails.stats, level, growthCoefficients);
+            const abilities = assignAbilities(enemyDetails, level);
             const fullEnemyData = { 
               ...selectedEnemy, 
               ...enemyDetails, 
               level, 
               stats,
-              currentHp: stats.hp,
-              maxHp: stats.hp,
-              currentEn: stats.en,
-              maxEn: stats.en,
-              currentMag: stats.mag,
-              maxMag: stats.mag
+              abilities,
+              currentHp: stats.maxHp,
+              maxHp: stats.maxHp,
+              currentEn: stats.maxEn,
+              maxEn: stats.maxEn,
+              currentMag: stats.maxMag,
+              maxMag: stats.maxMag,
+              expReward: stats.expReward, 
             };
+
+            console.log('Enemy Stats:', fullEnemyData); // Log enemy stats
 
             setEnemyState(fullEnemyData);
             setEnemy(fullEnemyData);
@@ -88,15 +104,11 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
     console.log('fleeChance:', fleeChance);
 
     if (Math.random() * 100 < fleeChance) {
-      setEnemyState(null); // Update the local state
-      setFleeDisabled(false);
-      setIsEventActive(false);
-      setInCombat(false);
-      // Ensure to reset current activity
-      // Ensure to reset current local position
-      // Ensure to reset current area
+      setPopupMessage('You successfully fled the battle!');
+      setShowPopup(true);
     } else {
-      alert("You could not escape!");
+      setPopupMessage('You could not escape!');
+      setShowPopup(true);
       setFleeDisabled(true);
     }
   };
@@ -107,10 +119,20 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
     setIsEventActive(false);
   };
 
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    if (popupMessage === 'You successfully fled the battle!') {
+      setEnemyState(null); // Update the local state
+      setFleeDisabled(false);
+      setIsEventActive(false);
+      setInCombat(false);
+    }
+  };
+
   console.log('Rendering with enemy:', enemy);
 
   return (
-    <>
+    <div className="event-trigger">
       {enemy ? (
         <div className="event-popup">
           <h3>An enemy <span className="enemy-name-span">{enemy.name}</span> has appeared!</h3>
@@ -123,7 +145,7 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
             </div>
           </div>
           <br />
-          <p className="stats-left">{enemy.description}</p>
+          <p className="event-description">{enemy.description}</p>
           <div className="button-container">   
             <button className="event-button" onClick={handleFight}>Fight</button>
             <button className={`event-button ${fleeDisabled ? 'disabled' : ''}`} onClick={handleFlee} disabled={fleeDisabled}>Flee</button>
@@ -132,6 +154,7 @@ export default function EventTrigger({ setInCombat, currentLocalPosition, curren
       ) : (
         <p>No enemy data to display</p>
       )}
-    </>
+      {showPopup && <EventPopup message={popupMessage} onClose={handleClosePopup} />}
+    </div>
   );
 }
