@@ -9,88 +9,88 @@ export const useCharacter = () => useContext(CharacterContext);
 
 const baseCharacterStats = {
   warrior: { 
-    hp: 240, 
+    hp: 200, 
     en: 60, 
     mag: 30, 
-    ar: 15, 
-    mres: 10, 
-    str: 15, 
+    ar: 5, 
+    mres: 8, 
+    str: 18, 
     int: 10, 
     crit: 5, 
     eva: 5, 
     acc: 8, 
     agi: 5, 
-    abilities: ['basicAttack', 'slash'] 
+    abilities: ['basicAttack', ,'bandage', 'slash'] 
   },
   witch: { 
     hp: 100, 
     en: 50, 
-    mag: 180, 
-    ar: 5, 
+    mag: 100, 
+    ar: 0, 
     mres: 10, 
     str: 10, 
     int: 30, 
     crit: 8, 
     eva: 10, 
     acc: 8, 
-    agi: 10, 
-    abilities: ['basicAttack', 'shunt'] 
+    agi: 8, 
+    abilities: ['basicAttack', 'shunt', 'burst'] 
   },
   rogue: { 
-    hp: 160, 
+    hp: 140, 
     en: 100, 
     mag: 30, 
-    ar: 8, 
+    ar: 2, 
     mres: 5, 
-    str: 20, 
+    str: 25, 
     int: 10, 
     crit: 15, 
     eva: 20, 
     acc: 12, 
-    agi: 20, 
-    abilities: ['basicAttack', 'bandage'] 
+    agi: 15, 
+    abilities: ['basicAttack', 'bandage', 'slash'] 
   },
   cleric: { 
-    hp: 140, 
+    hp: 120, 
     en: 50, 
-    mag: 140, 
-    ar: 5, 
+    mag: 100, 
+    ar: 0, 
     mres: 12, 
     str: 10, 
     int: 25, 
     crit: 5, 
     eva: 8, 
     acc: 8, 
-    agi: 12, 
-    abilities: ['basicAttack', 'heal'] 
+    agi: 10, 
+    abilities: ['basicAttack', 'recover', 'heal'] 
   },
   paladin: { 
-    hp: 200, 
+    hp: 180, 
     en: 60, 
-    mag: 80, 
-    ar: 12, 
+    mag: 60, 
+    ar: 4, 
     mres: 12, 
-    str: 18, 
-    int: 10, 
+    str: 16, 
+    int: 15, 
     crit: 5, 
     eva: 5, 
     acc: 6, 
     agi: 8, 
-    abilities: ['basicAttack', 'recover'] 
+    abilities: ['basicAttack', 'recover', 'slash'] 
   },
   ranger: { 
     hp: 160, 
-    en: 100, 
+    en: 90, 
     mag: 50, 
-    ar: 8, 
+    ar: 2, 
     mres: 5, 
     str: 20, 
-    int: 15, 
+    int: 12, 
     crit: 15, 
     eva: 20, 
     acc: 15, 
-    agi: 20, 
-    abilities: ['basicAttack', 'bandage'] 
+    agi: 12, 
+    abilities: ['basicAttack', 'bandage', 'slash'] 
   },
 };
 

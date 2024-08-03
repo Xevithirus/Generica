@@ -22,7 +22,7 @@ export const WorldData = {
               },
               inn: {
                 name: 'The Crinkled Skink',
-                description: 'You enter The Crinkled Skink. It is lively, bustling with the denizens of Darda. A pleasant barkeep waves at you from behind the counter.',
+                description: 'Welcome to The Crinkled Skink! It is bustling with the denizens of Darda. A pleasant barkeep waves at you from behind the counter.',
                 image: './images/crinkled-skink-tavern.png',
               }
             }
@@ -55,22 +55,24 @@ export const WorldData = {
             description: 'You step onto a dirt path that snakes through the valley, dappled with sunlight. The air is cool and filled with the scent of pine and earth. Every step brings a new discovery, from blooming flowers to hidden clearings. It is a place of quiet reflection and natural wonder.',
             image: './images/old-trail-valley.png',
             activities: {
-              Walking: {
-                name: 'Walking',
-                description: 'Take a leisurely walk through the valley.',
+              Explore: {
+                name: 'Explore',
+                description: 'You explore the area...',
+                image: './images/old-trail-valley.png',
               },
               NatureWatching: {
                 name: 'Nature Watching',
                 description: 'Observe the wildlife in their natural habitat. Spot deer, foxes, and countless birds. The valley is alive with the wonders of the natural world.',
+                image: './images/old-trail-valley.png',
               }
             },
             // Enemy spawns and spawn weights for Valley Path
             enemies: [
-              { name: 'GreenSlime', spawnRate: 55 },
+              { name: 'GreenSlime', spawnRate: 35 },
               { name: 'Velyr', spawnRate: 25 },
-              { name: 'Kaskari', spawnRate: 10 },
-              { name: 'ValleyWolf', spawnRate: 5 },
-              { name: 'Brontor', spawnRate: 3 },
+              { name: 'Kaskari', spawnRate: 18 },
+              { name: 'ValleyWolf', spawnRate: 10 },
+              { name: 'Brontor', spawnRate: 10 },
               { name: 'Ayrin', spawnRate: 2 },
             ],
             levelRange: { min: 1, max: 3 } // Define level range for Valley Path
@@ -85,21 +87,20 @@ export const WorldData = {
         localPositions: {
           beachHut: {
             name: 'Beach Hut',
-            description: 'You discover a cozy hut by the beach, perfect for relaxing. The scent of salt air and the sound of waves provide a tranquil backdrop. Inside, the hut is warm and inviting, a perfect retreat from the sun. Outside, the beach offers endless opportunities for fun and relaxation. It is an ideal spot to unwind and enjoy the view.',
+            description: 'You discover an small hut nestled in the cliffs near the beach. It appears to be abandoned.',
             image: './images/beach-hut.png',
             activities: {
-              Resting: {
-                name: 'Resting',
-                description: 'Relax in the comfort of the beach hut. Let your worries drift away with the tide. The hut is a haven of peace and tranquility.',
+              Explore: {
+                name: 'Explore',
+                description: 'You explore the area...',
+                image: './images/beach-hut.png',
               },
-              BeachGames: {
-                name: 'Beach Games',
-                description: 'Play games on the sandy beach. Feel the joy of simple pleasures under the sun. The beach is a playground for all ages.',
-              }
             },
             // Enemy spawns and spawn weights 
             enemies: [
-              { name: 'GreenSlime', spawnRate: 85 },
+              { name: 'BlueSlime', spawnRate: 50 },
+              { name: 'Neridia', spawnRate: 10 },
+              { name: 'Serashka', spawnRate: 40 },
             ],
             levelRange: { min: 2, max: 5 } // Define level range 
           }
@@ -114,23 +115,19 @@ export const WorldData = {
           cliffTop: {
             name: 'Cliff Top',
             description: 'You reach the cliff top and are greeted by a breathtaking view. The sea below sparkles in the sunlight, and the horizon stretches endlessly. The wind whips around you, carrying the scent of salt and adventure. It is a perfect spot for contemplation and inspiration. Here, you feel the true power and beauty of nature.',
-            image: './images/cliff-top.png',
+            image: './images/bluster-bluffs.png',
             activities: {
-              Sightseeing: {
-                name: 'Sightseeing',
-                description: 'Enjoy the scenic view from the top. Take in the panoramic vistas and feel the grandeur of nature. Every glance reveals a new wonder.',
+              Explore: {
+                name: 'Explore',
+                description: 'You explore the area...',
+                image: './images/bluster-bluffs.png',
               },
-              Photography: {
-                name: 'Photography',
-                description: 'Capture beautiful photos of the landscape. The ever-changing light and shadows offer endless opportunities. The cliffs provide a dramatic backdrop for your shots.',
-              }
             },         
             // Enemy spawns and spawn weights for Cliff Top
             enemies: [
-              // { name: 'GreenSlime', spawnRate: 55 },
-              // { name: 'Velyr', spawnRate: 30 },
-              // { name: 'Kaskari', spawnRate: 10 },
-              // { name: 'ValleyWolf', spawnRate: 5 },
+              { name: 'BlueSlime', spawnRate: 20 },
+              { name: 'Velyr', spawnRate: 40 },
+              { name: 'Serashka', spawnRate: 40 },
             ],
             levelRange: { min: 3, max: 6 } // Define level range for Cliff Top 
           }

@@ -571,6 +571,7 @@
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 1);
   display: flex;
   flex-direction: column;
+  max-width: 600px;
 }
 
 .popup-message {
@@ -584,6 +585,8 @@
   border: 2px solid #b8860b;
   padding: 10px 30px;
   margin-bottom: 0px;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 0px;
   color: white;
   font-family: "Press Start 2P", system-ui;

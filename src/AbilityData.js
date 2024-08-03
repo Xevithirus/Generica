@@ -3,7 +3,7 @@ export const AbilityData = {
     name: 'Basic Attack',
     requiredLevel: 1,
     cost: { energy: 0, magic: 0 },
-    castTime: 0,
+    castTime: 1,
     description: "A basic attack using whatever you have in-hand.",
     effect: (user) => ({
       type: 'physical',
@@ -14,7 +14,7 @@ export const AbilityData = {
     name: 'Shunt',
     requiredLevel: 1,
     cost: { energy: 0, magic: 5 },
-    castTime: 1,
+    castTime: 2,
     description: "The most basic spell. Push unfocused energy forwards dealing minor damage.",
     effect: (user) => ({
       type: 'magical',
@@ -25,7 +25,7 @@ export const AbilityData = {
     name: 'Bandage',
     requiredLevel: 1,
     cost: { energy: 5, magic: 0 },
-    castTime: 1,
+    castTime: 2,
     description: "Use torn cloth to stop bleeding and recover a small amount of damage.",
     effect: (user) => ({
       type: 'heal',
@@ -36,7 +36,7 @@ export const AbilityData = {
     name: 'Recover',
     requiredLevel: 1,
     cost: { energy: 0, magic: 5 },
-    castTime: 1,
+    castTime: 2,
     description: "Use magic to stop bleeding and recover a small amount of health.",
     effect: (user) => ({
       type: 'heal',
@@ -47,7 +47,7 @@ export const AbilityData = {
     name: 'Burst',
     requiredLevel: 2,
     cost: { energy: 0, magic: 10 },
-    castTime: 2,
+    castTime: 4,
     description: "Gather magic and release it in a burst, dealing reasonable damage.",
     effect: (user) => ({
       type: 'magical',
@@ -58,7 +58,7 @@ export const AbilityData = {
     name: 'Slash',
     requiredLevel: 2,
     cost: { energy: 5, magic: 0 },
-    castTime: 1,
+    castTime: 3,
     description: "A focused physical attack that deals reasonable damage.",
     effect: (user) => ({
       type: 'physical',
@@ -69,7 +69,7 @@ export const AbilityData = {
     name: 'Heal',
     requiredLevel: 2,
     cost: { energy: 0, magic: 10 },
-    castTime: 2,
+    castTime: 3,
     description: "A healing ability that restores a reasonable amount of health.",
     effect: (user) => ({
       type: 'heal',
