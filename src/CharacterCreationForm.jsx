@@ -8,6 +8,8 @@ const CharacterCreationForm = () => {
   const [job, setJob] = useState('');
   const [sex, setSex] = useState('');
 
+  const MAX_NAME_LENGTH = 17; // Set the maximum length for the name
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name && job && sex) {
@@ -17,13 +19,19 @@ const CharacterCreationForm = () => {
     }
   };
 
+  const handleNameChange = (e) => {
+    if (e.target.value.length <= MAX_NAME_LENGTH) {
+      setName(e.target.value);
+    }
+  };
+
   return (
     <div className={styles.characterCreationForm}>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <h1>Create your character</h1>
         <label>
           Name:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" value={name} onChange={handleNameChange} maxLength={MAX_NAME_LENGTH} />
         </label>
         <label>
           Sex:

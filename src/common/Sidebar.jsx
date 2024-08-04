@@ -1,3 +1,4 @@
+//Sidebar.jsx
 import React from 'react';
 import { useCharacter } from '../CharacterContext';
 
@@ -52,9 +53,9 @@ const Sidebar = ({ play, pause, volume, setVolume, isPlaying }) => {
       </div>
       <div className="audio-controls">
         <button onClick={isPlaying ? pause : play}>
-          {isPlaying ? 'Pause' : 'Play'}
+          {isPlaying ? 'Pause' : 'Music'}
         </button>
-        <label htmlFor="volume">Volume: </label>
+        {/* <label htmlFor="volume">Volume: </label> */}
         <input
           type="range"
           id="volume"

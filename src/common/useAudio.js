@@ -6,7 +6,7 @@ const useAudio = () => {
   const [volume, setVolume] = useState(0.5);
   const [src, setSrc] = useState('');
 
-  const handleFade = (startVolume, endVolume, duration) => {
+  const handleFade = (startVolume, endVolume, duration, callback) => {
     const fadeSteps = Math.abs(endVolume - startVolume) * 100;
     const fadeInterval = duration / fadeSteps;
     let currentVolume = startVolume;
@@ -22,6 +22,7 @@ const useAudio = () => {
         if (endVolume === 0) {
           audioRef.current.pause();
         }
+        if (callback) callback();
       }
     };
     fadeAudio();
@@ -48,6 +49,7 @@ const useAudio = () => {
   useEffect(() => {
     if (src) {
       audioRef.current.src = src;
+      audioRef.current.load();
       if (isPlaying) {
         audioRef.current.play().catch(error => console.log('Failed to play audio:', error));
       }
@@ -58,9 +60,12 @@ const useAudio = () => {
     setIsPlaying(true);
     audioRef.current.play().catch(error => console.log('Failed to play audio:', error));
   };
+
   const pause = () => setIsPlaying(false);
+
   const fadeIn = (duration) => handleFade(audioRef.current.volume, volume, duration);
-  const fadeOut = (duration) => handleFade(audioRef.current.volume, 0, duration);
+
+  const fadeOut = (duration, callback) => handleFade(audioRef.current.volume, 0, duration, callback);
 
   return { isPlaying, volume, setVolume, play, pause, fadeIn, fadeOut, setSrc };
 };
