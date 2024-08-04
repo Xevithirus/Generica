@@ -1,44 +1,61 @@
+// WorldData.js
 export const WorldData = {
   faldor: {
     name: 'Faldor',
-    description: 'Welcome to Faldor, a vast and diverse region. You step into a land teeming with life, where every path leads to a new story. The sky is a clear blue, dotted with fluffy white clouds. A gentle breeze carries the scent of pine and fresh earth. Adventure awaits at every turn, inviting you to explore its many wonders.',
+    description: 'Welcome to Faldor, a vast and diverse region...',
     image: './images/faldor.png',
     areas: {
       darda: {
         name: 'Darda',
-        description: 'You arrive at the entrance to Darda, a quaint little fishing village with a rich history. Time seems to slow down in this peaceful place, as if the village itself is holding onto a past it refuses to share.',
+        description: 'You arrive at the entrance to Darda...',
         image: './images/darda.png',
-        connectedAreas: ['theValley'],
+        connectedAreas: [
+          { name: 'theValley', distance: 1 } // 1 km
+        ],
+        travelText: 'Travelling to Darda',
+        exitText: 'Leaving Darda',
         localPositions: {
           townSquare: {
             name: 'Town Square',
-            description: 'The bustling center of town, the square is quaint but alive. Shops and cafes line the streets, each offering unique wares and flavors. Musicians play cheerful tunes, adding to the lively atmosphere. The aroma of freshly baked bread tempts you. This is the heart of Darda, where stories are shared and lives intertwine.',
+            description: 'The bustling center of town...',
+            travelText: 'Heading to the town square',
+            exitText: 'Leaving the town square',
             image: './images/town-square-darda.png',
             activities: {
               shop: {
                 name: "Tinkerton's",
-                description: "You enter Tinkerton's general store. Find the best selection of legal merchandise around, from practical tools to whimsical trinkets.",
+                description: "You enter Tinkerton's general store...",
+                travelText: "Entering Tinkerton's",
+                exitText: "Leaving Tinkerton's",
                 image: './images/tinkertons.png',
               },
               inn: {
                 name: 'The Crinkled Skink',
-                description: 'Welcome to The Crinkled Skink! It is bustling with the denizens of Darda. A pleasant barkeep waves at you from behind the counter.',
+                description: 'Welcome to The Crinkled Skink...',
+                travelText: 'Entering The Crinkled Skink',
+                exitText: 'Leaving the The Crinkled Skink',
                 image: './images/crinkled-skink-tavern.png',
               }
             }
           },
           docks: {
             name: 'Docks',
-            description: 'You find yourself at the docks where fishermen and traders gather. Boats from distant lands bring exotic goods and stories of adventure. Seagulls cry overhead, diving for scraps. The salty sea air invigorates your senses.',
+            description: 'You find yourself at the docks...',
+            travelText: 'Heading to the docks',
+            exitText: 'Leaving the docks',
             image: './images/docks-darda.png',
             activities: {
               Trading: {
                 name: 'Trading',
-                description: 'You can trade goods with local and foreign merchants here. Discover rare items and haggle for the best price. Each trade brings a new story and a piece of the world closer to home.',
+                description: 'You can trade goods with local and foreign merchants here...',
+                travelText: 'Trading',
+                exitText: 'Ending trade',
               },
               Fishing: {
                 name: 'Fishing',
-                description: 'Cast your line and feel the thrill of the catch. Watch the fishermen at work and learn their secrets. The sea promises bountiful rewards for those who are patient.',
+                description: 'Cast your line and feel the thrill of the catch...',
+                travelText: 'Fishing',
+                exitText: 'Ending fishing',
               }
             },
           }
@@ -46,27 +63,38 @@ export const WorldData = {
       },
       theValley: {
         name: 'The Valley',
-        description: 'A peaceful green paradise unfolds before you. Lush meadows stretch as far as the eye can see. The sloping grasslands wind its way through the landscape, inviting you to follow. Birds sing from the treetops, filling the air with music. This is a sanctuary for those seeking tranquility and natural beauty.',
+        description: 'A peaceful green paradise unfolds before you...',
         image: './images/the-valley.png',
-        connectedAreas: ['darda', 'coralCove', 'thalenPass'],
+        connectedAreas: [
+          { name: 'darda', distance: 1 },
+          { name: 'coralCove', distance: 3 },
+          { name: 'thalenPass', distance: 5 }
+        ],
+        travelText: 'Travelling to the Valley',
+        exitText: 'Leaving the Valley',
         localPositions: {
           valleyPath: {
             name: 'Valley Path',
-            description: 'You step onto a dirt path that snakes through the valley, dappled with sunlight. The air is cool and filled with the scent of pine and earth. Every step brings a new discovery, from blooming flowers to hidden clearings. It is a place of quiet reflection and natural wonder.',
+            description: 'You step onto a dirt path...',
+            travelText: 'Heading to the Valley Path',
+            exitText: 'Leaving the Valley Path',
             image: './images/old-trail-valley.png',
             activities: {
               Explore: {
                 name: 'Explore',
-                description: 'You explore the area...',
+                description: 'You explored the area...',
+                travelText: 'Exploring',
+                exitText: 'Ending exploration',
                 image: './images/old-trail-valley.png',
               },
               NatureWatching: {
                 name: 'Nature Watching',
-                description: 'Observe the wildlife in their natural habitat. Spot deer, foxes, and countless birds. The valley is alive with the wonders of the natural world.',
+                description: 'You observe the wildlife in their natural habitat...',
+                travelText: 'Watching nature',
+                exitText: 'Ending nature watch',
                 image: './images/old-trail-valley.png',
               }
             },
-            // Enemy spawns and spawn weights for Valley Path
             enemies: [
               { name: 'GreenSlime', spawnRate: 35 },
               { name: 'Velyr', spawnRate: 25 },
@@ -75,7 +103,7 @@ export const WorldData = {
               { name: 'Brontor', spawnRate: 10 },
               { name: 'Ayrin', spawnRate: 2 },
             ],
-            levelRange: { min: 1, max: 3 } // Define level range for Valley Path
+            levelRange: { min: 1, max: 3 }
           }
         }
       },
@@ -83,26 +111,33 @@ export const WorldData = {
         name: 'Coral Cove',
         description: 'A beautiful sandy beach bordered by impressive cliff walls greets you. The clear blue waters sparkle in the sunlight, inviting you to take a dip. Colorful corals and vibrant marine life can be seen just below the surface. The sound of waves crashing against the shore creates a soothing symphony. It is a hidden gem where the sea meets the land in perfect harmony.',
         image: './images/coral-cove.png',
-        connectedAreas: ['thalenPass', 'blusterBluffs'],
+        connectedAreas: [
+          { name: 'blusterBluffs', distance: 3 },
+        ],
+        travelText: 'Travelling to Coral Cove',
+        exitText: 'Leaving Coral Cove',
         localPositions: {
           beachHut: {
             name: 'Beach Hut',
             description: 'You discover an small hut nestled in the cliffs near the beach. It appears to be abandoned.',
+            travelText: 'Heading to the Beach Hut',
+            exitText: 'Leaving the Beach Hut',
             image: './images/beach-hut.png',
             activities: {
               Explore: {
                 name: 'Explore',
                 description: 'You explore the area...',
+                travelText: 'Exploring',
+                exitText: 'Ending exploration',
                 image: './images/beach-hut.png',
               },
             },
-            // Enemy spawns and spawn weights 
             enemies: [
               { name: 'BlueSlime', spawnRate: 50 },
               { name: 'Neridia', spawnRate: 10 },
               { name: 'Serashka', spawnRate: 40 },
             ],
-            levelRange: { min: 2, max: 5 } // Define level range 
+            levelRange: { min: 2, max: 5 }
           }
         }
       },
@@ -110,26 +145,33 @@ export const WorldData = {
         name: 'Bluster Bluffs',
         description: 'Overlooking Coral Cove, Bluster Bluffs provides a great view of the sea. The cliffs are rugged and majestic, shaped by the relentless forces of nature. From the top, you can see the vast expanse of the ocean stretching out to the horizon. The wind is strong here, adding to the sense of wild beauty. It is a place to stand in awe of the natural world.',
         image: './images/bluster-bluffs.png',
-        connectedAreas: ['coralCove'],
+        connectedAreas: [
+          { name: 'coralCove', distance: 3 },
+        ],
+        travelText: 'Travelling to Bluster Bluffs',
+        exitText: 'Leaving Bluster Bluffs',
         localPositions: {
           cliffTop: {
             name: 'Cliff Top',
             description: 'You reach the cliff top and are greeted by a breathtaking view. The sea below sparkles in the sunlight, and the horizon stretches endlessly. The wind whips around you, carrying the scent of salt and adventure. It is a perfect spot for contemplation and inspiration. Here, you feel the true power and beauty of nature.',
+            travelText: 'Heading to the Cliff Top',
+            exitText: 'Leaving the Cliff Top',
             image: './images/bluster-bluffs.png',
             activities: {
               Explore: {
                 name: 'Explore',
                 description: 'You explore the area...',
+                travelText: 'Exploring',
+                exitText: 'Ending exploration',
                 image: './images/bluster-bluffs.png',
               },
-            },         
-            // Enemy spawns and spawn weights for Cliff Top
+            },
             enemies: [
               { name: 'BlueSlime', spawnRate: 20 },
               { name: 'Velyr', spawnRate: 40 },
               { name: 'Serashka', spawnRate: 40 },
             ],
-            levelRange: { min: 3, max: 6 } // Define level range for Cliff Top 
+            levelRange: { min: 3, max: 6 }
           }
         }
       },
@@ -137,31 +179,37 @@ export const WorldData = {
         name: 'Thalen Pass',
         description: 'You enter Thalen Pass, an old mining tunnel that once provided thoroughfare to the world beyond the Westridge Mountains. Echoes of its industrious past still linger, with rusted tracks and forgotten tools. The air is cool and heavy with the scent of earth and history. As you explore, you can almost hear the whispers of miners who once toiled here. It is a place of mystery and history, where every corner holds a tale.',
         image: './images/thalen-pass.png',
-        connectedAreas: ['theValley'],
+        connectedAreas: [
+          { name: 'theValley', distance: 5 },
+        ],
+        travelText: 'Travelling to Thalen Pass',
+        exitText: 'Leaving Thalen Pass',
         localPositions: {
           tunnelEntrance: {
             name: 'Tunnel Entrance',
             description: 'The entrance to the Thalen Pass.',
+            travelText: 'Heading to the Tunnel Entrance',
+            exitText: 'Leaving the Tunnel Entrance',
             image: './images/inside-tunnel.png',
             activities: {
               Exploring: {
                 name: 'Exploring',
                 description: 'You look around the area. Discover relics of the past and imagine the bustling activity that once filled this place. Every step is a journey into history.',
+                travelText: 'Exploring',
+                exitText: 'Ending exploration',
               },
               Encounter: {
                 name: 'Sound in the dark',
                 description: 'You hear something approaching...',
+                travelText: 'Investigating sound',
+                exitText: 'Leaving encounter',
                 image: './images/corrupted-golem.png',
               }
             },
-            // Enemy spawns and spawn weights for Tunnel Entrance
             enemies: [
               { name: 'CorruptedGolem', spawnRate: 100 },
-              // { name: 'Velyr', spawnRate: 30 },
-              // { name: 'Kaskari', spawnRate: 10 },
-              // { name: 'ValleyWolf', spawnRate: 5 },
             ],
-            levelRange: { min: 6, max: 8 } // Define level range for Tunnel Entrance
+            levelRange: { min: 6, max: 8 }
           }
         }
       }

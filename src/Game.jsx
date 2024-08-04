@@ -6,6 +6,9 @@ import { WorldData } from './WorldData';
 import EventTrigger from './common/EventTrigger';
 import CombatWindow from './CombatWindow';
 import { useCharacter } from './CharacterContext'; 
+import TravelPopup from './common/TravelPopup';
+import { useClock } from './common/GameClock';
+import ClockDisplay from './common/ClockDisplay';
 import './App.css';
 
 const Game = () => {
@@ -20,14 +23,17 @@ const Game = () => {
   const [enemy, setEnemy] = useState(null);
   const [inCombat, setInCombat] = useState(false);
   const [fleeDisabled, setFleeDisabled] = useState(false);
-
+  const [showTravelPopup, setShowTravelPopup] = useState(false);
+  const [travelText, setTravelText] = useState('Travelling');
+  
   const { character, updateLastInn } = useCharacter(); // Access character stats and updateLastInn from context
-
+  const { updateClock } = useClock(); // Access the clock context
+  
   const currentRegionData = WorldData[currentRegion];
   const currentAreaData = currentRegionData?.areas[currentArea];
   const currentLocalPositionData = currentAreaData?.localPositions[currentLocalPosition];
   const currentActivityData = currentLocalPositionData?.activities[currentActivity];
-
+  
   const mainImage = currentActivityData
     ? currentActivityData.image
     : currentLocalPositionData?.image || currentAreaData?.image || currentRegionData?.image;
@@ -37,7 +43,7 @@ const Game = () => {
   const mainDescription = currentActivityData
     ? currentActivityData.description
     : currentLocalPositionData?.description || currentAreaData?.description || currentRegionData?.description;
-
+  
   useEffect(() => {
     if (currentLocalPositionData?.enemies && currentLocalPositionData.enemies.length > 0) {
       // Check if an event should be triggered
@@ -52,7 +58,7 @@ const Game = () => {
       setIsEventActive(false);
     }
   }, [currentLocalPositionData]); // Dependency on currentLocalPositionData
-
+  
   const handlePopupToggle = (type, list) => {
     if (showPopup && popupType === type) {
       setShowPopup(false);
@@ -65,54 +71,128 @@ const Game = () => {
   };
 
   const handleTravel = () => {
-    const connectedAreas = currentAreaData.connectedAreas;
-    const connectedAreaNames = connectedAreas.map(areaKey => currentRegionData.areas[areaKey]?.name);
+    const connectedAreaNames = currentAreaData.connectedAreas.map(area => {
+      const areaKey = Object.keys(currentRegionData.areas).find(key => key === area.name);
+      return currentRegionData.areas[areaKey]?.name;
+    });
     handlePopupToggle('travel', connectedAreaNames);
   };
-
+  
   const handleLocal = () => {
     const localPositionKeys = Object.keys(currentAreaData.localPositions);
-    const localPositionNames = localPositionKeys.map(posKey => currentAreaData.localPositions[posKey]?.name);
-    handlePopupToggle('local', localPositionNames.filter(posName => posName !== currentLocalPosition));
+    const localPositionNames = localPositionKeys
+      .filter(posKey => posKey !== currentLocalPosition) // Filter out the current local position
+      .map(posKey => currentAreaData.localPositions[posKey]?.name);
+    if (localPositionNames.length === 0) {
+      localPositionNames.push("There is nothing else here");
+    }
+    handlePopupToggle('local', localPositionNames);
   };
-
+  
   const handleActivities = () => {
     const activityKeys = Object.keys(currentLocalPositionData.activities);
     const activityNames = activityKeys.map(actKey => currentLocalPositionData.activities[actKey]?.name);
     handlePopupToggle('activities', activityNames);
   };
+  
+  const normalizeString = (str) => str.toLowerCase().replace(/\s+/g, '');
 
-  const handleSelect = (item) => {
+  const handleSelect = async (item) => {
+    if (item === "There is nothing else here") {
+      setShowPopup(false);
+      setPopupType('');
+      return;
+    }
+
     setShowPopup(false);
     setPopupType('');
-
+    
+    const normalizedItem = normalizeString(item);
+    console.log(`Selecting item: ${normalizedItem}`);
+    
     const selectedKey = (() => {
       if (popupType === 'activities') {
-        return Object.keys(currentLocalPositionData.activities).find(key => currentLocalPositionData.activities[key].name === item);
+        return Object.keys(currentLocalPositionData.activities).find(key => {
+          const activityName = normalizeString(currentLocalPositionData.activities[key].name);
+          console.log(`Checking activity: ${activityName} against ${normalizedItem}`);
+          return activityName === normalizedItem;
+        });
       } else if (popupType === 'local') {
-        return Object.keys(currentAreaData.localPositions).find(key => currentAreaData.localPositions[key].name === item);
+        return Object.keys(currentAreaData.localPositions).find(key => {
+          const localPositionName = normalizeString(currentAreaData.localPositions[key].name);
+          console.log(`Checking local position: ${localPositionName} against ${normalizedItem}`);
+          return localPositionName === normalizedItem;
+        });
       } else {
-        return Object.keys(currentRegionData.areas).find(key => currentRegionData.areas[key].name === item);
+        return Object.keys(currentRegionData.areas).find(key => {
+          const areaName = normalizeString(currentRegionData.areas[key].name);
+          console.log(`Checking area: ${areaName} against ${normalizedItem}`);
+          return areaName === normalizedItem;
+        });
       }
     })();
-
-    if (popupType === 'activities') {
-      setCurrentActivity(selectedKey);
-      // Check if the selected activity is an inn
-      const selectedActivity = currentLocalPositionData.activities[selectedKey];
-      if (selectedActivity.name.toLowerCase().includes('inn')) {
-        updateLastInn(currentRegion, currentArea, currentLocalPosition, selectedKey);
-      }
-    } else if (popupType === 'local') {
-      setCurrentActivity(null);
-      setCurrentLocalPosition(selectedKey);
-    } else {
-      setCurrentActivity(null);
-      setCurrentLocalPosition(null);
-      setCurrentArea(selectedKey);
+  
+    if (!selectedKey) {
+      console.error('Selected key not found');
+      return;
     }
+  
+    if (popupType === 'activities') {
+      setTravelText(currentLocalPositionData.activities[selectedKey].travelText || 'Exploring');
+    } else if (popupType === 'local') {
+      setTravelText(currentAreaData.localPositions[selectedKey].travelText || 'Moving');
+    } else {
+      const selectedArea = currentRegionData.areas[selectedKey];
+      const connectedArea = currentAreaData.connectedAreas.find(area => normalizeString(currentRegionData.areas[area.name].name) === normalizedItem);
+      if (!connectedArea) {
+        console.error('Connected area not found');
+        return;
+      }
+      const distance = connectedArea.distance || 0;
+      const travelMinutes = distance * 10; // 10 minutes per kilometer
+      updateClock(travelMinutes);
+      setTravelText(selectedArea.travelText || 'Travelling');
+    }
+  
+    await triggerTravelPopup(async () => {
+      if (popupType === 'activities') {
+        setCurrentActivity(selectedKey);
+        const selectedActivity = currentLocalPositionData.activities[selectedKey];
+        if (selectedActivity.name.toLowerCase().includes('inn')) {
+          updateLastInn(currentRegion, currentArea, currentLocalPosition, selectedKey);
+        }
+      } else if (popupType === 'local') {
+        setCurrentActivity(null);
+        setCurrentLocalPosition(selectedKey);
+      } else {
+        setCurrentActivity(null);
+        setCurrentLocalPosition(null);
+        setCurrentArea(selectedKey);
+      }
+    });
   };
-
+  
+  const triggerTravelPopup = (callback) => {
+    return new Promise((resolve) => {
+      setShowTravelPopup(true);
+      setTimeout(() => {
+        callback();
+        setTimeout(() => {
+          setShowTravelPopup(false);
+          resolve();
+        }, 2000); // 2 seconds to fade back in
+      }, 2000); // 2 seconds to fade out
+    });
+  };
+  
+  const handleReturnFromActivity = () => {
+    const exitText = currentActivityData?.exitText || 'Returning';
+    setTravelText(exitText);
+    triggerTravelPopup(() => {
+      setCurrentActivity(null);
+    });
+  };
+  
   const handleClickOutsidePopup = (e) => {
     if (
       showPopup &&
@@ -125,8 +205,8 @@ const Game = () => {
       setPopupType('');
     }
   };
-
- return (
+  
+  return (
     <div className="app" onClick={handleClickOutsidePopup}>
       <Sidebar
         setCurrentRegion={setCurrentRegion}
@@ -134,6 +214,7 @@ const Game = () => {
         setCurrentLocalPosition={setCurrentLocalPosition}
         setCurrentActivity={setCurrentActivity}
       />
+      <ClockDisplay /> {/* Add the ClockDisplay component here */}
       <div className="location-screen">
         <div className="main-image">
           <img src={mainImage} alt={mainTitle} />
@@ -151,6 +232,7 @@ const Game = () => {
           setCurrentActivity={setCurrentActivity}
           isEventActive={isEventActive}
           inCombat={inCombat} 
+          handleReturnFromActivity={handleReturnFromActivity}
         />
       </div>
       {isEventActive && (
@@ -200,6 +282,7 @@ const Game = () => {
           </ul>
         </div>
       )}
+      <TravelPopup show={showTravelPopup} text={travelText} />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCharacter } from './CharacterContext';
+import styles from './CharacterCreationForm.module.css';
 
 const CharacterCreationForm = () => {
   const { handleCharacterCreation } = useCharacter();
@@ -17,8 +18,8 @@ const CharacterCreationForm = () => {
   };
 
   return (
-    <div className="character-creation-container">
-      <form className="character-creation-form" onSubmit={handleSubmit}>
+    <div className={styles.characterCreationForm}>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
         <h1>Create your character</h1>
         <label>
           Name:

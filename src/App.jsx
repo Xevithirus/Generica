@@ -1,13 +1,17 @@
+// App.jsx
 import React from 'react';
-import { useCharacter } from './CharacterContext';
-import CharacterCreationForm from './CharacterCreationForm';
 import Game from './Game';
+import CharacterCreationForm from './CharacterCreationForm';
+import { useCharacter } from './CharacterContext';
+import ClockDisplay from './common/ClockDisplay';
 
 const App = () => {
   const { isCharacterCreated } = useCharacter();
 
   return (
-    isCharacterCreated ? <Game /> : <CharacterCreationForm />
+    <div className="app">
+      {isCharacterCreated ? <Game /> : <CharacterCreationForm />}
+    </div>
   );
 };
 

@@ -1,8 +1,25 @@
-//LocationScreen.jsx
 import React from 'react';
 
-const LocationScreen = ({ region, area, localPosition, activity, handleTravel, handleLocal, handleActivities, setCurrentArea, setCurrentLocalPosition, setCurrentActivity, isEventActive, inCombat }) => {
+const LocationScreen = ({ 
+  region, 
+  area, 
+  localPosition, 
+  activity, 
+  handleTravel, 
+  handleLocal, 
+  handleActivities, 
+  setCurrentArea, 
+  setCurrentLocalPosition, 
+  setCurrentActivity, 
+  isEventActive, 
+  inCombat, 
+  handleReturnFromActivity 
+}) => {
   const isDisabled = isEventActive || inCombat;
+
+  const localPositions = Object.keys(area.localPositions).filter(
+    (posKey) => posKey !== localPosition
+  );
 
   return (
     <div className="world-location">
@@ -12,7 +29,7 @@ const LocationScreen = ({ region, area, localPosition, activity, handleTravel, h
         {!localPosition && !activity && (
           <>
             <button className="travel-button" onClick={handleTravel} disabled={isDisabled}>Travel</button>
-            <button className="enter-button" onClick={() => setCurrentLocalPosition(Object.keys(area.localPositions)[0])} disabled={isDisabled}>Enter</button>
+            <button className="enter-button" onClick={() => { setCurrentLocalPosition(Object.keys(area.localPositions)[0]); }} disabled={isDisabled}>Enter</button>
           </>
         )}
         {localPosition && !activity && (
@@ -23,7 +40,7 @@ const LocationScreen = ({ region, area, localPosition, activity, handleTravel, h
           </>
         )}
         {activity && (
-          <button className="return-button" onClick={() => setCurrentActivity(null)} disabled={isDisabled}>Return</button>
+          <button className="return-button" onClick={handleReturnFromActivity} disabled={isDisabled}>Return</button>
         )}
       </div>
     </div>
