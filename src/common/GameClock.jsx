@@ -6,33 +6,25 @@ const ClockContext = createContext();
 export const useClock = () => useContext(ClockContext);
 
 const GameClockProvider = ({ children }) => {
-    const [date, setDate] = useState(() => {
-        const now = new Date();
-        const hours = now.getHours() % 12 || 12;
-        const minutes = now.getMinutes();
-        const period = now.getHours() >= 12 ? 'PM' : 'AM';
-        const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'long' });
-        const month = now.toLocaleDateString('en-US', { month: 'long' });
-        const dayOfMonth = now.getDate();
-        const year = now.getFullYear();
-        const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
-        const season = seasons[Math.floor(((now.getMonth() + 1) % 12) / 3)];
+    const months = [
+        'Ianuarius', 'Februarius', 'Martius', 'Aprilis', 'Maius', 'Iunius', 
+        'Quintilis', 'Sextilis', 'September', 'October', 'November', 'December'
+    ];
+    const daysOfWeek = [
+        'Dies Solis', 'Dies Lunae', 'Dies Martis', 'Dies Mercurii', 'Dies Iovis', 'Dies Veneris', 'Dies Saturni'
+    ];
+    const seasons = ['Hiems', 'Ver', 'Aestas', 'Autumnus'];
 
-        return {
-            hour: hours,
-            minute: minutes,
-            period,
-            dayOfWeek,
-            month,
-            dayOfMonth,
-            year,
-            season
-        };
+    const [date, setDate] = useState({
+        hour: 12,
+        minute: 0,
+        period: 'AM',
+        dayOfWeek: 'Dies Saturni', // Saturday
+        month: 'October',
+        dayOfMonth: 31,
+        year: 1486,
+        season: 'Autumnus'
     });
-
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
 
     const updateClock = (minutesToAdd) => {
         setDate(prevDate => {
@@ -52,12 +44,12 @@ const GameClockProvider = ({ children }) => {
                     dayOfMonth += 1;
 
                     const monthIndex = months.indexOf(month);
-                    const daysInMonth = [31, (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
                     if (dayOfMonth > daysInMonth[monthIndex]) {
                         dayOfMonth = 1;
                         month = months[(monthIndex + 1) % 12];
-                        if (month === 'January') {
+                        if (month === 'Ianuarius') {
                             year += 1;
                         }
                     }
@@ -65,9 +57,6 @@ const GameClockProvider = ({ children }) => {
             }
 
             const monthIndex = months.indexOf(month);
-            const seasonIndex = seasons.indexOf(season);
-
-            // Update season based on month
             const newSeason = seasons[Math.floor(((monthIndex + 1) % 12) / 3)];
 
             return { dayOfMonth, month, year, dayOfWeek, hour, minute, period, season: newSeason };
@@ -87,4 +76,5 @@ const GameClockProvider = ({ children }) => {
 };
 
 export default GameClockProvider;
+
 

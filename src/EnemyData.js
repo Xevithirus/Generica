@@ -6,17 +6,20 @@ const assignAbilities = (enemy, level) => {
 
 // Base stats for level 1 enemies
 export const baseStats = {
-  GreenSlime: { maxHp: 50, currentHp: 50, maxEn: 10, currentEn: 10, maxMag: 10, currentMag: 10, ar: 3, mres: 2, str: 10, int: 8, crit: 3, eva: 5, acc: 7, agi: 7, expReward: 15 },
-  Velyr: { maxHp: 60, currentHp: 60, maxEn: 15, currentEn: 15, maxMag: 20, currentMag: 20, ar: 1, mres: 5, str: 8, int: 12, crit: 5, eva: 15, acc: 10, agi: 12, expReward: 20 },
-  Kaskari: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 3, mres: 4, str: 15, int: 10, crit: 7, eva: 10, acc: 10, agi: 10, expReward: 25 },
-  Kryten: { maxHp: 70, currentHp: 70, maxEn: 15, currentEn: 15, maxMag: 10, currentMag: 10, ar: 4, mres: 5, str: 12, int: 10, crit: 5, eva: 8, acc: 8, agi: 8, expReward: 22 },
-  ValleyWolf: { maxHp: 90, currentHp: 90, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 5, mres: 4, str: 20, int: 8, crit: 10, eva: 12, acc: 12, agi: 15, expReward: 30 },
-  Grugmir: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 6, mres: 5, str: 20, int: 12, crit: 8, eva: 10, acc: 12, agi: 10, expReward: 35 },
-  Molgur: { maxHp: 120, currentHp: 120, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 7, mres: 7, str: 25, int: 15, crit: 10, eva: 8, acc: 12, agi: 10, expReward: 40 },
-  Ayrin: { maxHp: 140, currentHp: 140, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 6, mres: 8, str: 25, int: 18, crit: 12, eva: 12, acc: 15, agi: 15, expReward: 45 },
-  Brontor: { maxHp: 160, currentHp: 160, maxEn: 35, currentEn: 35, maxMag: 15, currentMag: 15, ar: 8, mres: 8, str: 30, int: 12, crit: 10, eva: 8, acc: 8, agi: 8, expReward: 50 },
-  CorruptedGolem: { maxHp: 180, currentHp: 180, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 10, mres: 9, str: 35, int: 15, crit: 8, eva: 6, acc: 8, agi: 6, expReward: 55 },
-  Zarnoth: { maxHp: 200, currentHp: 200, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 12, mres: 10, str: 40, int: 15, crit: 10, eva: 8, acc: 8, agi: 8, expReward: 60 },
+  GreenSlime: { maxHp: 50, currentHp: 50, maxEn: 10, currentEn: 10, maxMag: 10, currentMag: 10, ar: 2, mres: 2, str: 10, int: 8, crit: 3, eva: 5, acc: 7, agi: 5, expReward: 15 },
+  BlueSlime: { maxHp: 55, currentHp: 55, maxEn: 10, currentEn: 10, maxMag: 15, currentMag: 15, ar: 2, mres: 4, str: 8, int: 10, crit: 4, eva: 8, acc: 7, agi: 6, expReward: 18 },
+  Velyr: { maxHp: 60, currentHp: 60, maxEn: 15, currentEn: 15, maxMag: 20, currentMag: 20, ar: 1, mres: 5, str: 8, int: 12, crit: 5, eva: 15, acc: 10, agi: 8, expReward: 20 },
+  Kaskari: { maxHp: 80, currentHp: 80, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 2, mres: 4, str: 15, int: 10, crit: 7, eva: 10, acc: 10, agi: 6, expReward: 25 },
+  Kryten: { maxHp: 70, currentHp: 70, maxEn: 15, currentEn: 15, maxMag: 10, currentMag: 10, ar: 3, mres: 5, str: 12, int: 10, crit: 5, eva: 8, acc: 8, agi: 5, expReward: 22 },
+  ValleyWolf: { maxHp: 90, currentHp: 90, maxEn: 20, currentEn: 20, maxMag: 10, currentMag: 10, ar: 3, mres: 4, str: 20, int: 8, crit: 10, eva: 12, acc: 12, agi: 6, expReward: 30 },
+  Grugmir: { maxHp: 100, currentHp: 100, maxEn: 20, currentEn: 20, maxMag: 15, currentMag: 15, ar: 4, mres: 5, str: 20, int: 12, crit: 8, eva: 10, acc: 12, agi: 5, expReward: 35 },
+  Molgur: { maxHp: 120, currentHp: 120, maxEn: 25, currentEn: 25, maxMag: 20, currentMag: 20, ar: 5, mres: 7, str: 25, int: 15, crit: 10, eva: 8, acc: 12, agi: 6, expReward: 40 },
+  Ayrin: { maxHp: 140, currentHp: 140, maxEn: 30, currentEn: 30, maxMag: 25, currentMag: 25, ar: 4, mres: 8, str: 25, int: 18, crit: 12, eva: 12, acc: 15, agi: 9, expReward: 45 },
+  Brontor: { maxHp: 160, currentHp: 160, maxEn: 35, currentEn: 35, maxMag: 15, currentMag: 15, ar: 5, mres: 8, str: 30, int: 12, crit: 10, eva: 8, acc: 8, agi: 5, expReward: 50 },
+  CorruptedGolem: { maxHp: 180, currentHp: 180, maxEn: 40, currentEn: 40, maxMag: 15, currentMag: 15, ar: 6, mres: 9, str: 35, int: 15, crit: 8, eva: 6, acc: 8, agi: 4, expReward: 55 },
+  Zarnoth: { maxHp: 200, currentHp: 200, maxEn: 25, currentEn: 25, maxMag: 10, currentMag: 10, ar: 8, mres: 10, str: 40, int: 15, crit: 10, eva: 8, acc: 8, agi: 5, expReward: 60 },
+  Neridia: { maxHp: 45, currentHp: 45, maxEn: 20, currentEn: 20, maxMag: 50, currentMag: 50, ar: 3, mres: 10, str: 15, int: 15, crit: 8, eva: 8, acc: 10, agi: 6, expReward: 28 },
+  Serashka: { maxHp: 95, currentHp: 95, maxEn: 40, currentEn: 40, maxMag: 12, currentMag: 12, ar: 3, mres: 8, str: 22, int: 5, crit: 15, eva: 10, acc: 6, agi: 5, expReward: 30 },
 };
 
 // Growth per level Coefficients
@@ -196,8 +199,34 @@ Molgur
 Zarnoth
 */
 // --------------------------------------- OCEAN BIOME ----------------------------------------
+  Neridia: {
+    name: 'Neridia',
+    type: 'Spirit',
+    level: 1,
+    stats: baseStats.Neridia,
+    image: './images/neridia.png',
+    description: "Small ocean spirits. It is believed Neridia will appear floating near the shore where someone recently drowned.", 
+    possibleAbilities: ['basicAttack', 'recover'],
+  },
+  Serashka: {
+    name: 'Serashka',
+    type: 'Reptile',
+    level: 1,
+    stats: baseStats.Serashka,
+    image: './images/serashka.png',
+    description: "Large aquatic serpents with scales that shimmer to match the tides.", 
+    possibleAbilities: ['basicAttack', 'slash'],
+  },
+  BlueSlime: {
+    name: 'Blue Slime',
+    type: 'Gelatinous',
+    level: 1,
+    stats: baseStats.GreenSlime,
+    image: './images/blue-slime.png',
+    description: "Medium sized gelatinous creatures. Very friendly compared to their green counterparts. Very slippery and may regenerate over time.", 
+    possibleAbilities: ['basicAttack', 'heal'],
+  },
 /*
-Neridia
 Lumiryn
 Lumiryn
 Thaloran

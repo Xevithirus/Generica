@@ -1,0 +1,88 @@
+/* CharacterCreationForm.module.css */
+.characterCreationForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #141313;
+    font-family: "Press Start 2P", system-ui;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    /* Ensure it's above other elements */
+}
+
+.formContainer {
+    background-color: #252525;
+    padding: 50px;
+    border: 2px solid #b8860b;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: #f5f5f5;
+}
+
+.formContainer h1 {
+    margin-bottom: 45px;
+    font-size: 1.5rem;
+}
+
+.formContainer label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+}
+
+.formContainer input,
+.formContainer select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 2px solid #b8860b;
+    background-color: #141414;
+    color: #f5f5f5;
+    font-family: "Press Start 2P", system-ui;
+    font-size: 0.8rem;
+}
+
+.formContainer select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2010%2010%22%3E%3Cpath%20fill%3D%22%23b8860b%22%20d%3D%22M0%205l5%205%205-5H0z%22/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.formContainer select option {
+    padding-top: 10px;
+    padding-bottom: 100px;
+}
+
+.formContainer select option:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.formContainer select:focus {
+    border-color: #b8860b;
+    outline: none;
+}
+
+.formContainer button {
+    background-color: #290d0d;
+    border: 2px solid #b8860b;
+    padding: 15px;
+    font-family: "Press Start 2P", system-ui;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formContainer button:hover {
+    background-color: #b8860b;
+    color: #000;
+    border: 2px solid #000;
+    transition: background-color 0.3s ease;
+}

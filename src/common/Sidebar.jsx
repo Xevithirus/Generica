@@ -1,8 +1,7 @@
-// Sidebar.jsx
 import React from 'react';
 import { useCharacter } from '../CharacterContext';
 
-const Sidebar = () => {
+const Sidebar = ({ play, pause, volume, setVolume, isPlaying }) => {
   const { character } = useCharacter();
 
   const capitalizeField = (field) => {
@@ -50,6 +49,22 @@ const Sidebar = () => {
         <div className="money-container">
           <p>GOLD: 16g</p>
         </div>
+      </div>
+      <div className="audio-controls">
+        <button onClick={isPlaying ? pause : play}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
+        <label htmlFor="volume">Volume: </label>
+        <input
+          type="range"
+          id="volume"
+          name="volume"
+          min="0"
+          max="1"
+          step="0.01"
+          value={volume}
+          onChange={(e) => setVolume(parseFloat(e.target.value))}
+        />
       </div>
     </div>
   );

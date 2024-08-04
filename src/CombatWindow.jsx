@@ -14,7 +14,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
   const [showAbilityMenu, setShowAbilityMenu] = useState(false);
   const [playerTurnTime, setPlayerTurnTime] = useState(0);
   const [enemyTurnTime, setEnemyTurnTime] = useState(0);
-  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+  const [isPlayerTurn, setIsPlayerTurn] = useState(null); // Initially null to determine the first turn
   const combatLogRef = useRef(null);
   const abilityMenuRef = useRef(null);
 
@@ -25,7 +25,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
   }, [combatLog]);
 
   useEffect(() => {
-    if (!isPlayerTurn) {
+    if (isPlayerTurn === false) {
       handleEnemyTurn();
     }
   }, [isPlayerTurn]);
@@ -47,6 +47,34 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showAbilityMenu]);
+
+  useEffect(() => {
+    // Determine the initial turn order based on agility
+    const playerAgility = character.stats.agi;
+    const enemyAgility = enemy.stats.agi;
+
+    if (playerAgility >= enemyAgility) {
+      setIsPlayerTurn(true);
+      const playerTurnInterval = Math.ceil(100 / playerAgility);
+      setPlayerTurnTime(playerTurnInterval);
+    } else {
+      setIsPlayerTurn(false);
+      const enemyTurnInterval = Math.ceil(100 / enemyAgility);
+      setEnemyTurnTime(enemyTurnInterval);
+      handleEnemyTurn(); // Directly handle the enemy turn if they go first
+    }
+  }, [character.stats.agi, enemy.stats.agi]);
+
+  useEffect(() => {
+    const checkPlayerHp = async () => {
+      if (character.currentHp <= 0) {
+        setPopupMessage('You have been defeated...');
+        setShowPopup(true);
+      }
+    };
+
+    checkPlayerHp();
+  }, [character.currentHp]);
 
   const determineNextTurn = () => {
     const playerAgility = character.stats.agi;
@@ -128,20 +156,30 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     }
 
     console.log('Result:', result);
+    console.log(`Player HP after action: ${character.currentHp}`);
     const abilityCastTime = abilityDetails.castTime || 0;
     setPlayerTurnTime(prev => prev + abilityCastTime);
     console.log(`Player used ${ability}. Cast time: ${abilityCastTime}. New PlayerTurnTime: ${playerTurnTime + abilityCastTime}`);
+    
     setIsPlayerTurn(false);
     determineNextTurn();
   };
 
   const handleEnemyTurn = () => {
     console.log('Handling enemy turn');
+    console.log(`Player HP at start of enemy turn: ${character.currentHp}`);
+    
+    // Check if the player is already dead before the enemy turn starts
+    if (character.currentHp <= 0) {
+      setPopupMessage('You have been defeated...');
+      setShowPopup(true);
+      return;
+    }
     
     // Filter abilities to only include those the enemy has enough resources to use
     const availableAbilities = enemy.abilities.filter(ability => {
       const abilityDetails = AbilityData[ability];
-      return enemy.stats.currentEn >= abilityDetails.cost.energy && enemy.stats.currentMag >= abilityDetails.cost.magic;
+      return enemy.stats.currentEn > abilityDetails.cost.energy && enemy.stats.currentMag > abilityDetails.cost.magic;
     });
 
     // If no abilities can be used, skip the turn
@@ -186,6 +224,10 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
         generateLogMessage(enemy.name, 'you', result, true)
       ]);
 
+      console.log(`Player HP after enemy attack: ${character.currentHp}`);
+
+      // Check if the player's health is now zero or less
+      console.log(`Checking player HP after enemy attack: ${character.currentHp}`);
       if (character.currentHp <= 0) {
         setPopupMessage('You have been defeated...');
         setShowPopup(true);
@@ -208,6 +250,7 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     console.log(`Enemy used ${enemyAbility}. Cast time: ${abilityCastTime}. New EnemyTurnTime: ${enemyTurnTime + abilityCastTime}`);
     console.log(`Enemy currentEn after: ${enemy.stats.currentEn}`);
     console.log(`Enemy currentMag after: ${enemy.stats.currentMag}`);
+
     setIsPlayerTurn(true);
     determineNextTurn();
   };
@@ -279,24 +322,24 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     }
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    if (popupMessage === 'You have been defeated...') {
-      setCharacter(prev => ({
-        ...prev,
-        currentHp: prev.stats.maxHp,
-        currentEn: prev.stats.maxEn,
-        currentMag: prev.stats.maxMag
-      }));
-      const { region, area, localPosition, activity } = lastInn;
-      setCurrentRegion(region);
-      setCurrentArea(area);
-      setCurrentLocalPosition(localPosition);
-      setCurrentActivity(activity);
-    }
-    setInCombat(false);
-    setEnemy(null);
-  };
+const handleClosePopup = () => {
+  setShowPopup(false);
+  if (popupMessage.includes('You have been defeated')) {
+    setCharacter(prev => ({
+      ...prev,
+      currentHp: prev.stats.maxHp,
+      currentEn: prev.stats.maxEn,
+      currentMag: prev.stats.maxMag
+    }));
+    const { region, area, localPosition, activity } = lastInn;
+    setCurrentRegion(region);
+    setCurrentArea(area);
+    setCurrentLocalPosition(localPosition);
+    setCurrentActivity(activity);
+  }
+  setInCombat(false);
+  setEnemy(null);
+};
 
   const handleAbilityMenuClose = () => {
     setShowAbilityMenu(false);
