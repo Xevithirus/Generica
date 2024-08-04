@@ -1,4 +1,3 @@
-// WorldData.js
 export const WorldData = {
   faldor: {
     name: 'Faldor',
@@ -112,7 +111,8 @@ export const WorldData = {
         description: 'A beautiful sandy beach bordered by impressive cliff walls greets you. The clear blue waters sparkle in the sunlight, inviting you to take a dip. Colorful corals and vibrant marine life can be seen just below the surface. The sound of waves crashing against the shore creates a soothing symphony. It is a hidden gem where the sea meets the land in perfect harmony.',
         image: './images/coral-cove.png',
         connectedAreas: [
-          { name: 'blusterBluffs', distance: 3 },
+          { name: 'theValley', distance: 3 },
+          { name: 'blusterBluffs', distance: 2 },
         ],
         travelText: 'Travelling to Coral Cove',
         exitText: 'Leaving Coral Cove',
@@ -146,7 +146,7 @@ export const WorldData = {
         description: 'Overlooking Coral Cove, Bluster Bluffs provides a great view of the sea. The cliffs are rugged and majestic, shaped by the relentless forces of nature. From the top, you can see the vast expanse of the ocean stretching out to the horizon. The wind is strong here, adding to the sense of wild beauty. It is a place to stand in awe of the natural world.',
         image: './images/bluster-bluffs.png',
         connectedAreas: [
-          { name: 'coralCove', distance: 3 },
+          { name: 'coralCove', distance: 2 },
         ],
         travelText: 'Travelling to Bluster Bluffs',
         exitText: 'Leaving Bluster Bluffs',

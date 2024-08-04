@@ -1,4 +1,3 @@
-// Game.jsx
 import React, { useState, useEffect } from 'react';
 import Sidebar from './common/Sidebar';
 import LocationScreen from './LocationScreen';
@@ -9,6 +8,7 @@ import { useCharacter } from './CharacterContext';
 import TravelPopup from './common/TravelPopup';
 import { useClock } from './common/GameClock';
 import ClockDisplay from './common/ClockDisplay';
+import useAudio from './common/useAudio';
 import './App.css';
 
 const Game = () => {
@@ -33,7 +33,7 @@ const Game = () => {
   const currentAreaData = currentRegionData?.areas[currentArea];
   const currentLocalPositionData = currentAreaData?.localPositions[currentLocalPosition];
   const currentActivityData = currentLocalPositionData?.activities[currentActivity];
-  
+
   const mainImage = currentActivityData
     ? currentActivityData.image
     : currentLocalPositionData?.image || currentAreaData?.image || currentRegionData?.image;
@@ -43,7 +43,9 @@ const Game = () => {
   const mainDescription = currentActivityData
     ? currentActivityData.description
     : currentLocalPositionData?.description || currentAreaData?.description || currentRegionData?.description;
-  
+
+  const { isPlaying, volume, setVolume, play, pause, fadeIn, fadeOut, setSrc } = useAudio();
+
   useEffect(() => {
     if (currentLocalPositionData?.enemies && currentLocalPositionData.enemies.length > 0) {
       // Check if an event should be triggered
@@ -58,7 +60,21 @@ const Game = () => {
       setIsEventActive(false);
     }
   }, [currentLocalPositionData]); // Dependency on currentLocalPositionData
-  
+
+  useEffect(() => {
+    const areaMusicMap = {
+      darda: './public/music/darda-theme.mp3',
+      // Add other areas and their corresponding music files here
+    };
+
+    fadeOut(1000); // Fade out over 1 second
+    setTimeout(() => {
+      setSrc(areaMusicMap[currentArea] || '/default-theme.mp3');
+      fadeIn(1000); // Fade in over 1 second
+    }, 1000); // Wait for fade out to complete before changing src
+
+  }, [currentArea]);
+
   const handlePopupToggle = (type, list) => {
     if (showPopup && popupType === type) {
       setShowPopup(false);
@@ -77,7 +93,7 @@ const Game = () => {
     });
     handlePopupToggle('travel', connectedAreaNames);
   };
-  
+
   const handleLocal = () => {
     const localPositionKeys = Object.keys(currentAreaData.localPositions);
     const localPositionNames = localPositionKeys
@@ -88,13 +104,13 @@ const Game = () => {
     }
     handlePopupToggle('local', localPositionNames);
   };
-  
+
   const handleActivities = () => {
     const activityKeys = Object.keys(currentLocalPositionData.activities);
     const activityNames = activityKeys.map(actKey => currentLocalPositionData.activities[actKey]?.name);
     handlePopupToggle('activities', activityNames);
   };
-  
+
   const normalizeString = (str) => str.toLowerCase().replace(/\s+/g, '');
 
   const handleSelect = async (item) => {
@@ -171,7 +187,7 @@ const Game = () => {
       }
     });
   };
-  
+
   const triggerTravelPopup = (callback) => {
     return new Promise((resolve) => {
       setShowTravelPopup(true);
@@ -184,7 +200,7 @@ const Game = () => {
       }, 2000); // 2 seconds to fade out
     });
   };
-  
+
   const handleReturnFromActivity = () => {
     const exitText = currentActivityData?.exitText || 'Returning';
     setTravelText(exitText);
@@ -192,7 +208,7 @@ const Game = () => {
       setCurrentActivity(null);
     });
   };
-  
+
   const handleClickOutsidePopup = (e) => {
     if (
       showPopup &&
@@ -205,7 +221,7 @@ const Game = () => {
       setPopupType('');
     }
   };
-  
+
   return (
     <div className="app" onClick={handleClickOutsidePopup}>
       <Sidebar
@@ -213,6 +229,11 @@ const Game = () => {
         setCurrentArea={setCurrentArea}
         setCurrentLocalPosition={setCurrentLocalPosition}
         setCurrentActivity={setCurrentActivity}
+        play={play}
+        pause={pause}
+        volume={volume}
+        setVolume={setVolume}
+        isPlaying={isPlaying}
       />
       <ClockDisplay /> {/* Add the ClockDisplay component here */}
       <div className="location-screen">

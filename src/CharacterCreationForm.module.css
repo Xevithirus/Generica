@@ -77,10 +77,12 @@
     font-family: "Press Start 2P", system-ui;
     text-align: center;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .formContainer button:hover {
     background-color: #b8860b;
     color: #000;
     border: 2px solid #000;
+    transition: background-color 0.3s ease;
 }
