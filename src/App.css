@@ -28,6 +28,9 @@
   font-size: 1rem;
   margin-bottom: 20px;
   text-align: center;
+  padding: 4px;
+  background: #1b1b1b;
+  border: 2px solid #5a5a5a;
 }
 
 .sidebar img {
@@ -81,6 +84,31 @@
   border: solid 2px #5a5a5a;
 }
 
+.audio-controls button {
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  background-color: #290d0d;
+  border: 2px solid #b8860b;
+  padding: 5px 15px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  margin-top: 10px;
+  color: white;
+  font-family: "Press Start 2P", system-ui;
+  font-size: 0.6rem;
+}
+
+.audio-controls button:hover {
+  background-color: #b8860b;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.audio-controls input {
+  width: 65%;
+}
+
+/* ----------------- LOCATION SCREEN ------------------- */
 .location-screen {
   flex-grow: 1;
   display: flex;
@@ -341,7 +369,7 @@
   color: white;
   border: 2px solid #5e5e5e;
   padding: 20px;
-  z-index: 1000;
+  z-index: 6000;
   width: 60%;
   max-width: 1200px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);

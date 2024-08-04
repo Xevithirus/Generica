@@ -190,20 +190,21 @@ export const WorldData = {
             description: 'The entrance to the Thalen Pass.',
             travelText: 'Heading to the Tunnel Entrance',
             exitText: 'Leaving the Tunnel Entrance',
-            image: './images/inside-tunnel.png',
+            image: './images/thalen-pass.png',
             activities: {
               Exploring: {
                 name: 'Exploring',
                 description: 'You look around the area. Discover relics of the past and imagine the bustling activity that once filled this place. Every step is a journey into history.',
                 travelText: 'Exploring',
                 exitText: 'Ending exploration',
+                image: './images/thalen-pass.png',
               },
               Encounter: {
                 name: 'Sound in the dark',
                 description: 'You hear something approaching...',
                 travelText: 'Investigating sound',
                 exitText: 'Leaving encounter',
-                image: './images/corrupted-golem.png',
+                image: './images/thalen-pass.png',
               }
             },
             enemies: [
