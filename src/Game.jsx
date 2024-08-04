@@ -63,13 +63,13 @@ const Game = () => {
 
   useEffect(() => {
     const areaMusicMap = {
-      darda: './public/music/darda-theme.mp3',
+      darda: './music/darda-theme.mp3',
       // Add other areas and their corresponding music files here
     };
 
     fadeOut(1000); // Fade out over 1 second
     setTimeout(() => {
-      setSrc(areaMusicMap[currentArea] || '/default-theme.mp3');
+      setSrc(areaMusicMap[currentArea] || '/music/default-theme.mp3');
       fadeIn(1000); // Fade in over 1 second
     }, 1000); // Wait for fade out to complete before changing src
 
