@@ -14,7 +14,8 @@ const LocationScreen = ({
   setCurrentActivity, 
   isEventActive, 
   inCombat, 
-  handleReturnFromActivity 
+  handleReturnFromActivity,
+  handleTeleport // Add the handleTeleport prop
 }) => {
   const isDisabled = isEventActive || inCombat;
 

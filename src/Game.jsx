@@ -162,9 +162,22 @@ const Game = () => {
     }
   
     if (popupType === 'activities') {
-      setTravelText(currentLocalPositionData.activities[selectedKey].travelText || 'Exploring');
+      const selectedActivity = currentLocalPositionData.activities[selectedKey];
+      if (selectedActivity.targetArea && selectedActivity.targetLocalPosition) {
+        // This is a teleport activity
+        handleTeleport(selectedActivity.targetArea, selectedActivity.targetLocalPosition, selectedActivity.travelText);
+      } else {
+        setTravelText(selectedActivity.travelText || 'Exploring');
+        await triggerTravelPopup(() => {
+          setCurrentActivity(selectedKey);
+        });
+      }
     } else if (popupType === 'local') {
       setTravelText(currentAreaData.localPositions[selectedKey].travelText || 'Moving');
+      await triggerTravelPopup(() => {
+        setCurrentActivity(null);
+        setCurrentLocalPosition(selectedKey);
+      });
     } else {
       const selectedArea = currentRegionData.areas[selectedKey];
       const connectedArea = currentAreaData.connectedAreas.find(area => normalizeString(currentRegionData.areas[area.name].name) === normalizedItem);
@@ -176,27 +189,13 @@ const Game = () => {
       const travelMinutes = distance * 10; // 10 minutes per kilometer
       updateClock(travelMinutes);
       setTravelText(selectedArea.travelText || 'Travelling');
-    }
-  
-    await triggerTravelPopup(async () => {
-      if (popupType === 'activities') {
-        setCurrentActivity(selectedKey);
-        const selectedActivity = currentLocalPositionData.activities[selectedKey];
-        if (selectedActivity.name.toLowerCase().includes('inn')) {
-          updateLastInn(currentRegion, currentArea, currentLocalPosition, selectedKey);
-        } 
-      } else if (popupType === 'local') {
-        setCurrentActivity(null);
-        setCurrentLocalPosition(selectedKey);
-      } else {
+      await triggerTravelPopup(() => {
         setCurrentActivity(null);
         setCurrentLocalPosition(null);
         setCurrentArea(selectedKey);
-      }
-    });
+      });
+    }
   };
-
-  
 
   const triggerTravelPopup = (callback) => {
     return new Promise((resolve) => {
@@ -232,6 +231,18 @@ const Game = () => {
     }
   };
 
+  const handleTeleport = (targetArea, targetLocalPosition, travelText) => {
+    // Set the travel text to the provided travelText or "Teleporting..."
+    setTravelText(travelText || 'Teleporting...');
+
+    // Trigger the travel popup and update the state to the new location
+    triggerTravelPopup(() => {
+      setCurrentActivity(null);
+      setCurrentArea(targetArea);
+      setCurrentLocalPosition(targetLocalPosition);
+    });
+  };
+
   return (
     <div className="app" onClick={handleClickOutsidePopup}>
       <Sidebar
@@ -264,7 +275,7 @@ const Game = () => {
           isEventActive={isEventActive}
           inCombat={inCombat} 
           handleReturnFromActivity={handleReturnFromActivity}
-          triggerTravelPopup={triggerTravelPopup}
+          handleTeleport={handleTeleport} // Pass handleTeleport to LocationScreen
         />
       </div>
       {isEventActive && (

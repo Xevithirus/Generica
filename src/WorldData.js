@@ -66,24 +66,12 @@ export const WorldData = {
                 description: 'Cast your line and feel the thrill of the catch...',
                 travelText: 'Fishing',
                 exitText: 'Ending fishing',
+                isTeleport: true, // Custom flag to identify teleport activity
+                targetArea: 'thalenPass',
+                targetLocalPosition: 'tunnelEntrance',
               }
             },
           },
-          graveyard: {
-            name: 'Graveyard',
-            description: 'A solemn place where the unlucky and the out-of-time come to rest.',
-            travelText: 'Heading to the graveyard',
-            exitText: 'Leaving the graveyard',
-            image: './images/graveyard.png',
-            activities: {
-              PayRespect: {
-                name: 'Pay respect to the fallen',
-                description: 'You take a moment in silence to pay your respect to the fallen here.',
-                travelText: '',
-                exitText: '',
-              },
-            },
-          }
         }
       },
       theValley: {
@@ -203,7 +191,7 @@ export const WorldData = {
       },
       thalenPass: {
         name: 'Thalen Pass',
-        description: 'You enter Thalen Pass, an old mining tunnel that once provided thoroughfare to the world beyond the Westridge Mountains. Echoes of its industrious past still linger, with rusted tracks and forgotten tools. The air is cool and heavy with the scent of earth and history. As you explore, you can almost hear the whispers of miners who once toiled here. It is a place of mystery and history, where every corner holds a tale.',
+        description: 'You approach Thalen Pass, an old abandoned tunnel that once provided thoroughfare to the world beyond the mountains. The air is cool and heavy with the scent of earth and history.',
         image: './images/thalen-pass.png',
         connectedAreas: [
           { name: 'theValley', distance: 5 },
@@ -218,25 +206,31 @@ export const WorldData = {
             exitText: 'Leaving the Tunnel Entrance',
             image: './images/thalen-pass.png',
             activities: {
-              Exploring: {
-                name: 'Exploring',
-                description: 'You look around the area. Discover relics of the past and imagine the bustling activity that once filled this place. Every step is a journey into history.',
+              Observe: {
+                name: 'Observe',
+                description: 'You look around the area. The tunnel peers out at you ominously, its blackness within seems to grow and change shape.',
                 travelText: 'Exploring',
                 exitText: 'Ending exploration',
                 image: './images/thalen-pass.png',
               },
-              Encounter: {
-                name: 'Sound in the dark',
-                description: 'You hear something approaching...',
-                travelText: 'Investigating sound',
-                exitText: 'Leaving encounter',
-                image: './images/thalen-pass.png',
-              }
+              EnterTunnel: {  // Activity name can be anything, key is important
+                name: 'Enter the Tunnel',
+                description: 'You enter the tunnel.',
+                travelText: 'Entering Thalen Pass Tunnel',
+                exitText: 'Leaving Thalen Pass Tunnel',
+                image: './images/thalen-tunnel.png',
+                isTeleport: true, // Custom flag to identify teleport activity
+                targetArea: 'darda',
+                targetLocalPosition: 'docks',
+              },          
             },
             enemies: [
-              { name: 'CorruptedGolem', spawnRate: 100 },
+              { name: 'Velyr', spawnRate: 50 },
+              { name: 'ValleyWolf', spawnRate: 25 },
+              { name: 'Brontor', spawnRate: 20 },
+              { name: 'Ayrin', spawnRate: 5 },
             ],
-            levelRange: { min: 6, max: 8 }
+            levelRange: { min: 6, max: 8 },
           }
         }
       }
