@@ -162,6 +162,13 @@ export const CharacterProvider = ({ children }) => {
     activity: 'inn',
   });
 
+  const [lastGraveyard, setLastGraveyard] = useState({
+    region: 'faldor',
+    area: 'graveyard',
+    localPosition: 'null',
+    activity: 'null',
+  });
+
   const [isCharacterCreated, setIsCharacterCreated] = useState(false);
 
   const handleCharacterCreation = useCallback((name, job, sex) => {
@@ -224,8 +231,12 @@ export const CharacterProvider = ({ children }) => {
     setLastInn({ region, area, localPosition, activity });
   }, []);
 
+  const updateLastGraveyard = useCallback((region, area, localPosition, activity) => {
+    setLastGraveyard({ region, area, localPosition, activity });
+  }, []);
+
   return (
-    <CharacterContext.Provider value={{ character, setCharacter, isCharacterCreated, handleCharacterCreation, gainExperience, lastInn, updateLastInn }}>
+    <CharacterContext.Provider value={{ character, setCharacter, isCharacterCreated, handleCharacterCreation, gainExperience, lastInn, lastGraveyard, updateLastInn, updateLastGraveyard }}>
       {children}
     </CharacterContext.Provider>
   );

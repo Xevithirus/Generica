@@ -285,7 +285,7 @@
 .event-popup img {
   max-width: 65%;
   height: auto;
-  max-height: 650px;
+  max-height: 600px;
   margin: 10px 0;
   border-radius: 10px;
   z-index: 1;
@@ -297,6 +297,7 @@
   flex-direction: row;
   justify-content: space-between;
   width: 65%;
+  margin-bottom: 0px;
 }
 
 .event-popup h3,
@@ -308,7 +309,11 @@
 
 .event-description {
   width: 80%;
-  margin-top: 10px;
+  height: 150px;
+  margin-bottom: 10px;
+  background-color: #00000096;
+  border: 5px groove rgb(218, 218, 218);
+  padding: 10px 30px;
 }
 
 .enemy-name-span {
@@ -318,6 +323,10 @@
 .event-popup h3 {
   position: relative;
   margin-bottom: 10px;
+  margin-top: 30px;
+  background-color: #00000096;
+  border: 5px groove rgb(218, 218, 218);
+  padding: 5px 30px;
 }
 
 .event-popup .stats-left {
@@ -335,7 +344,7 @@
   justify-content: center;
   gap: 10px;
   width: 30%;
-  margin-top: auto;
+  margin-top: 10px;
   margin-bottom: 40px;
 }
 
@@ -364,7 +373,7 @@
   position: fixed;
   top: calc(39%);
   left: 58%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -47%);
   background-color: #303030;
   color: white;
   border: 2px solid #5e5e5e;
@@ -380,14 +389,17 @@
 }
 
 .combat-title {
-  margin: 10px;
-  padding: 10px 30px;
-  background-color: #161616;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  padding: 5px 30px;
+  background-color: #141414;
   border: 2px solid #535353;
+  font-size: 1.3rem;
 }
 
 .combat-level {
   margin-bottom: 20px;
+  font-size: 1rem;
 }
 
 .combat-info {
@@ -427,6 +439,7 @@
 
 .combat-stats {
   width: 100%;
+  font-size: 12px;
 }
 
 .stat-value {
@@ -446,7 +459,7 @@
   overflow-y: auto;
   background-color: #141414;
   padding: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 12px;
   border: 2px solid #5e5e5e;
 }
@@ -458,7 +471,7 @@
 .combat-actions {
   display: flex;
   justify-content: space-around;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 100px;
   margin-right: 100px;
 }

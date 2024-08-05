@@ -6,8 +6,8 @@ import { getProfileImageSrc } from './utils/utils';
 import Popup from './common/Popup';
 import { AbilityData } from './AbilityData';
 
-export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity }) {
-  const { character, setCharacter, lastInn, gainExperience } = useCharacter();
+export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity, triggerTravelPopup, setTravelText }) {
+  const { character, setCharacter, lastGraveyard, gainExperience } = useCharacter();
   const [combatLog, setCombatLog] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
@@ -322,20 +322,23 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     }
   };
 
-const handleClosePopup = () => {
+const handleClosePopup = async () => {
   setShowPopup(false);
-  if (popupMessage.includes('You have been defeated')) {
-    setCharacter(prev => ({
-      ...prev,
-      currentHp: prev.stats.maxHp,
-      currentEn: prev.stats.maxEn,
-      currentMag: prev.stats.maxMag
-    }));
-    const { region, area, localPosition, activity } = lastInn;
-    setCurrentRegion(region);
-    setCurrentArea(area);
-    setCurrentLocalPosition(localPosition);
-    setCurrentActivity(activity);
+  if (popupMessage.includes('You have been defeated...')) {
+    setTravelText('Travelling to the graveyard'); // Set travel text for graveyard
+    await triggerTravelPopup(() => {
+      setCharacter(prev => ({
+        ...prev,
+        currentHp: prev.stats.maxHp,
+        currentEn: prev.stats.maxEn,
+        currentMag: prev.stats.maxMag
+      }));
+      const { region, area, localPosition, activity } = lastGraveyard;
+      setCurrentRegion(region);
+      setCurrentArea(area);
+      setCurrentLocalPosition(localPosition);
+      setCurrentActivity(activity);
+    });
   }
   setInCombat(false);
   setEnemy(null);

@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   transition: background 1s;
-  z-index: 1000;
+  z-index: 10000;
   pointer-events: none;
 }
 
