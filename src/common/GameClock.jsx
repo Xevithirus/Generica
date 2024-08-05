@@ -16,7 +16,7 @@ const GameClockProvider = ({ children }) => {
     const seasons = ['Hiems', 'Ver', 'Aestas', 'Autumnus'];
 
     const [date, setDate] = useState({
-        hour: 12,
+        hour: 8,
         minute: 0,
         period: 'AM',
         dayOfWeek: 'Dies Saturni', // Saturday

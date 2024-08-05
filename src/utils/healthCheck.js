@@ -2,7 +2,7 @@
 import { useCharacter } from '../CharacterContext';
 
 export function useHealthCheck() {
-  const { character, setCharacter, lastInn, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity } = useCharacter();
+  const { character, setCharacter, lastGraveyard, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity } = useCharacter();
 
   const checkHealth = () => {
     if (character.currentHp <= 0) {
@@ -12,7 +12,7 @@ export function useHealthCheck() {
         currentEn: prev.stats.maxEn,
         currentMag: prev.stats.maxMag,
       }));
-      const { region, area, localPosition, activity } = lastInn;
+      const { region, area, localPosition, activity } = lastGraveyard;
       setCurrentRegion(region);
       setCurrentArea(area);
       setCurrentLocalPosition(localPosition);

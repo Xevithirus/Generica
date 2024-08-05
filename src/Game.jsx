@@ -9,6 +9,7 @@ import TravelPopup from './common/TravelPopup';
 import { useClock } from './common/GameClock';
 import ClockDisplay from './common/ClockDisplay';
 import useAudio from './common/useAudio';
+import { useHealthCheck } from './utils/healthCheck';
 import './App.css';
 
 const Game = () => {
@@ -26,7 +27,7 @@ const Game = () => {
   const [showTravelPopup, setShowTravelPopup] = useState(false);
   const [travelText, setTravelText] = useState('Travelling');
   
-  const { character, updateLastInn } = useCharacter(); // Access character stats and updateLastInn from context
+  const { character, updateLastInn, updateLastGraveyard } = useCharacter(); // Access character stats and updates from context
   const { updateClock } = useClock(); // Access the clock context
   
   const currentRegionData = WorldData[currentRegion];
@@ -65,6 +66,7 @@ const Game = () => {
     const areaMusicMap = {
       darda: './music/darda-theme.mp3',
       theValley: './music/the-valley-theme.mp3',
+      graveyard: './music/graveyard-theme.mp3',
       // Add other areas and their corresponding music files here
     };
 
@@ -182,7 +184,7 @@ const Game = () => {
         const selectedActivity = currentLocalPositionData.activities[selectedKey];
         if (selectedActivity.name.toLowerCase().includes('inn')) {
           updateLastInn(currentRegion, currentArea, currentLocalPosition, selectedKey);
-        }
+        } 
       } else if (popupType === 'local') {
         setCurrentActivity(null);
         setCurrentLocalPosition(selectedKey);
@@ -193,6 +195,8 @@ const Game = () => {
       }
     });
   };
+
+  
 
   const triggerTravelPopup = (callback) => {
     return new Promise((resolve) => {
@@ -260,6 +264,7 @@ const Game = () => {
           isEventActive={isEventActive}
           inCombat={inCombat} 
           handleReturnFromActivity={handleReturnFromActivity}
+          triggerTravelPopup={triggerTravelPopup}
         />
       </div>
       {isEventActive && (
@@ -296,6 +301,8 @@ const Game = () => {
           setCurrentArea={setCurrentArea}
           setCurrentLocalPosition={setCurrentLocalPosition}
           setCurrentActivity={setCurrentActivity}
+          triggerTravelPopup={triggerTravelPopup} // Pass the function to CombatWindow
+          setTravelText={setTravelText} // Pass setTravelText to CombatWindow
         />
       )}
       {showPopup && (

@@ -4,6 +4,17 @@ export const WorldData = {
     description: 'Welcome to Faldor, a vast and diverse region...',
     image: './images/faldor.png',
     areas: {
+      graveyard: {
+        name: 'Graveyard',
+        description: 'You awake as a spectral reflection of your former self, floating and intangible. You find yourself in a graveyard. A solemn place where the unlucky and the out-of-time come to rest. Your time, however... has not yet come.',
+        image: './images/graveyard.png',
+        connectedAreas: [
+          { name: 'darda', distance: 0.1 } 
+        ],
+        travelText: '',
+        exitText: 'Leaving the graveyard',
+        localPositions: {}
+      },
       darda: {
         name: 'Darda',
         description: 'You arrive at the entrance to Darda...',
@@ -56,6 +67,21 @@ export const WorldData = {
                 travelText: 'Fishing',
                 exitText: 'Ending fishing',
               }
+            },
+          },
+          graveyard: {
+            name: 'Graveyard',
+            description: 'A solemn place where the unlucky and the out-of-time come to rest.',
+            travelText: 'Heading to the graveyard',
+            exitText: 'Leaving the graveyard',
+            image: './images/graveyard.png',
+            activities: {
+              PayRespect: {
+                name: 'Pay respect to the fallen',
+                description: 'You take a moment in silence to pay your respect to the fallen here.',
+                travelText: '',
+                exitText: '',
+              },
             },
           }
         }
