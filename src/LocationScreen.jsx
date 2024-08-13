@@ -23,6 +23,7 @@ const LocationScreen = ({
     const connectedAreaNames = area.connectedAreas.map(area => {
       const areaKey = Object.keys(region.areas).find(key => key === area.name);
       return region.areas[areaKey]?.name;
+      updateClock
     });
     handleTravel(); // Trigger the travel popup with the connected areas
   };

@@ -50,7 +50,7 @@ const CharacterCreationForm = () => {
             <option value="rogue">🗡️ Rogue</option>
             <option value="cleric">⚕️ Cleric</option>
             <option value="paladin">⚔️ Paladin</option>
-            <option value="ranger">🏹 Ranger</option>
+            {/* <option value="ranger">🏹 Ranger</option> */}
           </select>
         </label>
         <button type="submit">Create Character</button>

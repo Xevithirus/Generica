@@ -5,8 +5,19 @@ import { calculateHealing } from './utils/calculateHealing';
 import { getProfileImageSrc } from './utils/utils';
 import Popup from './common/Popup';
 import { AbilityData } from './AbilityData';
+import { EffectData } from './EffectData';
 
-export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentRegion, setCurrentArea, setCurrentLocalPosition, setCurrentActivity, triggerTravelPopup, setTravelText }) {
+export default function CombatWindow({
+  enemy,
+  setInCombat,
+  setEnemy,
+  setCurrentRegion,
+  setCurrentArea,
+  setCurrentLocalPosition,
+  setCurrentActivity,
+  triggerTravelPopup,
+  setTravelText,
+}) {
   const { character, setCharacter, lastGraveyard, gainExperience } = useCharacter();
   const [combatLog, setCombatLog] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -82,16 +93,10 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     const playerTurnInterval = Math.ceil(100 / playerAgility);
     const enemyTurnInterval = Math.ceil(100 / enemyAgility);
 
-    console.log(`Determining turn: PlayerTurnTime=${playerTurnTime}, EnemyTurnTime=${enemyTurnTime}`);
-    console.log(`Player Agility=${playerAgility}, Enemy Agility=${enemyAgility}`);
-    console.log(`Player Turn Interval=${playerTurnInterval}, Enemy Turn Interval=${enemyTurnInterval}`);
-
     if (playerTurnTime <= 0) {
-      console.log('Player Turn');
       setIsPlayerTurn(true);
       setPlayerTurnTime(playerTurnInterval);
     } else if (enemyTurnTime <= 0) {
-      console.log('Enemy Turn');
       setIsPlayerTurn(false);
       setEnemyTurnTime(enemyTurnInterval);
     }
@@ -101,28 +106,27 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     if (!enemy) return;
 
     const abilityDetails = AbilityData[ability];
-    console.log('Ability Details:', abilityDetails);
 
     // Check if the player has enough resources to use the ability
     if (character.currentEn < abilityDetails.cost.energy || character.currentMag < abilityDetails.cost.magic) {
-      setCombatLog(prevLog => [...prevLog, <div key={prevLog.length}>You do not have enough resources to use {abilityDetails.name}!</div>]);
+      setCombatLog((prevLog) => [
+        ...prevLog,
+        <div key={prevLog.length}>You do not have enough resources to use {abilityDetails.name}!</div>,
+      ]);
       return;
     }
 
-    let result;
-    if (abilityDetails.effect(character).type === 'heal') {
+    let result = {};
+    if (abilityDetails.healing) {
       result = calculateHealing(character, abilityDetails);
-      setCharacter(prev => ({
+      setCharacter((prev) => ({
         ...prev,
         currentHp: Math.min(prev.stats.maxHp, prev.currentHp + result.healingAmount),
         currentEn: Math.max(0, prev.currentEn - abilityDetails.cost.energy),
         currentMag: Math.max(0, prev.currentMag - abilityDetails.cost.magic),
       }));
-      setCombatLog(prevLog => [
-        ...prevLog,
-        generateLogMessage('You', null, result, false)
-      ]);
-    } else {
+      setCombatLog((prevLog) => [...prevLog, generateLogMessage('You', null, result, false)]);
+    } else if (abilityDetails.damage) {
       result = calculateDamage(character, enemy, abilityDetails);
       const updatedEnemy = {
         ...enemy,
@@ -134,9 +138,9 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
 
       setEnemy(updatedEnemy);
 
-      setCombatLog(prevLog => [
+      setCombatLog((prevLog) => [
         ...prevLog,
-        generateLogMessage('You', enemy.name, result, false)
+        generateLogMessage('You', enemy.name, result, false),
       ]);
 
       if (updatedEnemy.stats.currentHp <= 0) {
@@ -147,45 +151,72 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
         return;
       }
 
+      // Apply special effects like stun
+      if (abilityDetails.effect) {
+        const effectDetails = abilityDetails.effect(character, enemy);
+        if (effectDetails.stun) {
+          const stunApplied = EffectData.stun.apply(
+            updatedEnemy,
+            effectDetails.stun.duration,
+            effectDetails.stun.chance
+          );
+          setCombatLog((prevLog) => [
+            ...prevLog,
+            <div key={prevLog.length}>{stunApplied ? 'The enemy is stunned!' : 'The stun attempt failed.'}</div>,
+          ]);
+        }
+      }
+
       // Update character's resources after using the ability
-      setCharacter(prev => ({
+      setCharacter((prev) => ({
         ...prev,
         currentEn: Math.max(0, prev.currentEn - abilityDetails.cost.energy),
         currentMag: Math.max(0, prev.currentMag - abilityDetails.cost.magic),
       }));
     }
 
-    console.log('Result:', result);
-    console.log(`Player HP after action: ${character.currentHp}`);
     const abilityCastTime = abilityDetails.castTime || 0;
-    setPlayerTurnTime(prev => prev + abilityCastTime);
-    console.log(`Player used ${ability}. Cast time: ${abilityCastTime}. New PlayerTurnTime: ${playerTurnTime + abilityCastTime}`);
-    
+    setPlayerTurnTime((prev) => prev + abilityCastTime);
+
     setIsPlayerTurn(false);
     determineNextTurn();
   };
 
-  const handleEnemyTurn = () => {
-    console.log('Handling enemy turn');
-    console.log(`Player HP at start of enemy turn: ${character.currentHp}`);
-    
+  const handleEnemyTurn = async () => {
     // Check if the player is already dead before the enemy turn starts
     if (character.currentHp <= 0) {
       setPopupMessage('You have been defeated...');
       setShowPopup(true);
       return;
     }
-    
+
+    // Check if the enemy is stunned
+    if (EffectData.stun.isStunned(enemy)) {
+      setCombatLog((prevLog) => [
+        ...prevLog,
+        <div key={prevLog.length}>The enemy is stunned and skips their turn!</div>,
+      ]);
+      EffectData.stun.tick(enemy);
+      setIsPlayerTurn(true);
+      determineNextTurn();
+      return;
+    }
+
     // Filter abilities to only include those the enemy has enough resources to use
-    const availableAbilities = enemy.abilities.filter(ability => {
+    const availableAbilities = enemy.abilities.filter((ability) => {
       const abilityDetails = AbilityData[ability];
-      return enemy.stats.currentEn > abilityDetails.cost.energy && enemy.stats.currentMag > abilityDetails.cost.magic;
+      return (
+        enemy.stats.currentEn >= abilityDetails.cost.energy && enemy.stats.currentMag >= abilityDetails.cost.magic
+      );
     });
 
     // If no abilities can be used, skip the turn
     if (availableAbilities.length === 0) {
-      setCombatLog(prevLog => [...prevLog, <div key={prevLog.length}>The enemy does not have enough resources to use any abilities!</div>]);
-      setEnemyTurnTime(prev => prev + Math.ceil(100 / enemy.stats.agi)); // Increment enemy turn time
+      setCombatLog((prevLog) => [
+        ...prevLog,
+        <div key={prevLog.length}>The enemy does not have enough resources to use any abilities!</div>,
+      ]);
+      setEnemyTurnTime((prev) => prev + Math.ceil(100 / enemy.stats.agi)); // Increment enemy turn time
       setIsPlayerTurn(true);
       return;
     }
@@ -193,14 +224,13 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
     const enemyAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
     const abilityDetails = AbilityData[enemyAbility];
 
-    console.log(`Enemy uses ${enemyAbility}`);
-    console.log(`Enemy currentEn before: ${enemy.stats.currentEn}`);
-    console.log(`Enemy currentMag before: ${enemy.stats.currentMag}`);
+    // Add a delay before executing the enemy's action
+    await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    let result;
-    if (abilityDetails.effect(enemy).type === 'heal') {
+    let result = {};
+    if (abilityDetails.healing) {
       result = calculateHealing(enemy, abilityDetails);
-      setEnemy(prev => ({
+      setEnemy((prev) => ({
         ...prev,
         stats: {
           ...prev.stats,
@@ -209,32 +239,28 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
           currentMag: Math.max(0, prev.stats.currentMag - abilityDetails.cost.magic),
         },
       }));
-      setCombatLog(prevLog => [
+      setCombatLog((prevLog) => [
         ...prevLog,
-        generateLogMessage(enemy.name, null, result, true)
+        generateLogMessage(enemy.name, null, result, true),
       ]);
-    } else {
+    } else if (abilityDetails.damage) {
       result = calculateDamage(enemy, character, abilityDetails);
-      setCharacter(prev => ({
+      setCharacter((prev) => ({
         ...prev,
         currentHp: Math.max(0, prev.currentHp - result.finalDamage),
       }));
-      setCombatLog(prevLog => [
+      setCombatLog((prevLog) => [
         ...prevLog,
-        generateLogMessage(enemy.name, 'you', result, true)
+        generateLogMessage(enemy.name, 'you', result, true),
       ]);
 
-      console.log(`Player HP after enemy attack: ${character.currentHp}`);
-
-      // Check if the player's health is now zero or less
-      console.log(`Checking player HP after enemy attack: ${character.currentHp}`);
       if (character.currentHp <= 0) {
         setPopupMessage('You have been defeated...');
         setShowPopup(true);
         return;
       }
 
-      setEnemy(prev => ({
+      setEnemy((prev) => ({
         ...prev,
         stats: {
           ...prev.stats,
@@ -244,12 +270,8 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
       }));
     }
 
-    console.log('Enemy Result:', result);
     const abilityCastTime = abilityDetails.castTime || 0;
-    setEnemyTurnTime(prev => prev + abilityCastTime);
-    console.log(`Enemy used ${enemyAbility}. Cast time: ${abilityCastTime}. New EnemyTurnTime: ${enemyTurnTime + abilityCastTime}`);
-    console.log(`Enemy currentEn after: ${enemy.stats.currentEn}`);
-    console.log(`Enemy currentMag after: ${enemy.stats.currentMag}`);
+    setEnemyTurnTime((prev) => prev + abilityCastTime);
 
     setIsPlayerTurn(true);
     determineNextTurn();
@@ -257,39 +279,33 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
 
   const generateLogMessage = (attackerName, defenderName, attackDetails, isEnemyAttacking) => {
     if (attackDetails.effectType === 'heal') {
-      const healAmount = <span style={{ color: '#00eeff' }}>{attackDetails.healingAmount}</span>;
-      if (isEnemyAttacking) {
-        return <div key={combatLog.length}>The {attackerName} heals for {healAmount} health!</div>;
-      } else {
-        return <div key={combatLog.length}>You heal for {healAmount} health!</div>;
-      }
+      const healAmount = attackDetails.healingAmount;
+      return (
+        <div key={combatLog.length}>
+          {isEnemyAttacking
+            ? `The ${attackerName} heals for ${healAmount} health!`
+            : `You heal for ${healAmount} health!`}
+        </div>
+      );
     } else if (!attackDetails.didHit) {
       return <div key={combatLog.length}>{attackerName} missed!</div>;
     } else {
       const damageColor = isEnemyAttacking ? 'red' : '#00ff00';
-      const baseDamage = <span>{attackDetails.baseDamage}</span>;
-      const mitigatedAmount = <span>{attackDetails.mitigatedAmount}</span>;
-      const finalDamage = <span style={{ color: damageColor }}>{attackDetails.finalDamage}</span>;
+      const baseDamage = attackDetails.baseDamage;
+      const mitigatedAmount = attackDetails.mitigatedAmount;
+      const finalDamage = attackDetails.finalDamage;
 
-      let message;
-      if (isEnemyAttacking) {
-        message = (
-          <div key={combatLog.length}>
-            <p>The {attackerName} attacks you for {baseDamage} {attackDetails.damageType} damage! {mitigatedAmount} damage was mitigated.</p>
-            <p>You take {finalDamage} damage!</p>
-            {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
-          </div>
-        );
-      } else {
-        message = (
-          <div key={combatLog.length}>
-            <p>You attack the {defenderName} for {baseDamage} {attackDetails.damageType} damage! {mitigatedAmount} damage was mitigated.</p>
-            <p>The {defenderName} takes {finalDamage} damage!</p>
-            {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
-          </div>
-        );
-      }
-      return message;
+      return (
+        <div key={combatLog.length}>
+          <p>
+            {isEnemyAttacking
+              ? `The ${attackerName} attacks you for ${baseDamage} ${attackDetails.damageType} damage! ${mitigatedAmount} damage was mitigated.`
+              : `You attack the ${defenderName} for ${baseDamage} ${attackDetails.damageType} damage! ${mitigatedAmount} damage was mitigated.`}
+          </p>
+          <p>{isEnemyAttacking ? `You take ${finalDamage} damage!` : `The ${defenderName} takes ${finalDamage} damage!`}</p>
+          {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
+        </div>
+      );
     }
   };
 
@@ -298,51 +314,51 @@ export default function CombatWindow({ enemy, setInCombat, setEnemy, setCurrentR
   };
 
   const handleUseClick = () => {
-    console.log("Opened Use Menu...");
+    console.log('Opened Use Menu...');
   };
 
   const handleFleeClick = () => {
-    console.log("Attempting to flee...");
     const enemyAgility = enemy.stats.agi;
-    const playerAgility = character.stats.agi; 
+    const playerAgility = character.stats.agi;
     let fleeChance = 50 + (playerAgility - enemyAgility);
     fleeChance += Math.floor(Math.random() * 11) - 5;
     fleeChance = Math.max(0, Math.min(100, fleeChance));
-
-    console.log('fleeChance:', fleeChance);
 
     if (Math.random() * 100 < fleeChance) {
       setPopupMessage('You successfully fled the battle!');
       setShowPopup(true);
     } else {
-      setCombatLog(prevLog => [...prevLog, <div key={prevLog.length}>You failed to flee!</div>]);
+      setCombatLog((prevLog) => [
+        ...prevLog,
+        <div key={prevLog.length}>You failed to flee!</div>,
+      ]);
       setPlayerTurnTime(playerTurnTime + Math.ceil(100 / playerAgility)); // Increment player turn time
       setIsPlayerTurn(false);
       determineNextTurn();
     }
   };
 
-const handleClosePopup = async () => {
-  setShowPopup(false);
-  if (popupMessage.includes('You have been defeated...')) {
-    setTravelText('Travelling to the graveyard'); // Set travel text for graveyard
-    await triggerTravelPopup(() => {
-      setCharacter(prev => ({
-        ...prev,
-        currentHp: prev.stats.maxHp,
-        currentEn: prev.stats.maxEn,
-        currentMag: prev.stats.maxMag
-      }));
-      const { region, area, localPosition, activity } = lastGraveyard;
-      setCurrentRegion(region);
-      setCurrentArea(area);
-      setCurrentLocalPosition(localPosition);
-      setCurrentActivity(activity);
-    });
-  }
-  setInCombat(false);
-  setEnemy(null);
-};
+  const handleClosePopup = async () => {
+    setShowPopup(false);
+    if (popupMessage.includes('You have been defeated...')) {
+      setTravelText('Travelling to the graveyard'); // Set travel text for graveyard
+      await triggerTravelPopup(() => {
+        setCharacter((prev) => ({
+          ...prev,
+          currentHp: prev.stats.maxHp,
+          currentEn: prev.stats.maxEn,
+          currentMag: prev.stats.maxMag,
+        }));
+        const { region, area, localPosition, activity } = lastGraveyard;
+        setCurrentRegion(region);
+        setCurrentArea(area);
+        setCurrentLocalPosition(localPosition);
+        setCurrentActivity(activity);
+      });
+    }
+    setInCombat(false);
+    setEnemy(null);
+  };
 
   const handleAbilityMenuClose = () => {
     setShowAbilityMenu(false);
@@ -356,7 +372,13 @@ const handleClosePopup = async () => {
         <div className="combat-character">
           <h2 className="combat-title">{character.name}</h2>
           <p className="combat-level"><span>Level:</span><span>{character.level}</span></p>
-          <img src={playerImageSrc} alt={character.name} />
+          <img
+            src={playerImageSrc}
+            alt={character.name}
+            style={{
+              boxShadow: isPlayerTurn ? '0px 0px 25px 15px #ffd900' : '0px 0px 25px 10px rgba(0, 0, 0, 1)',
+            }}
+          />
           <div className="combat-stats">
             <p><span>HP:</span><span className="stat-value">{character.currentHp}/{character.stats.maxHp}</span></p>
             <p><span>EN:</span><span className="stat-value">{character.currentEn}/{character.stats.maxEn}</span></p>
@@ -375,7 +397,13 @@ const handleClosePopup = async () => {
         <div className="combat-enemy">
           <h2 className="combat-title">{enemy.name}</h2>
           <p className="combat-level"><span>Level:</span><span>{enemy.level}</span></p>
-          <img src={enemy.image} alt={enemy.name} />
+          <img
+            src={enemy.image}
+            alt={enemy.name}
+            style={{
+              boxShadow: !isPlayerTurn ? '0px 0px 25px 15px #ffd900' : '0px 0px 25px 10px rgba(0, 0, 0, 1)',
+            }}
+          />
           <div className="combat-stats">
             <p><span>HP:</span><span className="stat-value">{enemy.stats.currentHp}/{enemy.stats.maxHp}</span></p>
             <p><span>EN:</span><span className="stat-value">{enemy.stats.currentEn}/{enemy.stats.maxEn}</span></p>
@@ -397,19 +425,15 @@ const handleClosePopup = async () => {
         ))}
       </div>
       <div className="combat-actions">
-        {isPlayerTurn && (
-          <>
-            <button onClick={handleAttackClick}>Attack</button>
-            <button onClick={handleUseClick}>Use</button>
-            <button onClick={handleFleeClick}>Flee</button>
-          </>
-        )}
+        <button onClick={handleAttackClick} disabled={!isPlayerTurn}>Attack</button>
+        <button onClick={handleUseClick} disabled={!isPlayerTurn}>Use</button>
+        <button onClick={handleFleeClick} disabled={!isPlayerTurn}>Flee</button>
       </div>
       {showAbilityMenu && (
         <div className="popup-overlay" onClick={handleAbilityMenuClose}>
           <div className="popup-content" ref={abilityMenuRef} onClick={(e) => e.stopPropagation()}>
             <h3 className="popup-message">Select an Ability</h3>
-            {character.abilities.map(ability => (
+            {character.abilities.map((ability) => (
               <button key={ability} onClick={() => { handlePlayerTurn(ability); handleAbilityMenuClose(); }}>
                 {AbilityData[ability].name}
               </button>

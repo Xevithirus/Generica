@@ -67,6 +67,7 @@ const Game = () => {
       darda: './music/darda-theme.mp3',
       theValley: './music/the-valley-theme.mp3',
       graveyard: './music/graveyard-theme.mp3',
+      coralCove: './music/the-valley-theme.mp3',
       // Add other areas and their corresponding music files here
     };
 

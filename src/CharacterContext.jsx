@@ -20,7 +20,7 @@ const baseCharacterStats = {
     eva: 5, 
     acc: 8, 
     agi: 5, 
-    abilities: ['basicAttack', ,'bandage', 'slash'] 
+    abilities: ['basicAttack', ,'bandage', 'shieldBash', 'slash',] 
   },
   witch: { 
     hp: 100, 
@@ -78,20 +78,20 @@ const baseCharacterStats = {
     agi: 8, 
     abilities: ['basicAttack', 'recover', 'slash'] 
   },
-  ranger: { 
-    hp: 160, 
-    en: 90, 
-    mag: 50, 
-    ar: 2, 
-    mres: 5, 
-    str: 20, 
-    int: 12, 
-    crit: 15, 
-    eva: 20, 
-    acc: 15, 
-    agi: 12, 
-    abilities: ['basicAttack', 'bandage', 'slash'] 
-  },
+  // ranger: { 
+  //   hp: 160, 
+  //   en: 90, 
+  //   mag: 50, 
+  //   ar: 2, 
+  //   mres: 5, 
+  //   str: 20, 
+  //   int: 12, 
+  //   crit: 15, 
+  //   eva: 20, 
+  //   acc: 15, 
+  //   agi: 12, 
+  //   abilities: ['basicAttack', 'bandage', 'slash'] 
+  // },
 };
 
 const initialStats = (baseStats) => ({
