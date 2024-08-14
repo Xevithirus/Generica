@@ -102,7 +102,7 @@ export const EnemyData = {
     stats: baseStats.Kaskari,
     image: './images/kaskari.png',
     description: "A Small creature with fur resembling the grasses around it and the ability to manipulate plants.", 
-    possibleAbilities: ['basicAttack', 'recover'],
+    possibleAbilities: ['basicAttack', 'recover','slash'],
   },
   Brontor: {
     name: 'Brontor',
@@ -111,7 +111,7 @@ export const EnemyData = {
     stats: baseStats.Brontor,
     image: './images/brontor.png',
     description: "A burly beast that attacks by rolling its great weight toward the enemy.", 
-    possibleAbilities: ['basicAttack', 'slash'],
+    possibleAbilities: ['basicAttack', 'shieldBash'],
   },
   
   // --------------------------------------- MOUNTAIN BIOME ----------------------------------------
@@ -122,7 +122,7 @@ export const EnemyData = {
     stats: baseStats.CorruptedGolem,
     image: './images/corrupted-golem.png',
     description: "An enchanted stone being crafted to guard important things. As millenia pass, their magic drains unevenly from the material, leaving many corrupted by madness.", 
-    possibleAbilities: ['basicAttack'],
+    possibleAbilities: ['basicAttack', 'shieldBash', 'slash'],
   },
   Kryten: {
     name: 'Kryten',
@@ -131,7 +131,7 @@ export const EnemyData = {
     stats: baseStats.Kryten,
     image: './images/kryten.png',
     description: "Tiny, crystal-winged creatures with rough, stone-like skin.", 
-    possibleAbilities: ['basicAttack'],
+    possibleAbilities: ['basicAttack', 'concuss'],
   },
   Grugmir: {
     name: 'Grugmir',
@@ -140,7 +140,7 @@ export const EnemyData = {
     stats: baseStats.Grugmir,
     image: './images/grugmir.png',
     description: "Small, sturdy creatures with rocky exteriors and luminous veins.", 
-    possibleAbilities: ['basicAttack'],
+    possibleAbilities: ['basicAttack', 'slash'],
   },
   Molgur: {
     name: 'Molgur',
@@ -149,7 +149,7 @@ export const EnemyData = {
     stats: baseStats.Molgur,
     image: './images/molgur.png',
     description: "Reptilian creatures with molten cores and hardened lava scales.", 
-    possibleAbilities: ['basicAttack', 'heal'],
+    possibleAbilities: ['basicAttack', 'recover', 'slash'],
   },
   
   // ---------------------------------- TEMPERATE FOREST BIOME -----------------------------------
@@ -167,7 +167,7 @@ export const EnemyData = {
     stats: baseStats.Ayrin,
     image: './images/ayrin.png',
     description: "An antelope-like being said to have the ability to manipulate wind and create powerful gusts.", 
-    possibleAbilities: ['basicAttack', 'shunt','burst', 'recover'],
+    possibleAbilities: ['basicAttack', 'shunt', 'burst', 'recover', 'concuss'],
   },
   /*
   Sisharra

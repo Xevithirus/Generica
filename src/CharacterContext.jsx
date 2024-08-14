@@ -9,7 +9,7 @@ export const useCharacter = () => useContext(CharacterContext);
 
 const baseCharacterStats = {
   warrior: { 
-    hp: 200, 
+    hp: 150, 
     en: 60, 
     mag: 30, 
     ar: 5, 
@@ -23,7 +23,7 @@ const baseCharacterStats = {
     abilities: ['basicAttack', ,'bandage', 'shieldBash', 'slash',] 
   },
   witch: { 
-    hp: 100, 
+    hp: 80, 
     en: 50, 
     mag: 100, 
     ar: 0, 
@@ -34,10 +34,10 @@ const baseCharacterStats = {
     eva: 10, 
     acc: 8, 
     agi: 8, 
-    abilities: ['basicAttack', 'shunt', 'burst'] 
+    abilities: ['basicAttack', 'shunt', 'burst', 'concuss'] 
   },
   rogue: { 
-    hp: 140, 
+    hp: 100, 
     en: 100, 
     mag: 30, 
     ar: 2, 
@@ -51,7 +51,7 @@ const baseCharacterStats = {
     abilities: ['basicAttack', 'bandage', 'slash'] 
   },
   cleric: { 
-    hp: 120, 
+    hp: 95, 
     en: 50, 
     mag: 100, 
     ar: 0, 
@@ -65,12 +65,12 @@ const baseCharacterStats = {
     abilities: ['basicAttack', 'recover', 'heal'] 
   },
   paladin: { 
-    hp: 180, 
+    hp: 130, 
     en: 60, 
     mag: 60, 
     ar: 4, 
     mres: 12, 
-    str: 16, 
+    str: 20, 
     int: 15, 
     crit: 5, 
     eva: 5, 

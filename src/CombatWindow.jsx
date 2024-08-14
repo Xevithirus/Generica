@@ -102,7 +102,8 @@ export default function CombatWindow({
     }
   };
 
-  const handlePlayerTurn = (ability) => {
+// PLAYER TURN
+const handlePlayerTurn = (ability) => {
     if (!enemy) return;
 
     const abilityDetails = AbilityData[ability];
@@ -117,8 +118,13 @@ export default function CombatWindow({
     }
 
     let result = {};
+    result.abilityName = abilityDetails.name; // Include ability name in the result
+
     if (abilityDetails.healing) {
-      result = calculateHealing(character, abilityDetails);
+      result = {
+        ...result,
+        ...calculateHealing(character, abilityDetails),
+      };
       setCharacter((prev) => ({
         ...prev,
         currentHp: Math.min(prev.stats.maxHp, prev.currentHp + result.healingAmount),
@@ -127,44 +133,53 @@ export default function CombatWindow({
       }));
       setCombatLog((prevLog) => [...prevLog, generateLogMessage('You', null, result, false)]);
     } else if (abilityDetails.damage) {
-      result = calculateDamage(character, enemy, abilityDetails);
-      const updatedEnemy = {
-        ...enemy,
-        stats: {
-          ...enemy.stats,
-          currentHp: Math.max(0, enemy.stats.currentHp - result.finalDamage),
-        },
+      result = {
+        ...result,
+        ...calculateDamage(character, enemy, abilityDetails),
       };
 
-      setEnemy(updatedEnemy);
+      // Check if the attack hit
+      if (result.didHit) {
+        const updatedEnemy = {
+          ...enemy,
+          stats: {
+            ...enemy.stats,
+            currentHp: Math.max(0, enemy.stats.currentHp - result.finalDamage),
+          },
+        };
+        setEnemy(updatedEnemy);
 
-      setCombatLog((prevLog) => [
-        ...prevLog,
-        generateLogMessage('You', enemy.name, result, false),
-      ]);
-
-      if (updatedEnemy.stats.currentHp <= 0) {
-        const expGained = updatedEnemy.stats.expReward;
-        setPopupMessage(`You have defeated the ${enemy.name} and gained ${expGained} experience!`);
-        gainExperience(expGained);
-        setShowPopup(true);
-        return;
-      }
-
-      // Apply special effects like stun
-      if (abilityDetails.effect) {
-        const effectDetails = abilityDetails.effect(character, enemy);
-        if (effectDetails.stun) {
-          const stunApplied = EffectData.stun.apply(
-            updatedEnemy,
-            effectDetails.stun.duration,
-            effectDetails.stun.chance
-          );
-          setCombatLog((prevLog) => [
-            ...prevLog,
-            <div key={prevLog.length}>{stunApplied ? 'The enemy is stunned!' : 'The stun attempt failed.'}</div>,
-          ]);
+        // Apply effects like stun only if the attack hit
+        if (abilityDetails.effect) {
+          const effectDetails = abilityDetails.effect(character, updatedEnemy);
+          if (effectDetails.stun) {
+            const stunApplied = EffectData.stun.apply(
+              updatedEnemy,
+              effectDetails.stun.duration,
+              effectDetails.stun.chance
+            );
+            setCombatLog((prevLog) => [
+              ...prevLog,
+              generateLogMessage('You', enemy.name, result, false),
+              <div key={prevLog.length + 1}>{stunApplied ? 'The enemy is stunned!' : 'The stun attempt failed.'}</div>,
+            ]);
+          } else {
+            setCombatLog((prevLog) => [...prevLog, generateLogMessage('You', enemy.name, result, false)]);
+          }
+        } else {
+          setCombatLog((prevLog) => [...prevLog, generateLogMessage('You', enemy.name, result, false)]);
         }
+
+        if (updatedEnemy.stats.currentHp <= 0) {
+          const expGained = updatedEnemy.stats.expReward;
+          setPopupMessage(`You have defeated the ${enemy.name} and gained ${expGained} experience!`);
+          gainExperience(expGained);
+          setShowPopup(true);
+          return;
+        }
+      } else {
+        // Log the miss and skip applying any effects
+        setCombatLog((prevLog) => [...prevLog, generateLogMessage('You', enemy.name, result, false)]);
       }
 
       // Update character's resources after using the ability
@@ -180,9 +195,10 @@ export default function CombatWindow({
 
     setIsPlayerTurn(false);
     determineNextTurn();
-  };
+};
 
-  const handleEnemyTurn = async () => {
+// ENEMY TURN  
+const handleEnemyTurn = () => {
     // Check if the player is already dead before the enemy turn starts
     if (character.currentHp <= 0) {
       setPopupMessage('You have been defeated...');
@@ -190,124 +206,163 @@ export default function CombatWindow({
       return;
     }
 
-    // Check if the enemy is stunned
-    if (EffectData.stun.isStunned(enemy)) {
-      setCombatLog((prevLog) => [
-        ...prevLog,
-        <div key={prevLog.length}>The enemy is stunned and skips their turn!</div>,
-      ]);
-      EffectData.stun.tick(enemy);
-      setIsPlayerTurn(true);
-      determineNextTurn();
-      return;
-    }
+    // Add a delay before the enemy takes action
+    setTimeout(() => {
+        // Check if the enemy is stunned
+        if (EffectData.stun.isStunned(enemy)) {
+          setCombatLog((prevLog) => [
+            ...prevLog,
+            <div key={prevLog.length}>The enemy is stunned and skips their turn!</div>,
+          ]);
+          EffectData.stun.tick(enemy);
+          setIsPlayerTurn(true);
+          determineNextTurn();
+          return;
+        }
 
-    // Filter abilities to only include those the enemy has enough resources to use
-    const availableAbilities = enemy.abilities.filter((ability) => {
-      const abilityDetails = AbilityData[ability];
-      return (
-        enemy.stats.currentEn >= abilityDetails.cost.energy && enemy.stats.currentMag >= abilityDetails.cost.magic
-      );
-    });
+        // Filter abilities to only include those the enemy has enough resources to use
+        const availableAbilities = enemy.abilities.filter((ability) => {
+          const abilityDetails = AbilityData[ability];
+          return (
+            enemy.stats.currentEn >= abilityDetails.cost.energy && enemy.stats.currentMag >= abilityDetails.cost.magic
+          );
+        });
 
-    // If no abilities can be used, skip the turn
-    if (availableAbilities.length === 0) {
-      setCombatLog((prevLog) => [
-        ...prevLog,
-        <div key={prevLog.length}>The enemy does not have enough resources to use any abilities!</div>,
-      ]);
-      setEnemyTurnTime((prev) => prev + Math.ceil(100 / enemy.stats.agi)); // Increment enemy turn time
-      setIsPlayerTurn(true);
-      return;
-    }
+        // If no abilities can be used, skip the turn
+        if (availableAbilities.length === 0) {
+          setCombatLog((prevLog) => [
+            ...prevLog,
+            <div key={prevLog.length}>The enemy does not have enough resources to use any abilities!</div>,
+          ]);
+          setEnemyTurnTime((prev) => prev + Math.ceil(100 / enemy.stats.agi)); // Increment enemy turn time
+          setIsPlayerTurn(true);
+          return;
+        }
 
-    const enemyAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
-    const abilityDetails = AbilityData[enemyAbility];
+        const enemyAbility = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
+        const abilityDetails = AbilityData[enemyAbility];
 
-    // Add a delay before executing the enemy's action
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+        let result = {};
+        result.abilityName = abilityDetails.name; // Include ability name in the result
 
-    let result = {};
-    if (abilityDetails.healing) {
-      result = calculateHealing(enemy, abilityDetails);
-      setEnemy((prev) => ({
-        ...prev,
-        stats: {
-          ...prev.stats,
-          currentHp: Math.min(prev.stats.maxHp, prev.stats.currentHp + result.healingAmount),
-          currentEn: Math.max(0, prev.stats.currentEn - abilityDetails.cost.energy),
-          currentMag: Math.max(0, prev.stats.currentMag - abilityDetails.cost.magic),
-        },
-      }));
-      setCombatLog((prevLog) => [
-        ...prevLog,
-        generateLogMessage(enemy.name, null, result, true),
-      ]);
-    } else if (abilityDetails.damage) {
-      result = calculateDamage(enemy, character, abilityDetails);
-      setCharacter((prev) => ({
-        ...prev,
-        currentHp: Math.max(0, prev.currentHp - result.finalDamage),
-      }));
-      setCombatLog((prevLog) => [
-        ...prevLog,
-        generateLogMessage(enemy.name, 'you', result, true),
-      ]);
+        if (abilityDetails.healing) {
+          result = {
+            ...result,
+            ...calculateHealing(enemy, abilityDetails),
+          };
+          setEnemy((prev) => ({
+            ...prev,
+            stats: {
+              ...prev.stats,
+              currentHp: Math.min(prev.stats.maxHp, prev.stats.currentHp + result.healingAmount),
+              currentEn: Math.max(0, prev.stats.currentEn - abilityDetails.cost.energy),
+              currentMag: Math.max(0, prev.stats.currentMag - abilityDetails.cost.magic),
+            },
+          }));
+          setCombatLog((prevLog) => [
+            ...prevLog,
+            generateLogMessage(enemy.name, null, result, true),
+          ]);
+        } else if (abilityDetails.damage) {
+          result = {
+            ...result,
+            ...calculateDamage(enemy, character, abilityDetails),
+          };
 
-      if (character.currentHp <= 0) {
-        setPopupMessage('You have been defeated...');
-        setShowPopup(true);
-        return;
-      }
+          // Check if the attack hit
+          if (result.didHit) {
+            setCharacter((prev) => ({
+              ...prev,
+              currentHp: Math.max(0, prev.currentHp - result.finalDamage),
+            }));
 
-      setEnemy((prev) => ({
-        ...prev,
-        stats: {
-          ...prev.stats,
-          currentEn: Math.max(0, prev.stats.currentEn - abilityDetails.cost.energy),
-          currentMag: Math.max(0, prev.stats.currentMag - abilityDetails.cost.magic),
-        },
-      }));
-    }
+            // Apply effects like stun only if the attack hit
+            if (abilityDetails.effect) {
+              const effectDetails = abilityDetails.effect(enemy, character);
+              if (effectDetails.stun) {
+                const stunApplied = EffectData.stun.apply(
+                  character,
+                  effectDetails.stun.duration,
+                  effectDetails.stun.chance
+                );
+                setCombatLog((prevLog) => [
+                  ...prevLog,
+                  generateLogMessage(enemy.name, 'you', result, true),
+                  <div key={prevLog.length + 1}>{stunApplied ? 'You are stunned!' : 'The stun attempt failed.'}</div>,
+                ]);
+              } else {
+                setCombatLog((prevLog) => [...prevLog, generateLogMessage(enemy.name, 'you', result, true)]);
+              }
+            } else {
+              setCombatLog((prevLog) => [...prevLog, generateLogMessage(enemy.name, 'you', result, true)]);
+            }
 
-    const abilityCastTime = abilityDetails.castTime || 0;
-    setEnemyTurnTime((prev) => prev + abilityCastTime);
+            if (character.currentHp <= 0) {
+              setPopupMessage('You have been defeated...');
+              setShowPopup(true);
+              return;
+            }
+          } else {
+            // Log the miss and skip applying any effects
+            setCombatLog((prevLog) => [...prevLog, generateLogMessage(enemy.name, 'you', result, true)]);
+          }
 
-    setIsPlayerTurn(true);
-    determineNextTurn();
-  };
+          setEnemy((prev) => ({
+            ...prev,
+            stats: {
+              ...prev.stats,
+              currentEn: Math.max(0, prev.stats.currentEn - abilityDetails.cost.energy),
+              currentMag: Math.max(0, prev.stats.currentMag - abilityDetails.cost.magic),
+            },
+          }));
+        }
 
-  const generateLogMessage = (attackerName, defenderName, attackDetails, isEnemyAttacking) => {
+        const abilityCastTime = abilityDetails.castTime || 0;
+        setEnemyTurnTime((prev) => prev + abilityCastTime);
+
+        setIsPlayerTurn(true);
+        determineNextTurn();
+    }, 1000); // 1-second delay before enemy action
+};
+
+const generateLogMessage = (attackerName, defenderName, attackDetails, isEnemyAttacking) => {
+    const abilityName = attackDetails.abilityName || "an ability"; // Ensure abilityName is present or use a default
+
     if (attackDetails.effectType === 'heal') {
-      const healAmount = attackDetails.healingAmount;
-      return (
-        <div key={combatLog.length}>
-          {isEnemyAttacking
-            ? `The ${attackerName} heals for ${healAmount} health!`
-            : `You heal for ${healAmount} health!`}
-        </div>
-      );
+        const healAmount = attackDetails.healingAmount;
+        const healColor = '#40E0D0'; // Turquoise color for heals
+        return (
+            <div key={combatLog.length}>
+                {isEnemyAttacking
+                    ? <span>{attackerName} uses {abilityName} and heals for <span style={{ color: healColor, fontWeight: 'bold' }}>{healAmount}</span> health!</span>
+                    : <span>You use {abilityName} and heal for <span style={{ color: healColor, fontWeight: 'bold' }}>{healAmount}</span> health!</span>}
+            </div>
+        );
     } else if (!attackDetails.didHit) {
-      return <div key={combatLog.length}>{attackerName} missed!</div>;
+        return <div key={combatLog.length}>{attackerName} uses {abilityName} but missed!</div>;
     } else {
-      const damageColor = isEnemyAttacking ? 'red' : '#00ff00';
-      const baseDamage = attackDetails.baseDamage;
-      const mitigatedAmount = attackDetails.mitigatedAmount;
-      const finalDamage = attackDetails.finalDamage;
+        const damageColor = isEnemyAttacking ? 'red' : '#00ff00'; // Red for enemy, green for player
+        const baseDamage = attackDetails.baseDamage;
+        const mitigatedAmount = attackDetails.mitigatedAmount;
+        const finalDamage = attackDetails.finalDamage;
 
-      return (
-        <div key={combatLog.length}>
-          <p>
-            {isEnemyAttacking
-              ? `The ${attackerName} attacks you for ${baseDamage} ${attackDetails.damageType} damage! ${mitigatedAmount} damage was mitigated.`
-              : `You attack the ${defenderName} for ${baseDamage} ${attackDetails.damageType} damage! ${mitigatedAmount} damage was mitigated.`}
-          </p>
-          <p>{isEnemyAttacking ? `You take ${finalDamage} damage!` : `The ${defenderName} takes ${finalDamage} damage!`}</p>
-          {attackDetails.isCritical && <p><span style={{ color: 'yellow' }}>Critical Strike!</span></p>}
-        </div>
-      );
+        return (
+            <div key={combatLog.length}>
+                <p>
+                    {isEnemyAttacking
+                        ? <>{attackerName} uses {abilityName} and attacks you for <span style={{ fontWeight: 'bold' }}>{baseDamage}</span> {attackDetails.damageType} damage! <span style={{ fontWeight: 'bold' }}>{mitigatedAmount}</span> damage was mitigated.</>
+                        : <>You use {abilityName} and attack the {defenderName} for <span style={{ fontWeight: 'bold' }}>{baseDamage}</span> {attackDetails.damageType} damage! <span style={{ fontWeight: 'bold' }}>{mitigatedAmount}</span> damage was mitigated.</>}
+                </p>
+                <p>
+                    {isEnemyAttacking
+                        ? <>You take <span style={{ color: damageColor, fontWeight: 'bold' }}>{finalDamage}</span> damage!</>
+                        : <>The {defenderName} takes <span style={{ color: damageColor, fontWeight: 'bold' }}>{finalDamage}</span> damage!</>}
+                </p>
+                {attackDetails.isCritical && <p><span style={{ color: 'yellow', fontWeight: 'bold' }}>Critical Strike!</span></p>}
+            </div>
+        );
     }
-  };
+};
 
   const handleAttackClick = () => {
     setShowAbilityMenu(true);
