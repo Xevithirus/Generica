@@ -84,7 +84,7 @@ export const EnemyData = {
     stats: baseStats.ValleyWolf,
     image: './images/valley-wolf.png',
     description: "A skilled predator and prowler of The Valley.", 
-    possibleAbilities: ['basicAttack', 'slash'],
+    possibleAbilities: ['basicAttack', 'heavyBlow'],
   },
   Velyr: {
     name: 'Velyr',
@@ -101,8 +101,8 @@ export const EnemyData = {
     level: 1,
     stats: baseStats.Kaskari,
     image: './images/kaskari.png',
-    description: "A Small creature with fur resembling the grasses around it and the ability to manipulate plants.", 
-    possibleAbilities: ['basicAttack', 'recover','slash'],
+    description: "A horned creature with fur resembling the grasses around it and the ability to manipulate plants.", 
+    possibleAbilities: ['basicAttack', 'recover','heavyBlow'],
   },
   Brontor: {
     name: 'Brontor',
@@ -122,7 +122,7 @@ export const EnemyData = {
     stats: baseStats.CorruptedGolem,
     image: './images/corrupted-golem.png',
     description: "An enchanted stone being crafted to guard important things. As millenia pass, their magic drains unevenly from the material, leaving many corrupted by madness.", 
-    possibleAbilities: ['basicAttack', 'shieldBash', 'slash'],
+    possibleAbilities: ['basicAttack', 'shieldBash', 'heavyBlow'],
   },
   Kryten: {
     name: 'Kryten',
@@ -140,7 +140,7 @@ export const EnemyData = {
     stats: baseStats.Grugmir,
     image: './images/grugmir.png',
     description: "Small, sturdy creatures with rocky exteriors and luminous veins.", 
-    possibleAbilities: ['basicAttack', 'slash'],
+    possibleAbilities: ['basicAttack', 'heavyBlow'],
   },
   Molgur: {
     name: 'Molgur',
@@ -149,7 +149,7 @@ export const EnemyData = {
     stats: baseStats.Molgur,
     image: './images/molgur.png',
     description: "Reptilian creatures with molten cores and hardened lava scales.", 
-    possibleAbilities: ['basicAttack', 'recover', 'slash'],
+    possibleAbilities: ['basicAttack', 'recover', 'heavyBlow'],
   },
   
   // ---------------------------------- TEMPERATE FOREST BIOME -----------------------------------
@@ -190,7 +190,7 @@ export const EnemyData = {
     stats: baseStats.Zarnoth,
     image: './images/zarnoth.png',
     description: "Massive beings with crystalline spines and immense strength.", 
-    possibleAbilities: ['basicAttack', 'slash'],
+    possibleAbilities: ['basicAttack', 'heavyBlow'],
   },
 /*
 Kryten
@@ -215,7 +215,7 @@ Zarnoth
     stats: baseStats.Serashka,
     image: './images/serashka.png',
     description: "Large aquatic serpents with scales that shimmer to match the tides.", 
-    possibleAbilities: ['basicAttack', 'slash'],
+    possibleAbilities: ['basicAttack', 'heavyBlow'],
   },
   BlueSlime: {
     name: 'Blue Slime',

@@ -19,8 +19,8 @@ const baseCharacterStats = {
     crit: 5, 
     eva: 5, 
     acc: 8, 
-    agi: 5, 
-    abilities: ['basicAttack', ,'bandage', 'shieldBash', 'slash',] 
+    agi: 6, 
+    abilities: ['basicAttack', ,'bandage', 'shieldBash', 'heavyBlow',] 
   },
   witch: { 
     hp: 80, 
@@ -47,8 +47,8 @@ const baseCharacterStats = {
     crit: 15, 
     eva: 20, 
     acc: 12, 
-    agi: 15, 
-    abilities: ['basicAttack', 'bandage', 'slash'] 
+    agi: 12, 
+    abilities: ['basicAttack', 'bandage', 'heavyBlow'] 
   },
   cleric: { 
     hp: 95, 
@@ -76,7 +76,7 @@ const baseCharacterStats = {
     eva: 5, 
     acc: 6, 
     agi: 8, 
-    abilities: ['basicAttack', 'recover', 'slash'] 
+    abilities: ['basicAttack', 'recover', 'heavyBlow'] 
   },
   // ranger: { 
   //   hp: 160, 
@@ -90,7 +90,7 @@ const baseCharacterStats = {
   //   eva: 20, 
   //   acc: 15, 
   //   agi: 12, 
-  //   abilities: ['basicAttack', 'bandage', 'slash'] 
+  //   abilities: ['basicAttack', 'bandage', 'heavyBlow'] 
   // },
 };
 
