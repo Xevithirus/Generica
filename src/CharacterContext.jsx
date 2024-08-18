@@ -9,7 +9,7 @@ export const useCharacter = () => useContext(CharacterContext);
 
 const baseCharacterStats = {
   warrior: { 
-    hp: 200, 
+    hp: 150, 
     en: 60, 
     mag: 30, 
     ar: 5, 
@@ -19,11 +19,11 @@ const baseCharacterStats = {
     crit: 5, 
     eva: 5, 
     acc: 8, 
-    agi: 5, 
-    abilities: ['basicAttack', ,'bandage', 'shieldBash', 'slash',] 
+    agi: 6, 
+    abilities: ['basicAttack', ,'bandage', 'shieldBash', 'heavyBlow',] 
   },
   witch: { 
-    hp: 100, 
+    hp: 80, 
     en: 50, 
     mag: 100, 
     ar: 0, 
@@ -34,10 +34,10 @@ const baseCharacterStats = {
     eva: 10, 
     acc: 8, 
     agi: 8, 
-    abilities: ['basicAttack', 'shunt', 'burst'] 
+    abilities: ['basicAttack', 'shunt', 'burst', 'concuss'] 
   },
   rogue: { 
-    hp: 140, 
+    hp: 100, 
     en: 100, 
     mag: 30, 
     ar: 2, 
@@ -47,11 +47,11 @@ const baseCharacterStats = {
     crit: 15, 
     eva: 20, 
     acc: 12, 
-    agi: 15, 
-    abilities: ['basicAttack', 'bandage', 'slash'] 
+    agi: 12, 
+    abilities: ['basicAttack', 'bandage', 'heavyBlow'] 
   },
   cleric: { 
-    hp: 120, 
+    hp: 95, 
     en: 50, 
     mag: 100, 
     ar: 0, 
@@ -65,18 +65,18 @@ const baseCharacterStats = {
     abilities: ['basicAttack', 'recover', 'heal'] 
   },
   paladin: { 
-    hp: 180, 
+    hp: 130, 
     en: 60, 
     mag: 60, 
     ar: 4, 
     mres: 12, 
-    str: 16, 
+    str: 20, 
     int: 15, 
     crit: 5, 
     eva: 5, 
     acc: 6, 
     agi: 8, 
-    abilities: ['basicAttack', 'recover', 'slash'] 
+    abilities: ['basicAttack', 'recover', 'heavyBlow'] 
   },
   // ranger: { 
   //   hp: 160, 
@@ -90,7 +90,7 @@ const baseCharacterStats = {
   //   eva: 20, 
   //   acc: 15, 
   //   agi: 12, 
-  //   abilities: ['basicAttack', 'bandage', 'slash'] 
+  //   abilities: ['basicAttack', 'bandage', 'heavyBlow'] 
   // },
 };
 
